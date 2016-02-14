@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import { routeReducer as router } from 'react-router-redux';
+import { routeReducer } from 'react-router-redux';
+import { reducer as awaitReducer } from 'redux-await';
 
 import Immutable from 'immutable';
 
@@ -12,7 +13,8 @@ import textView from 'redux/modules/views/text';
 import settingsView from 'redux/modules/views/settings';
 
 export default Immutable.fromJS(combineReducers({
-  router,
+  routeReducer,
+  awaitReducer,
 
   layout,
   colorList,
