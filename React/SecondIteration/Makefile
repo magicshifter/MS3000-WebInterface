@@ -106,7 +106,7 @@ inline:
 scss-lint:
 	scss-lint src
 
-deploy: test build
+deploy: build
 
 help:
 	@echo " \n\
