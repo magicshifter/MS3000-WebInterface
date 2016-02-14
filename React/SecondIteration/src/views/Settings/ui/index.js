@@ -57,7 +57,7 @@ export const UiSettings =
 UiSettings.propTypes = {
   protocol: PropTypes.string.isRequired,
   host: PropTypes.string.isRequired,
-  syslogIp: PropTypes.string.isRequired,
+  syslogIp: PropTypes.string,
   onInputChange: PropTypes.func.isRequired,
   onFormSubmit: PropTypes.func.isRequired,
 };
