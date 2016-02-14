@@ -1,5 +1,4 @@
-import { createAction } from 'redux-action';
-import { handleActions } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import Immutable from 'immutable';
 
 import { isObject } from 'utils/types';

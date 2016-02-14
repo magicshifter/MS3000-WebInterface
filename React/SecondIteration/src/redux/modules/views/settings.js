@@ -1,5 +1,4 @@
-import { createAction } from 'redux-action';
-import { handleActions } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import Immutable from 'immutable';
 import localforage from 'localforage';
 
@@ -55,10 +54,10 @@ export default handleActions({
 
   [SAVE_SETTINGS]:
     (state, { payload }) =>
-      localforage.setItem('settings', payload),
+      state.setIn('asyncSettings', localforage.setItem('settings', payload)),
 
   [LOAD_SETTINGS]:
     (state, { payload }) =>
-      localforage.getItem('settings'),
+      state.setIn('asyncSettings', localforage.getItem('settings')),
 
 }, initialState);
