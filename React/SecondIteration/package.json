@@ -95,7 +95,6 @@
     "react-router": "^2.0.0-rc5",
     "react-router-redux": "^3.0.0",
     "redux": "^3.0.0",
-    "redux-action": "^0.5.0",
     "redux-actions": "^0.9.1",
     "redux-devtools": "^3.0.0",
     "redux-devtools-dock-monitor": "^1.0.1",
