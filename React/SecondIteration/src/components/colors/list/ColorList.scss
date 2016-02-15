@@ -15,9 +15,10 @@
 }
 
 .indicator {
-  height: 2em;
-  width: 2em;
   float: left;
-  border-radius: 100%;
-  border: 3px solid #222;
+
+  &:before {
+    border-radius: 100%;
+    padding: 4px;
+  }
 }

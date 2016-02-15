@@ -6,10 +6,15 @@ import classes from './ColorNav.scss';
 export const ColorNav =
   ({ handleAddColorClick }) =>
     <div className={ classes['container'] }>
-      <i
-        className={ getIconCssClass('zoom_in') }
-        onClick={ handleAddColorClick }
-      />
+      <ul>
+        <li
+          onClick={ handleAddColorClick }
+        >
+          <i
+            className={ getIconCssClass('plus') }
+          />
+        </li>
+      </ul>
     </div>;
 
 ColorNav.propTypes = {

@@ -43,8 +43,12 @@
       i {
         cursor: pointer;
         font-size: 30px;
-        background-color: #353535;
-        border-radius: 100%;
+
+        &:before {
+          background-color: #353535;
+          border-radius: 100%;
+          padding: 1px;
+        }
 
         &:last-child {
           display: none;

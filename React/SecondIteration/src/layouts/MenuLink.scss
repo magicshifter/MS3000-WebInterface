@@ -13,12 +13,15 @@
   }
 
   i {
-    background-color: #e6e6e6;
-    border-radius: 100%;
     color: #353535;
-    font-size: 30px;
-    padding: 5px;
-    float: left;
+
+    &:before {
+      background-color: #e6e6e6;
+      border-radius: 100%;
+      font-size: 30px;
+      padding: 5px;
+      float: left;
+    }
   }
 
   span {

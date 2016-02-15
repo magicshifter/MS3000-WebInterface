@@ -15,11 +15,17 @@
   }
 
   i {
-    background-color: #353535;
-    border-radius: 100%;
     color: #1cfffa;
-    font-size: 30px;
-    padding: 5px;
+
+    &:before {
+      background-color: #353535;
+      border-radius: 100%;
+      font-size: 30px;
+      padding: 0;
+      border-width: 2px;
+      border-style: solid;
+      border-color: #353535;
+    }
   }
 }
 
