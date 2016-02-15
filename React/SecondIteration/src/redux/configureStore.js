@@ -2,7 +2,6 @@ import thunk from 'redux-thunk';
 import rootReducer from './rootReducer';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { syncHistory } from 'react-router-redux';
-import { middleware as awaitMiddleware } from 'redux-await';
 import { browserHistory } from 'react-router';
 
 import devTools from 'containers/DevTools';
@@ -12,7 +11,7 @@ export default function configureStore(initialState) {
 
   const syncedHistory = syncHistory(browserHistory);
 
-  const middleware = applyMiddleware(thunk, syncedHistory, awaitMiddleware);
+  const middleware = applyMiddleware(thunk, syncedHistory);
 
   if (__DEBUG__) {
     createStoreWithMiddleware = compose(
