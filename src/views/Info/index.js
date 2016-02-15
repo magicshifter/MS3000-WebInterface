@@ -2,29 +2,25 @@ import React from 'react';
 
 import classes from './InfoView.scss';
 
-export default () => {
-  const updateUrl = 'http://magicshifter.net/ms3000/update';
+export default () =>
+  <div className={[classes['container'], 'container'].join(' ')}>
+    <h1>Welcome to the MagicShifter 3000 Web Interface!</h1>
+    <p>
+      The new MS3000 hardware allows so many new use cases
+      for connected apps that it will take us some time to implement our
+      vision of the perfect MS3000 user interface one feature at a time.
+    </p>
+    <p>
+      If you find some bug or issue with the webinterface and want to tell us
+      you can just use the public <a href='http://github.com/magicshifter/ms3000-webinterface'>github issue tracker</a>
+    </p>
+    <p>
+      The firmware github repository is at: <a href='https://github.com/magicshifter/ms3000-firmware'>magicshifter/ms3000-firmware</a>
+    </p>
+    <p>
+      You can also find the assets used when building the firmware at: <a href='https://github.com/magicshifter/ms3000-assets'>magicshifter/ms3000-assets</a>
+    </p>
 
-  return (
-    <div className={[classes['container'], 'container'].join(' ')}>
-      <h1>Welcome to the MagicShifter 3000 Web Interface!</h1>
-      <p>
-        Although we did our best to make this first beta firmware as good as possible,
-        we also know that it is far from being finished.
-      </p>
-      <p>
-        The new MS3000 hardware allows so many new use cases
-        for connected apps that it will take us some time to implement our
-        vision of the perfect MS3000 user interface one feature at a time.
-      </p>
-      <p>
-        Expect the first firmware update in February 2016.
-        When it's done you can always find the latest firmware
-        (and instructions on how to update) at: <a href={updateUrl}>{updateUrl}</a>
-      </p>
-
-      <p>Greetings,</p>
-      <p>The MagicShifter Team!</p>
-    </div>
-  );
-};
+    <p>Greetings,</p>
+    <p>The MagicShifter Team!</p>
+  </div>;
