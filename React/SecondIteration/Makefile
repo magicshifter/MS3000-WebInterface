@@ -101,6 +101,8 @@ inline:
 
 	@cp ${JS_DIST_DIR}index.js ${JS_DIST_DIR}bundled/index.js
 	@cp ${JS_DIST_DIR}magicshifter.appcache ${JS_DIST_DIR}bundled/magicshifter.appcache
+	@mkdir -p ${JS_DIST_DIR}font/
+	@cp ${JS_DIST_DIR}ms-ico.woff ${JS_DIST_DIR}bundled/ms-ico.woff
 	@echo "inlining finished"
 
 scss-lint:
