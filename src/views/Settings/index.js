@@ -19,6 +19,7 @@ const mapStateToProps =
 export class SettingsView extends Component {
   static propTypes = {
     settings: settingsViewType,
+    loadApSettings: PropTypes.func.isRequired,
     setSettings: PropTypes.func.isRequired,
   };
 
@@ -27,7 +28,7 @@ export class SettingsView extends Component {
 
     const { settings } = props;
 
-    // this.inputChange = onInputChange.bind(this);
+    this.inputChange = this.inputChange.bind(this);
     this.formSubmit = this.formSubmit.bind(this);
 
     this.state = settings || {};
@@ -46,7 +47,7 @@ export class SettingsView extends Component {
   }
 
   render() {
-    const { protocol, host, syslogIp, ssid } = this.state;
+    const { protocol, host, syslogIp } = this.state;
 
     return (
       <div className={[classes['container'], 'container'].join(' ')}>
@@ -61,8 +62,7 @@ export class SettingsView extends Component {
         />
 
         <ApSettings
-          ssid={ssid}
-          onInputChange={e => this.inputChange(e, this)}
+          onInputChange={this.inputChange}
           onFormSubmit={this.formSubmit}
         />
       </div>
