@@ -29,7 +29,7 @@ compile:
 	@node -r dotenv/config --harmony bin/compile
 	@echo "build completed in dist/"
 
-build:
+build: clean
 	export NODE_ENV=production && ${MAKE} clean compile cheap-concat inline
 	@echo "build finished"
 
@@ -101,12 +101,14 @@ inline:
 
 	@cp ${JS_DIST_DIR}index.js ${JS_DIST_DIR}bundled/index.js
 	@cp ${JS_DIST_DIR}magicshifter.appcache ${JS_DIST_DIR}bundled/magicshifter.appcache
+
+	@gzip --keep --force --best dist/bundled/index.js
 	@echo "inlining finished"
 
 scss-lint:
 	scss-lint src
 
-deploy: clean build
+deploy: build
 
 help:
 	@echo " \n\
