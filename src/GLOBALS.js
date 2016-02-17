@@ -8,7 +8,15 @@ export const materialColors = colorsToObj(mColors);
 export const host = '192.168.4.1';
 export const protocol = 'http';
 
+export const newApName = 'MS3000';
+export const newApPass = '';
+
+export const preferredApSSID = '';
+export const preferredApPass = '';
+
 export const syslogIp = '';
+
+export const accesspoints = [];
 
 export const rows = 16;
 export const totalColumns = 96;
@@ -24,6 +32,10 @@ export const links = [
   { to: '/info', icon: 'info' },
   { to: '/settings', icon: 'settings' },
 ];
+
+export const powerdownTimeUSB = 5;
+export const powerdownTimeBattery = 5;
+export const defaultBrightness = 1;
 
 export const pixelEditorUrlBase = '/paint';
 
