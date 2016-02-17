@@ -10,7 +10,7 @@ Usage:
 -------
 ```bash
   git clone git@github.com:magicshifter/ms3000-webinterface
-  cd ms3000/webinterface
+  cd ms3000-webinterface
   make install
   make
 ```
