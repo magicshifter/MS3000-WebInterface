@@ -54,7 +54,7 @@ export default class NumberInput extends Component {
           type='number'
           name={name}
           value={val}
-          step={step || 1}
+          step={step}
           min={min}
           max={max}
           onChange={this.onChange}

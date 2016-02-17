@@ -1,55 +1,95 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
 
-import AddApInput from './AddApInput';
+import { reduxForm } from 'redux-form';
 
+import { onFormSubmit } from 'utils/inputs';
 import { getIconCssClass } from 'utils/icons';
 
 import classes from './ApSettings.scss';
 
 import { actions } from 'redux/modules/views/settings';
 
+export const fields = [
+  'newApName',
+  'newApPass',
+  'preferredApSSID',
+];
+
 const mapStateToProps =
-  state => ({
-    ssid: state.settingsView.toJS().ssid,
-  });
+  ({ settingsView }) => {
+    const {
+      preferredApSSID, preferredApPass,
+      newApName, newApPass,
+      accesspoints,
+    } = settingsView.toJS();
+
+    return {
+      preferredApSSID,
+      preferredApPass,
+      newApName,
+      newApPass,
+      accesspoints,
+    };
+  };
 
 export class ApSettings extends Component {
   static propTypes = {
-    ssid: PropTypes.string,
+    fields: PropTypes.object.isRequired,
+    accesspoints: PropTypes.arrayOf(PropTypes.object).isRequired,
     newApName: PropTypes.string,
     newApPass: PropTypes.string,
-    onFormSubmit: PropTypes.func.isRequired,
-    onInputChange: PropTypes.func.isRequired,
     loadApSettings: PropTypes.func.isRequired,
+    resetForm: PropTypes.func.isRequired,
+    submitting: PropTypes.bool.isRequired,
+    addAp: PropTypes.func.isRequired,
+    // preferredApSSID: PropTypes.string,
+    // preferredApPass: PropTypes.string,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      ssid: props.ssid,
-      addApMode: false,
+      loading: true,
+      error: false,
     };
 
     this.toggleAddApMode = this.toggleAddApMode.bind(this);
     this.scanAccesspoints = this.scanAccesspoints.bind(this);
+    this.handleScanApClick = this.handleScanApClick.bind(this);
+
+    this.scanAccesspoints();
+    this._isMounted = true;
   }
 
-  scanAccesspoints() {
-    const { loadApSettings } = this.props;
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  handleScanApClick() {
     this.setState({
       loading: true,
       error: false,
     });
 
+    this.scanAccesspoints();
+  }
+
+  scanAccesspoints() {
+    const { loadApSettings } = this.props;
+
     loadApSettings(this.state)
-      .then(({ payload }) => {
-        this.setState({
-          loading: false,
-          error: payload.message,
-        });
-      });
+      .then(
+        ({ payload }) => {
+          if (!this._isMounted) return; // Protection
+
+          console.log({ payload });
+          this.setState({
+            loading: false,
+            error: payload.message,
+          });
+        }
+      );
   }
 
   toggleAddApMode() {
@@ -60,84 +100,126 @@ export class ApSettings extends Component {
   }
 
   render() {
-    const { ssid, onInputChange, onFormSubmit, newApName, newApPass } = this.props;
-    const { loading, error, addApModeActive } = this.state;
+    const {
+      fields: {
+        newApName, newApPass,
+        preferredApSSID,
+      },
+      accesspoints,
+      addAp,
+      // resetForm,
+      submitting,
+    } = this.props;
+
+    const {
+      loading, error, addApModeActive,
+    } = this.state;
 
     return (
-      <form
+      <div
         className={classes['container']}
-        onSubmit={onFormSubmit}
       >
-        <fieldset>
-          <legend>Accesspoint:</legend>
-
-          <h5>Preferred Accesspoint:</h5>
-          <ul>
-            <li>
-              <label forHtml='ssid'>ssid</label>
-              <input
-                name='ssid'
-                type='text'
-                value={ssid}
-                onChange={onInputChange}
-              />
-            </li>
-            <li>
-              <label forHtml='password'>password</label>
-              <input
-                name='password'
-                type='password'
-                onChange={onInputChange}
-              />
-            </li>
-            <li>
-              <input
-                value='save'
-                type='submit'
-              />
-            </li>
-          </ul>
-
-          <h5>Available Accesspoints:</h5>
-
-          <ul>
-            <li
+        <form
+          onSubmit={e => onFormSubmit(e, addAp, fields)}
+        >
+          <fieldset>
+            <legend
               onClick={this.toggleAddApMode}
             >
-              <h5>
-                <i
-                  className={getIconCssClass('plus')}
-                />
-                Add Accesspoint
-              </h5>
-            </li>
-            {addApModeActive &&
+              <i
+                className={getIconCssClass('plus')}
+              />
+              Add Accesspoint
+            </legend>
+
+            {
+              addApModeActive &&
+              <ul>
+                <li>
+                  <label>name:</label>
+                  <input
+                    type='text'
+                    {...newApName}
+                  />
+                </li>
+
+                <li>
+                  <label>password:</label>
+                  <input
+                    type='text'
+                    {...newApPass}
+                  />
+                </li>
+                <li>
+                  <input
+                    type='submit'
+                    value='save'
+                  />
+                </li>
+              </ul>
+            }
+          </fieldset>
+        </form>
+
+        <div className={classes['list_container']}>
+          <input
+            className={classes['list_container__input']}
+            type='button'
+            value='Scan Accesspoints'
+            onClick={this.handleScanApClick}
+          />
+          {loading &&
+            <i
+              className={[
+                getIconCssClass(['loading', 'spin']),
+                classes['loading'],
+              ].join(' ')}
+            />
+          }
+          {error && <span>{error}</span>}
+
+          <ul>
+            {
+              accesspoints.length
+              ? accesspoints.map(
+                  ap =>
+                    <li>
+                      <span>{ap.name}</span>
+                      <i
+                        className={getIconCssClass('trash')}
+                      />
+                      <input
+                        type='radio'
+                        name='preferredApSSID'
+                        value={ap.name}
+                        checked={preferredApSSID.value === ap.name}
+                        {...preferredApSSID}
+                      />
+                    </li>
+                )
+              : <li>No Accesspoints found</li>
+            }
+            {accesspoints.length > 0 &&
               <li>
-                <AddApInput
-                  name={newApName}
-                  pass={newApPass}
-                  onInputChange={onInputChange}
+                <input
+                  type='submit'
+                  value='save'
+                  disabled={submitting}
                 />
               </li>
             }
-            <li>
-              <input
-                type='button'
-                value='Scan Accesspoints'
-                onClick={this.scanAccesspoints}
-              />
-              {loading &&
-                <i
-                  className={getIconCssClass('download')}
-                />
-              }
-              <span>{error}</span>
-            </li>
           </ul>
-        </fieldset>
-      </form>
+        </div>
+      </div>
     );
   }
 }
 
-export default connect(mapStateToProps, actions)(ApSettings);
+export default reduxForm(
+  {
+    form: 'apSettings',
+    fields,
+  },
+  mapStateToProps,
+  actions,
+)(ApSettings);

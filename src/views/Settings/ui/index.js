@@ -1,65 +1,112 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { reduxForm } from 'redux-form';
+
+import { onFormSubmit } from 'utils/inputs';
+
+import { actions } from 'redux/modules/views/settings';
 
 import classes from './UiSettings.scss';
 
-export const UiSettings =
-  ({ protocol, host, syslogIp, onInputChange, onFormSubmit }) =>
-    <form
-      className={classes['container']}
-      onSubmit={onFormSubmit}
-    >
-      <fieldset>
-        <legend>Userinterface:</legend>
+export const fields = [
+  'host',
+  'syslogIp',
+];
 
-        <ul>
-          <li style={{ display: 'none' }} key='protocol'>
-            <label>protocol:</label>
-            <input
-              type='text'
-              name='protocol'
-              onChange={onInputChange}
-              value={protocol}
-            />
-          </li>
+const mapStateToProps =
+  ({ settingsView }) => {
+    const { host, syslogIp } = settingsView.toJS();
 
-          <li key='host'>
-            <label>hostname:</label>
-            <input
-              type='text'
-              name='host'
-              onChange={onInputChange}
-              value={host}
-            />
-          </li>
+    return {
+      host,
+      syslogIp,
+    };
+  };
 
-          <li key='syslogIp'>
-            <label>syslog ip:</label>
-            <input
-              type='text'
-              name='syslogIp'
-              onChange={onInputChange}
-              value={syslogIp}
-            />
-          </li>
+const validate =
+  values => {
+    const errors = {};
 
-          <li
-            key='submit'
-          >
-            <input
-              type='submit'
-              value='save'
-            />
-          </li>
-        </ul>
-      </fieldset>
-    </form>;
+    if (!values.host) {
+      errors.host = 'Required';
+    }
 
-UiSettings.propTypes = {
-  protocol: PropTypes.string.isRequired,
-  host: PropTypes.string.isRequired,
-  syslogIp: PropTypes.string,
-  onInputChange: PropTypes.func.isRequired,
-  onFormSubmit: PropTypes.func.isRequired,
-};
+    return errors;
+  };
 
-export default UiSettings;
+export class UiSettings extends Component {
+  static propTypes = {
+    fields: PropTypes.object.isRequired,
+    host: PropTypes.string.isRequired,
+    syslogIp: PropTypes.string,
+    setSettings: PropTypes.func.isRequired,
+    // submitting: PropTypes.bool.isRequired,
+    // resetForm: PropTypes.func.isRequired,
+    // handleSubmit: PropTypes.func.isRequired,
+  };
+
+  constructor(props) {
+    const { host, syslogIp } = props;
+
+    props.fields.host.defaultValue = host;
+    props.fields.syslogIp.defaultValue = syslogIp;
+
+    super(props);
+  }
+
+  render() {
+    const {
+      fields: { host, syslogIp },
+      // resetForm,
+      // handleSubmit,
+      // submitting,
+      setSettings,
+    } = this.props;
+
+    return (
+      <form
+        className={classes['container']}
+        onSubmit={e => onFormSubmit(e, setSettings, fields)}
+      >
+        <fieldset>
+          <legend>Userinterface Settings:</legend>
+
+          <ul>
+            <li key='host'>
+              <label>hostname:</label>
+              <input
+                type='text'
+                {...host}
+              />
+            </li>
+
+            <li key='syslogIp'>
+              <label>syslog ip:</label>
+              <input
+                type='text'
+                {...syslogIp}
+              />
+            </li>
+
+            <li
+              key='submit'
+            >
+              <input
+                type='submit'
+                value='save'
+              />
+            </li>
+          </ul>
+        </fieldset>
+      </form>
+    );
+  }
+}
+export default reduxForm(
+  {
+    form: 'uiSettings',
+    fields,
+    validate,
+  },
+  mapStateToProps,
+  actions
+)(UiSettings);

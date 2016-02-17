@@ -10,10 +10,14 @@ const defaultValues = {
   host: GLOBALS.host,
   syslogIp: GLOBALS.syslogIp,
   ssid: GLOBALS.ssid,
-  accesspoints: [],
+  powerdownTimeBattery: GLOBALS.powerdownTimeBattery,
+  powerdownTimeUSB: GLOBALS.powerdownTimeUSB,
+  defaultBrightness: GLOBALS.defaultBrightness,
+  preferredAp: GLOBALS.preferredAp || {},
+  accesspoints: GLOBALS.accesspoints || [],
 };
 
-const initialState = Immutable.Map(defaultValues);
+const initialState = Immutable.fromJS(defaultValues);
 
 // ------------------------------------
 // Constants
@@ -38,7 +42,7 @@ export const loadApSettings = createAction(
 
 export const addAp = createAction(
   ADD_AP,
-  ({ name, pass }) => ({
+  ({ newApName: name, newApPass: pass }) => ({
     name,
     pass,
   })
@@ -56,14 +60,16 @@ export const actions = {
 export default handleActions({
   [SET_SETTINGS]:
     (state, { payload }) =>
-      Immutable.Map(payload),
+      Immutable.Map({
+        ...state.toJS(),
+        ...payload,
+      }),
 
   [LOAD_AP_SETTINGS]:
     (state, { payload }) => {
       const { status, responseText } = payload;
 
       if (status !== 200) {
-        console.log('returning failure');
         return state.delete('apLoading').set('apLoadError', 'No MagicShifter found in Network.');
       }
 
@@ -75,8 +81,7 @@ export default handleActions({
       }
 
       if (parsed) {
-        console.log('parse successful', { parsed });
-        return state.delete('apLoading');
+        return state.delete('apLoading').set('accesspoints', parsed);
       }
 
       return state.delete('apLoading').set('apLoadError', 'Unknown Error');
@@ -84,6 +89,6 @@ export default handleActions({
 
   [ADD_AP]:
     (state, { payload }) =>
-      state.setIn('accesspoints', state.get('accesspoints').push(payload)),
+      state.set('accesspoints', state.get('accesspoints').push(payload)),
 
 }, initialState);
