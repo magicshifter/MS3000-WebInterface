@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 
-import { onFormSubmit } from 'utils/inputs';
-
 import { actions } from 'redux/modules/views/settings';
 
 import classes from './UiSettings.scss';
@@ -17,8 +15,10 @@ const mapStateToProps =
     const { host, syslogIp } = settingsView.toJS();
 
     return {
-      host,
-      syslogIp,
+      initialValues: {
+        host,
+        syslogIp,
+      },
     };
   };
 
@@ -26,7 +26,9 @@ const validate =
   values => {
     const errors = {};
 
-    if (!values.host) {
+    const { host } = values;
+
+    if (!host) {
       errors.host = 'Required';
     }
 
@@ -36,42 +38,42 @@ const validate =
 export class UiSettings extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
-    host: PropTypes.string.isRequired,
-    syslogIp: PropTypes.string,
-    setSettings: PropTypes.func.isRequired,
-    // submitting: PropTypes.bool.isRequired,
-    // resetForm: PropTypes.func.isRequired,
-    // handleSubmit: PropTypes.func.isRequired,
+    // setSettings: PropTypes.func.isRequired,
+    submitting: PropTypes.bool.isRequired,
+    resetForm: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
   };
 
   constructor(props) {
-    const { host, syslogIp } = props;
-
-    props.fields.host.defaultValue = host;
-    props.fields.syslogIp.defaultValue = syslogIp;
-
     super(props);
+
+    this.submit = this.submit.bind(this);
   }
+
+  submit(values, dispatch) {
+    console.log('submit form', { values });
+    // fetch(``);
+  };
 
   render() {
     const {
       fields: { host, syslogIp },
-      // resetForm,
-      // handleSubmit,
-      // submitting,
-      setSettings,
+      resetForm,
+      handleSubmit,
+      submitting,
+      // setSettings,
     } = this.props;
 
     return (
       <form
         className={classes['container']}
-        onSubmit={e => onFormSubmit(e, setSettings, fields)}
+        onSubmit={handleSubmit(this.submit)}
       >
         <fieldset>
           <legend>Userinterface Settings:</legend>
 
           <ul>
-            <li key='host'>
+            <li>
               <label>hostname:</label>
               <input
                 type='text'
@@ -79,7 +81,7 @@ export class UiSettings extends Component {
               />
             </li>
 
-            <li key='syslogIp'>
+            <li>
               <label>syslog ip:</label>
               <input
                 type='text'
@@ -87,12 +89,18 @@ export class UiSettings extends Component {
               />
             </li>
 
-            <li
-              key='submit'
-            >
+            <li>
               <input
                 type='submit'
+                disabled={submitting}
                 value='save'
+              />
+
+              <input
+                type='button'
+                disabled={submitting}
+                onClick={resetForm}
+                value='reset'
               />
             </li>
           </ul>

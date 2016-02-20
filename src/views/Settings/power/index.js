@@ -1,129 +1,154 @@
 import React, { Component, PropTypes } from 'react';
-
 import { reduxForm } from 'redux-form';
-
-import { onFormSubmit, clampNumberInputValue } from 'utils/inputs';
-
 import { actions } from 'redux/modules/views/settings';
 
 export const fields = [
-  'powerdownTimeBattery',
   'powerdownTimeUSB',
+  'powerdownTimeBattery',
   'defaultBrightness',
 ];
 
 const validate =
   values => {
     const errors = {};
+    const isRequiredError = 'Required';
 
-    if (!values.powerdownTimeBattery) {
-      errors.powerdownTimeBattery = 'Required';
+    const {
+      powerdownTimeUSB,
+      powerdownTimeBattery,
+      defaultBrightness,
+    } = values;
+
+    if (!powerdownTimeUSB && powerdownTimeUSB !== 0) {
+      errors.powerdownTimeUSB = isRequiredError;
     }
-
-    if (!values.powerdownTimeUSB) {
-      errors.powerdownTimeUSB = 'Required';
+    if (!powerdownTimeBattery && powerdownTimeBattery !== 0) {
+      errors.powerdownTimeBattery = isRequiredError;
     }
-
-    if (!values.defaultBrightness) {
-      errors.defaultBrightness = 'Required';
+    if (!defaultBrightness && defaultBrightness !== 0) {
+      errors.defaultBrightness = isRequiredError;
     }
 
     return errors;
   };
 
-export const mapStateToProps =
+const mapStateToProps =
   ({ settingsView }) => {
-    const { powerdownTimeUSB, powerdownTimeBattery, defaultBrightness } = settingsView.toJS();
+    const {
+      powerdownTimeBattery,
+      powerdownTimeUSB,
+      defaultBrightness,
+      host,
+      protocol,
+    } = settingsView.toJS();
+
+    const initialValues = {
+      powerdownTimeBattery,
+      powerdownTimeUSB,
+      defaultBrightness,
+    };
 
     return {
-      battery: powerdownTimeBattery,
-      usb: powerdownTimeUSB,
-      brightness: defaultBrightness,
+      initialValues,
+      host,
+      protocol,
     };
   };
 
-export class PowerSettings extends Component {
+class PowerSettings extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    error: PropTypes.string,
     resetForm: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
-    setSettings: PropTypes.func.isRequired,
-    battery: PropTypes.number.isRequired,
-    usb: PropTypes.number.isRequired,
-    brightness: PropTypes.number.isRequired,
+    host: PropTypes.string.isRequired,
+    protocol: PropTypes.string.isRequired,
   };
 
   constructor(props) {
-    const { usb, battery, brightness } = props;
-
-    props.fields.powerdownTimeUSB.defaultValue = usb;
-    props.fields.powerdownTimeBattery.defaultValue = battery;
-    props.fields.defaultBrightness.defaultValue = brightness;
-
     super(props);
+
+    this.submit = this.submit.bind(this);
   }
+
+  submit(values, dispatch) {
+    console.log('submit form', { values });
+    // fetch(``);
+  };
 
   render() {
     const {
       fields: { powerdownTimeUSB, powerdownTimeBattery, defaultBrightness },
-      // resetForm,
-      // handleSubmit,
-      submitting,
-      setSettings,
+      error, resetForm, handleSubmit, submitting,
     } = this.props;
 
     return (
-      <form
-        onSubmit={e => onFormSubmit(e, setSettings, fields)}
-      >
+      <form onSubmit={handleSubmit(this.submit)}>
         <fieldset>
-          <legend>Set Powerdown and Brightness</legend>
+          <legend>
+            Use this menu to configure the various
+            powersaving related settings
+          </legend>
+
           <ul>
             <li>
-              <label>USB Sleep Timer</label>
+              <label>USB PowerDown Time</label>
               <input
                 type='number'
                 min={0}
                 max={30}
-                step={0.5}
                 {...powerdownTimeUSB}
-                onChange={e => clampNumberInputValue(e, 0, 30)}
               />
-              <label>Power down time when attached via USB</label>
+              {
+                powerdownTimeUSB.touched &&
+                powerdownTimeUSB.error &&
+                <p>{powerdownTimeUSB.error}</p>
+              }
             </li>
-
             <li>
-              <label>Battery Sleep Timer</label>
+              <label>Battery Powerdown Time</label>
               <input
                 type='number'
                 min={0}
                 max={30}
-                step={0.5}
                 {...powerdownTimeBattery}
-                onChange={e => clampNumberInputValue(e, 0, 30)}
               />
-              <label>Power down time in battery mode</label>
+              {
+                powerdownTimeBattery.touched &&
+                powerdownTimeBattery.error &&
+                <p>{powerdownTimeBattery.error}</p>
+              }
             </li>
-
             <li>
               <label>Default Brightness</label>
               <input
                 type='number'
-                min={0}
-                max={1}
-                step={0.1}
+                min={1}
+                max={31}
                 {...defaultBrightness}
-                onChange={e => clampNumberInputValue(e, 0, 1)}
               />
-              <label>The default brightness when activating the MagicShifter3000.</label>
+              {
+                defaultBrightness.touched &&
+                defaultBrightness.error &&
+                <p>{defaultBrightness.error}</p>
+              }
             </li>
+
+            {error && <li>{error}</li>}
 
             <li>
               <input
-                disabled={submitting}
                 type='submit'
+                disabled={submitting}
                 value='save'
+              />
+
+              <input
+                type='button'
+                disabled={submitting}
+                onClick={resetForm}
+                value='reset'
               />
             </li>
           </ul>
@@ -135,7 +160,7 @@ export class PowerSettings extends Component {
 
 export default reduxForm(
   {
-    form: 'powerSettings',
+    form: 'PowerSettings',
     fields,
     validate,
   },
