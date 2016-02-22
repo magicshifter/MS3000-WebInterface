@@ -9,15 +9,9 @@ export const fields = [
 ];
 
 const validate =
-  values => {
+  ({ powerdownTimeBattery, powerdownTimeUSB, defaultBrightness }) => {
     const errors = {};
     const isRequiredError = 'Required';
-
-    const {
-      powerdownTimeUSB,
-      powerdownTimeBattery,
-      defaultBrightness,
-    } = values;
 
     if (!powerdownTimeUSB && powerdownTimeUSB !== 0) {
       errors.powerdownTimeUSB = isRequiredError;
@@ -73,7 +67,11 @@ class PowerSettings extends Component {
   }
 
   submit(values, dispatch) {
-    console.log('submit form', { values });
+    const { setSettings } = this.props;
+
+    dispatch(setSettings(values));
+
+    // XXX TODO transmit settings to MagicShifter
     // fetch(``);
   };
 

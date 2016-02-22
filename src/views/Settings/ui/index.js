@@ -23,10 +23,8 @@ const mapStateToProps =
   };
 
 const validate =
-  values => {
+  ({ host }) => {
     const errors = {};
-
-    const { host } = values;
 
     if (!host) {
       errors.host = 'Required';
@@ -38,7 +36,7 @@ const validate =
 export class UiSettings extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
-    // setSettings: PropTypes.func.isRequired,
+    setSettings: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     resetForm: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -51,7 +49,10 @@ export class UiSettings extends Component {
   }
 
   submit(values, dispatch) {
+    const { setSettings } = this.props;
     console.log('submit form', { values });
+
+    dispatch(setSettings(values));
     // fetch(``);
   };
 
