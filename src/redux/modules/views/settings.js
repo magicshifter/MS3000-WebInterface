@@ -1,8 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 import Immutable from 'immutable';
 
-import { isObjectInArray } from 'utils/unique';
-
 import * as GLOBALS from 'GLOBALS';
 
 const defaultValues = {
@@ -35,8 +33,9 @@ export const setSettings = createAction(
 
 export const addAp = createAction(
   ADD_AP,
-  ({ newApSSID: ssid, newApPass: pass }) => ({
+  ({ ssid, free, pass }) => ({
     ssid,
+    free,
     pass,
   })
 );
@@ -59,18 +58,41 @@ export default handleActions({
 
   [ADD_AP]:
     (state, { payload }) => {
-      console.log({ payload });
+      const { ssid, free, pass } = payload;
+      console.log({ state, payload });
       const accesspoints = state.get('accesspoints');
-      if (payload.ssid && payload.key) {
-        if (isObjectInArray(accesspoints, payload)) {
-          console.log('object is in array');
-        } else {
-          console.log('object is not in array');
-          // accesspoints.push(payload);
-        }
+
+      if (!ssid) {
+        return state;
       }
 
-      return state.set('accesspoints', accesspoints);
+      const apExists = accesspoints.some(
+        ap =>
+          ap.ssid === ssid
+      );
+
+      if (!apExists) {
+        accesspoints.push({
+          ssid,
+          free,
+          pass,
+        });
+
+        return state.set('accesspoints', accesspoints);
+      }
+
+      const newAccesspoints = accesspoints.map(
+        ap =>
+          ap.ssid !== ssid
+            ? ap
+            : {
+              ...ap,
+              pass,
+              free,
+            }
+      );
+
+      return state.set('accesspoints', newAccesspoints);
     },
 
 }, initialState);
