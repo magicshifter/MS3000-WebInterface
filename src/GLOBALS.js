@@ -30,7 +30,7 @@ export const preferredApPass = '';
 
 export const syslogIp = '';
 
-export const accesspoints = {};
+export const accesspoints = [];
 
 export const rows = 16;
 export const totalColumns = 96;
