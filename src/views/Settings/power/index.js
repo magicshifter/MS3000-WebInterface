@@ -3,21 +3,21 @@ import { reduxForm } from 'redux-form';
 import { actions } from 'redux/modules/views/settings';
 
 export const fields = [
-  'powerdownTimeUSB',
-  'powerdownTimeBattery',
+  'timeoutHighPower',
+  'timeoutLowPower',
   'defaultBrightness',
 ];
 
 const validate =
-  ({ powerdownTimeBattery, powerdownTimeUSB, defaultBrightness }) => {
+  ({ timeoutLowPower, timeoutHighPower, defaultBrightness }) => {
     const errors = {};
     const isRequiredError = 'Required';
 
-    if (!powerdownTimeUSB && powerdownTimeUSB !== 0) {
-      errors.powerdownTimeUSB = isRequiredError;
+    if (!timeoutHighPower && timeoutHighPower !== 0) {
+      errors.timeoutHighPower = isRequiredError;
     }
-    if (!powerdownTimeBattery && powerdownTimeBattery !== 0) {
-      errors.powerdownTimeBattery = isRequiredError;
+    if (!timeoutLowPower && timeoutLowPower !== 0) {
+      errors.timeoutLowPower = isRequiredError;
     }
     if (!defaultBrightness && defaultBrightness !== 0) {
       errors.defaultBrightness = isRequiredError;
@@ -29,16 +29,16 @@ const validate =
 const mapStateToProps =
   ({ settingsView }) => {
     const {
-      powerdownTimeBattery,
-      powerdownTimeUSB,
+      timeoutLowPower,
+      timeoutHighPower,
       defaultBrightness,
       host,
       protocol,
     } = settingsView.toJS();
 
     const initialValues = {
-      powerdownTimeBattery,
-      powerdownTimeUSB,
+      timeoutLowPower,
+      timeoutHighPower,
       defaultBrightness,
     };
 
@@ -78,7 +78,7 @@ class PowerSettings extends Component {
 
   render() {
     const {
-      fields: { powerdownTimeUSB, powerdownTimeBattery, defaultBrightness },
+      fields: { timeoutHighPower, timeoutLowPower, defaultBrightness },
       error, resetForm, handleSubmit, submitting,
     } = this.props;
 
@@ -97,12 +97,12 @@ class PowerSettings extends Component {
                 type='number'
                 min={0}
                 max={30}
-                {...powerdownTimeUSB}
+                {...timeoutHighPower}
               />
               {
-                powerdownTimeUSB.touched &&
-                powerdownTimeUSB.error &&
-                <p>{powerdownTimeUSB.error}</p>
+                timeoutHighPower.touched &&
+                timeoutHighPower.error &&
+                <p>{timeoutHighPower.error}</p>
               }
             </li>
             <li>
@@ -111,12 +111,12 @@ class PowerSettings extends Component {
                 type='number'
                 min={0}
                 max={30}
-                {...powerdownTimeBattery}
+                {...timeoutLowPower}
               />
               {
-                powerdownTimeBattery.touched &&
-                powerdownTimeBattery.error &&
-                <p>{powerdownTimeBattery.error}</p>
+                timeoutLowPower.touched &&
+                timeoutLowPower.error &&
+                <p>{timeoutLowPower.error}</p>
               }
             </li>
             <li>

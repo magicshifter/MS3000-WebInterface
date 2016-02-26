@@ -47,8 +47,8 @@ export const links = [
   { to: '/settings', icon: 'settings' },
 ];
 
-export const powerdownTimeUSB = 5;
-export const powerdownTimeBattery = 5;
+export const timeoutHighPower = 5;
+export const timeoutLowPower = 5;
 export const defaultBrightness = 1;
 
 export const pixelEditorUrlBase = '/paint';
