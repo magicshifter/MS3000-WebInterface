@@ -1,10 +1,13 @@
 import React from 'react';
 
 import classes from './InfoView.scss';
+import CloseViewButton from 'components/inputs/CloseViewButton';
 
 export default () =>
   <div className={[classes['container'], 'container'].join(' ')}>
-    <h1>Welcome to the MagicShifter 3000 Web Interface!</h1>
+    <h5>Welcome to the MagicShifter 3000 Web Interface!</h5>
+    <CloseViewButton />
+
     <p>
       The new MS3000 hardware allows so many new use cases
       for connected apps that it will take us some time to implement our

@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
+import CloseViewButton from 'components/inputs/CloseViewButton';
+
 import { pixelsType } from 'utils/propTypes';
 
 import { actions } from 'redux/modules/pixels.js';
@@ -32,6 +34,9 @@ export class Effects extends Component {
         className={classes['container']}
       >
         <h5>effects</h5>
+
+        <CloseViewButton />
+
         <ul>
           <li>
             <button
