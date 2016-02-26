@@ -20,6 +20,10 @@ input[type=submit] {
   color: #000;
 }
 
+button[disabled] {
+  color: #777;
+}
+
 input[type=number] {
   text-align: right;
   width: 4em;
