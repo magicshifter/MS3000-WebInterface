@@ -40,7 +40,7 @@ export class Pixel extends Component {
     const { pixelHover, color } = this.props;
     const { e, pixel } = args;
 
-    if (e.buttons === 1) {
+    if (e.touches || e.buttons === 1) {
       pixelHover({ pixel, color });
     }
   }
@@ -59,6 +59,8 @@ export class Pixel extends Component {
         className={classes['container']}
         onMouseDown={() => pixelClick({ pixel, color })}
         onMouseOver={e => this.onMouseOver({ e, pixel })}
+        onTouchStart={e => this.onMouseOver({ e, pixel })}
+        onTouchMove={e => this.onMouseOver({ e, pixel })}
         style={style}
       ></td>
     );
