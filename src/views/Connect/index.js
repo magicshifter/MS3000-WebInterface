@@ -32,7 +32,7 @@ export class Connect extends Component {
   };
 
   render() {
-    const { connecting, connected, hosts, host, connectError } = this.props;
+    const { connecting, connected, hosts, host } = this.props;
 
     return (
       <div
