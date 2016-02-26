@@ -58,6 +58,7 @@ class PowerSettings extends Component {
     submitting: PropTypes.bool.isRequired,
     host: PropTypes.string.isRequired,
     protocol: PropTypes.string.isRequired,
+    setSettings: PropTypes.func.isRequired,
   };
 
   constructor(props) {

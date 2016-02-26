@@ -1,7 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import Immutable from 'immutable';
 
-import { fetch } from 'utils/http';
+import { isObjectInArray } from 'utils/unique';
 
 import * as GLOBALS from 'GLOBALS';
 
@@ -9,12 +9,12 @@ const defaultValues = {
   protocol: GLOBALS.protocol,
   host: GLOBALS.host,
   syslogIp: GLOBALS.syslogIp,
-  ssid: GLOBALS.ssid,
   powerdownTimeBattery: GLOBALS.powerdownTimeBattery,
   powerdownTimeUSB: GLOBALS.powerdownTimeUSB,
   defaultBrightness: GLOBALS.defaultBrightness,
-  preferredAp: GLOBALS.preferredAp || {},
-  accesspoints: GLOBALS.accesspoints || [],
+  preferredAp: GLOBALS.preferredAp,
+  accesspoints: GLOBALS.accesspoints,
+  hosts: GLOBALS.hosts,
 };
 
 const initialState = Immutable.fromJS(defaultValues);
@@ -23,7 +23,6 @@ const initialState = Immutable.fromJS(defaultValues);
 // Constants
 // ------------------------------------
 export const SET_SETTINGS = 'SET_SETTINGS';
-export const LOAD_AP_SETTINGS = 'LOAD_AP_SETTINGS';
 export const ADD_AP = 'ADD_AP';
 
 // ------------------------------------
@@ -34,23 +33,16 @@ export const setSettings = createAction(
   (value = defaultValues) => value
 );
 
-export const loadApSettings = createAction(
-  LOAD_AP_SETTINGS,
-  async ({ host, protocol }) =>
-    await fetch(`${protocol || GLOBALS.protocol}://${host || GLOBALS.host}/settings/wifi/list`)
-);
-
 export const addAp = createAction(
   ADD_AP,
-  ({ newApName: name, newApPass: pass }) => ({
-    name,
+  ({ newApSSID: ssid, newApPass: pass }) => ({
+    ssid,
     pass,
   })
 );
 
 export const actions = {
   setSettings,
-  loadApSettings,
   addAp,
 };
 
@@ -65,30 +57,20 @@ export default handleActions({
         ...payload,
       }),
 
-  [LOAD_AP_SETTINGS]:
-    (state, { payload }) => {
-      const { status, responseText } = payload;
-
-      if (status !== 200) {
-        return state.delete('apLoading').set('apLoadError', 'No MagicShifter found in Network.');
-      }
-
-      let parsed = false;
-      try {
-        parsed = JSON.parse(responseText);
-      } catch (err) {
-        return state.delete('apLoading').set('apLoadError', 'MagicShifter response invalid');
-      }
-
-      if (parsed) {
-        return state.delete('apLoading').set('accesspoints', parsed);
-      }
-
-      return state.delete('apLoading').set('apLoadError', 'Unknown Error');
-    },
-
   [ADD_AP]:
-    (state, { payload }) =>
-      state.set('accesspoints', state.get('accesspoints').push(payload)),
+    (state, { payload }) => {
+      console.log({ payload });
+      const accesspoints = state.get('accesspoints');
+      if (payload.ssid && payload.key) {
+        if (isObjectInArray(accesspoints, payload)) {
+          console.log('object is in array');
+        } else {
+          console.log('object is not in array');
+          // accesspoints.push(payload);
+        }
+      }
+
+      return state.set('accesspoints', accesspoints);
+    },
 
 }, initialState);

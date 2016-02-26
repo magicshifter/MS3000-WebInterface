@@ -50,10 +50,7 @@ export class UiSettings extends Component {
 
   submit(values, dispatch) {
     const { setSettings } = this.props;
-    console.log('submit form', { values });
-
     dispatch(setSettings(values));
-    // fetch(``);
   };
 
   render() {
