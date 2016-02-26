@@ -108,6 +108,7 @@
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.13.0",
+    "unique-by": "1.0.0",
     "url": "^0.11.0",
     "url-loader": "^0.5.6",
     "webpack": "1.12.11",
