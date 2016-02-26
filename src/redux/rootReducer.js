@@ -7,6 +7,7 @@ import Immutable from 'immutable';
 import layout from 'redux/modules/layout';
 import colorList from 'redux/modules/colorList';
 import pixels from 'redux/modules/pixels';
+import connect from 'redux/modules/connect';
 
 import imageView from 'redux/modules/views/image';
 import textView from 'redux/modules/views/text';
@@ -19,6 +20,7 @@ export default Immutable.fromJS(combineReducers({
   layout,
   colorList,
   pixels,
+  connect,
 
   imageView,
   textView,

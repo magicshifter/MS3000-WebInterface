@@ -10,6 +10,7 @@ import EffectsView from 'views/Effects';
 import FontsView from 'views/Fonts';
 import ColorsView from 'views/Colors';
 import UploadView from 'views/Upload';
+import ConnectView from 'views/Connect';
 
 import SettingsView from 'views/Settings';
 
@@ -50,6 +51,11 @@ export default (
         component={UploadView}
       />
     </Route>
+
+    <Route
+      path='connect'
+      component={ConnectView}
+    />
 
     <Route
       path='info'
