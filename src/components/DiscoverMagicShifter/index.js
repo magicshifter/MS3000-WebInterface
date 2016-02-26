@@ -80,7 +80,7 @@ export class DiscoverMagicShifter extends Component {
               connecting: false,
               connected: true,
             });
-          } else {
+          } else if (!this.props.connected) {
             setConnectState({
               connectError: true,
             });
@@ -91,11 +91,13 @@ export class DiscoverMagicShifter extends Component {
       )
       .catch(
         e => {
-          setConnectState({
-            connectError: true,
-          });
+          if (!this.props.connected) {
+            setConnectState({
+              connectError: true,
+            });
 
-          this.connectToHost(host);
+            this.connectToHost(host);
+          }
         }
       );
   }
