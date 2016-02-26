@@ -78,7 +78,7 @@ export class DiscoverMagicShifter extends Component {
             setConnectState({
               connectError: false,
               connecting: false,
-              connected: hostName,
+              connected: true,
             });
           } else {
             setConnectState({
