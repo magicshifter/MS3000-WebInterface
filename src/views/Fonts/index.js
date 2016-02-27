@@ -20,6 +20,7 @@ const mapStateToProps =
     const { totalColumns, rows, color } = state.imageView.toJS();
     const pixels = makePixelsArray(state.pixels);
     const { fonts, fontId, text } = state.textView.toJS();
+
     return {
       fonts,
       fontId,
@@ -97,10 +98,15 @@ export class Font extends Component {
     setColumns({ value: w });
   }
 
+  setText(e) {
+    const { setText } = this.props;
+    setText(e.target.value);
+  }
+
   render() {
     const {
       text = '! MAGIC !',
-      setFont, setText, // actions
+      setFont, // actions
     } = this.props;
 
     return (
@@ -120,7 +126,7 @@ export class Font extends Component {
           <input
             type='text'
             value={text}
-            onChange={e => setText(e.target.value)}
+            onChange={this.setText}
           />
         </div>
         <div>
