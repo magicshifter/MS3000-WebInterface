@@ -1,7 +1,12 @@
+.container {
+  max-height: 90vh;
+  overflow-y: scroll;
+}
+
 @media (orientation: landscape) {
   body {
     .container {
-      top: 258px;
+      top: 228px;
       width: 300px;
     }
   }
