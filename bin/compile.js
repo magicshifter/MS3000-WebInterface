@@ -64,12 +64,4 @@ compiler.run(function (err, stats) {
 
   fs.writeFileSync(appCacheDistFile, appCacheContent, 'utf8');
   console.log('appcache copying finished');
-
-  var packageJSONsrc = path.join(paths.client(), 'package.json');
-  var packageJSONdist = path.join(paths.dist(), 'package.json');
-
-  console.log('writing from', packageJSONsrc, 'to', packageJSONdist);
-  var packageJSONcontent = fs.readFileSync(packageJSONsrc);
-  fs.writeFileSync(packageJSONdist, packageJSONcontent, 'utf8');
-  console.log('package.json copying finished');
 });
