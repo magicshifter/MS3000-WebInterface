@@ -11,7 +11,7 @@ JS_DIST_DIR = ./dist/
 	lint \
 	lint-fix \
 	server \
-	nw \
+	nw-build \
 	dev-no-debug \
 	test \
 	test-dev \
@@ -68,11 +68,7 @@ server:
 	node -r dotenv/config bin/server --hot
 
 dev:
-	@echo "spawn state debugger in a separate window"
-	${BIN_DIR}nodemon -r dotenv/config bin/server --hot --nw
-
-dev-no-nw:
-	@echo "spawn state debugger inlined into page."
+	@echo "spawn debug environment"
 	${BIN_DIR}nodemon -r dotenv/config bin/server --hot
 
 # start dev mode with production environment
@@ -93,7 +89,7 @@ test-dev:
 inline:
 	@echo "start inlining js/css/images"
 	@mkdir -p ${JS_DIST_DIR}bundled/
-	@node_modules/.bin/html-inline \
+	@${BIN_DIR}html-inline \
 		-i ${JS_DIST_DIR}min.html \
 		-o ${JS_DIST_DIR}bundled/index.html \
 		-b ${JS_DIST_DIR}/ \
@@ -107,6 +103,11 @@ inline:
 
 scss-lint:
 	scss-lint src
+
+nw-build:
+	cp dist/package.json dist/bundled
+	${BIN_DIR}nwbuild -p win64 -o ./nw dist/bundled/
+	#win32,win64,osx32,osx64,linux32,linux64
 
 deploy: build
 
@@ -123,7 +124,6 @@ build - compile sources to dist dir \n\
 lint - lint code using eslint \n\
 lint-fix - lint and fix code \n\
 server - run server only, no build chain \n\
-nw - start browser history development tools in separate window \n\
 dev-no-debug - start dev env in production mode \n\
 test - run tests \n\
 test-dev - run and watch tests \n\
