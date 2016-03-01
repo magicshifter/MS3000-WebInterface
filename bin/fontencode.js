@@ -1,8 +1,10 @@
-var get = require('http').get;
-
 // Get binary file using XMLHttpRequest
 function getBinary(file) {
-  return get(file);
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", file, false);
+  xhr.overrideMimeType("text/plain; charset=x-user-defined");
+  xhr.send(null);
+  return xhr.responseText;
 }
 
 // Base64 encode binary string

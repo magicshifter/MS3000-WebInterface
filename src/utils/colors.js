@@ -44,7 +44,7 @@ export const rgba_fromArray =
     let convertedColors = [];
     const colorNames = ['r', 'b', 'g', 'a'];
 
-    for (let currentColorId = 0; currentColorId < pixelArray.length; currentColorId += 4) {
+    for (let currentColorId = 0; currentColorId < pixelArray.size; currentColorId += 4) {
       let color = {};
 
       Object.keys(colorNames)

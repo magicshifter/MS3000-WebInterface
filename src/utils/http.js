@@ -3,7 +3,7 @@ export const fetch =
     new Promise((resolve, reject) => {
       const req = new window.XMLHttpRequest();
 
-      req.timeout = 5000;
+      req.timeout = 3000;
       req.open(method, url);
 
       req.onload =
@@ -20,5 +20,21 @@ export const fetch =
         () =>
           reject(new Error('Request timed out'));
 
-      req.send();
+      try {
+        req.send();
+      } catch (e) {
+        console.log('error', { e });
+      }
     });
+
+export const parseJSONResult =
+  res => {
+    let parsed = new Error('invalid Response');
+    try {
+      parsed = JSON.parse(res);
+    } catch (e) {
+      parsed = e;
+    }
+
+    return parsed;
+  };

@@ -15,7 +15,7 @@
     },
     {
       "name": "jay vaughan",
-      "github": "ibisum"
+      "github": "seclorum"
     },
     {
       "name": "tom peak",
@@ -80,7 +80,7 @@
     "material-colors": "^1.0.0",
     "mocha": "^2.2.5",
     "node-sass": "^3.3.3",
-    "nodemon": "^1.8.1",
+    "nodemon": "1.9.0",
     "normalize.css": "git+https://github.com/necolas/normalize.css.git",
     "phantomjs": "^1.9.17",
     "phantomjs-polyfill": "0.0.1",
@@ -98,6 +98,7 @@
     "redux-devtools": "^3.0.0",
     "redux-devtools-dock-monitor": "^1.0.1",
     "redux-devtools-log-monitor": "^1.0.1",
+    "redux-form": "^4.2.0",
     "redux-immutablejs": "0.0.8",
     "redux-promise": "^0.5.1",
     "redux-thunk": "^1.0.0",

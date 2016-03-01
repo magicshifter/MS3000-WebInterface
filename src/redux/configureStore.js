@@ -23,7 +23,7 @@ export default function configureStore(initialState) {
     );
   } else {
     createStoreWithMiddleware = compose(
-      middleware,
+      middleware
     );
   }
 

@@ -8,6 +8,8 @@ import { actions as imageActions } from 'redux/modules/views/image';
 
 import FontSelect from 'components/inputs/FontSelect';
 
+import CloseViewButton from 'components/inputs/CloseViewButton';
+
 import { fontType, pixelsType, colorType } from 'utils/propTypes';
 import { makePixelsArray } from 'utils/pixels';
 
@@ -104,6 +106,8 @@ export class Font extends Component {
     return (
       <div className={classes['container']}>
         <h5>fonts</h5>
+
+        <CloseViewButton />
 
         <FontSelect
           setFont={setFont}

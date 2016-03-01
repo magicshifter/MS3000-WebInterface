@@ -63,7 +63,7 @@ export class ImageInput extends Component {
       pixels, columns,
     } = this.state;
 
-    if (pixels.length) {
+    if (pixels.count()) {
       setPixels(pixels);
       setColumns({ value: columns });
     }
@@ -90,7 +90,7 @@ export class ImageInput extends Component {
     const { label } = this.props;
     const { pixels } = this.state;
 
-    // XXX block(time) const fontSize = pixels.length ? '50px' : '200px';
+    // XXX block(time) const fontSize = pixels.count() ? '50px' : '200px';
 
     return (
       <div className={classes['container']}>
@@ -114,7 +114,7 @@ export class ImageInput extends Component {
           className={classes['sub_container']}
           style={{
             // XXX block(time) hide for now
-            display: false && pixels.length ? 'inherit' : 'none',
+            display: false && pixels.count() ? 'inherit' : 'none',
           }}
         >
           <canvas

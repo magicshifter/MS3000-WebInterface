@@ -8,7 +8,7 @@ import { isColor } from 'utils/types';
 import classes from './MenuLink.scss';
 
 export const MenuLink =
-  ({ text, to, icon, style, color }) => {
+  ({ text, title, to, icon, iconClass, style, color }) => {
     if (isColor(color) && icon === 'colors') {
       style = {
         color: rgba.css(color),
@@ -23,10 +23,10 @@ export const MenuLink =
               <IndexLink
                 to={to}
                 activeClassName={classes['active']}
-                title={text}
+                title={title || text}
               >
                 <i
-                  className={getIconCssClass(icon)}
+                  className={iconClass || getIconCssClass(icon)}
                   style={style}
                 />
               </IndexLink>
@@ -35,10 +35,10 @@ export const MenuLink =
               <Link
                 to={to}
                 activeClassName={classes['active']}
-                title={text}
+                title={title || text}
               >
                 <i
-                  className={getIconCssClass(icon)}
+                  className={iconClass || getIconCssClass(icon)}
                   style={style}
                 />
 
@@ -52,7 +52,9 @@ export const MenuLink =
 
 MenuLink.propTypes = {
   text: PropTypes.string,
+  title: PropTypes.string,
   icon: PropTypes.string,
+  iconClass: PropTypes.string,
   to: PropTypes.string.isRequired,
 };
 

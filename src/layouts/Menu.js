@@ -6,10 +6,18 @@ import classes from './Menu.scss';
 
 import { links } from 'GLOBALS';
 
+import DiscoverMagicShifter from 'components/DiscoverMagicShifter';
+
 export const Menu =
   () =>
     <nav className={classes['container']}>
       <ul>
+        <DiscoverMagicShifter
+          key='connect'
+          to='/connect'
+          icon='loading'
+          title='Connecting to MagicShifter 3000'
+        />
         {links.map(
           link =>
             <MenuLink

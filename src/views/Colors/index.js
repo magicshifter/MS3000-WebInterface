@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import ColorPicker from 'react-color';
 import Immutable from 'immutable';
 
+import CloseViewButton from 'components/inputs/CloseViewButton';
+
 import { actions as imageActions } from 'redux/modules/views/image';
 import { actions as colorListActions } from 'redux/modules/colorList';
 
@@ -93,6 +95,8 @@ export class Colors extends Component {
         style={style.rgba}
       >
         <h5>colors</h5>
+
+        <CloseViewButton />
 
         <div className={classes['picker']}>
           <ColorPicker
