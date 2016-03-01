@@ -1,8 +1,8 @@
 {
   "name": "MagicShifterUI",
   "version": "0.0.1",
-  "description": "magicshifter3000 userinterface",
-  "main": "index.js",
+  "description": "magicshifter3000 userinterface, built using react, redux and magic",
+  "main": "dist/bundled/index.html",
   "author": "Wizards@Work <dev@wizardsat.work> (http://wizardsat.work)",
   "contributors": [
     {
@@ -115,5 +115,8 @@
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.6.0",
     "yargs": "^3.18.0"
+  },
+  "devDependencies": {
+    "nw-builder": "2.2.0"
   }
 }
