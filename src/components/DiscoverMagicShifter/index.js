@@ -96,7 +96,7 @@ export class DiscoverMagicShifter extends Component {
 
     const [protocol, hostName] = host.path.split('://');
 
-    fetch(host.path)
+    fetch({ url: host.path })
       .then(
         res =>
           res.status === 200

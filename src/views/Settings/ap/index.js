@@ -54,7 +54,6 @@ export class ApSettings extends Component {
     this.toggleAddApMode = this.toggleAddApMode.bind(this);
     this.loadAvailableAps = this.loadAvailableAps.bind(this);
     this.handleScanApClick = this.handleScanApClick.bind(this);
-    this.addApToState = this.addApToState.bind(this);
     this.loadsavedAps = this.loadsavedAps.bind(this);
     this.handleLoadSavedApsClick = this.handleLoadSavedApsClick.bind(this);
     this.removeSavedAp = this.removeSavedAp.bind(this);
@@ -62,6 +61,9 @@ export class ApSettings extends Component {
     this.uploadNewAp = this.uploadNewAp.bind(this);
     this.setNewApPass = this.setNewApPass.bind(this);
     this.setNewApSSID = this.setNewApSSID.bind(this);
+
+    this.addApToState = this.addApToState.bind(this);
+    this.addActiveApToState = this.addActiveApToState.bind(this);
     this.addCustomApToState = this.addCustomApToState.bind(this);
 
     this.handleHostActiveClick = this.handleHostActiveClick.bind(this);
@@ -111,7 +113,7 @@ export class ApSettings extends Component {
       loadingPreferredApError: false,
     });
 
-    fetch(url)
+    fetch({ url })
       .then(
         res =>
         this._isMounted &&
@@ -146,7 +148,7 @@ export class ApSettings extends Component {
       });
 
       const url = `${protocol}://${host}/settings/wifi/delete?ssid=${ap.ssid}`;
-      fetch(url)
+      fetch({ url })
         .then(
           res =>
             this._isMounted &&
@@ -170,7 +172,7 @@ export class ApSettings extends Component {
   loadAvailableAps() {
     const { host, protocol } = this.props;
 
-    fetch(`${protocol}://${host}/listwlans`)
+    fetch({ url: `${protocol}://${host}/listwlans` })
       .then(
         res =>
         this._isMounted &&
@@ -192,7 +194,8 @@ export class ApSettings extends Component {
   loadsavedAps() {
     const { host, protocol } = this.props;
 
-    fetch(`${protocol}://${host}/settings/wifi/list`)
+    const url = `${protocol}://${host}/settings/wifi/list`;
+    fetch({ url })
       .then(
         res =>
         this._isMounted &&
@@ -216,61 +219,76 @@ export class ApSettings extends Component {
     });
   }
 
-  addCustomApToState(e) {
+  addCustomApToState() {
     const { newApSSID, newApPass } = this.state;
     const ap = {
       ssid: newApSSID,
       pass: newApPass,
       free: true,
     };
-    this.setState({
-      activeAp: ap,
-    });
-    this.addApToState(e, ap);
+    this.addApToState(ap);
   }
 
-  addApToState(e, newAp = false) {
-    const { availableAps, activeAp } = this.state;
+  addActiveApToState() {
+    const { activeAp } = this.state;
+
+    let newAp = {
+      ssid: activeAp,
+    };
+
+    const newApPassInput = this.refs.newApPass;
+    if (newApPassInput) {
+      newAp.pass = newApPassInput.value;
+    }
+
+    console.log({ newAp });
+
+    this.addApToState(newAp);
+  }
+
+  addApToState(newAp) {
+    const { availableAps } = this.state;
     let { savedAps } = this.state;
 
-    if ((activeAp && activeAp.ssid) || (newAp && newAp.ssid)) {
-      newAp = newAp || availableAps.filter(
-          ap =>
-            ap.ssid === activeAp
-        )[0];
-
-      const newApPassInput = this.refs.newApPass;
-      if (newApPassInput) {
-        newAp.pass = newApPassInput.value;
-      }
-
-      if (newAp && newAp.ssid) {
-        if (!newAp.free && !newAp.pass) {
-          this.setState({
-            pwError: 'This Accesspoint needs a password',
-          });
-          return;
-        }
-
-        if (savedAps.some(ap => newAp.ssid === ap.ssid)) {
-          savedAps = savedAps.map(
-            ap =>
-              ap.ssid !== newAp.ssid
-                ? ap
-                : {
-                  ...ap,
-                  ...newAp,
-                }
-          );
-        } else {
-          savedAps.push(newAp);
-        }
-
-        this.setState({
-          savedAps,
-        });
-      }
+    if (!newAp || !newAp.ssid) {
+      console.error('newAp is not defined');
+      return;
     }
+
+    newAp = availableAps.filter(
+      ap =>
+        ap.ssid === newAp.ssid
+    )[0] || newAp;
+
+    console.log('add ap first if');
+
+    if (!newAp.free && !newAp.pass) {
+      this.setState({
+        pwError: 'This Accesspoint needs a password',
+      });
+
+      return;
+    }
+
+    console.log('add ap second if');
+    if (savedAps.some(ap => newAp.ssid === ap.ssid)) {
+      savedAps = savedAps.map(
+        ap =>
+          ap.ssid !== newAp.ssid
+            ? ap
+            : {
+              ...ap,
+              ...newAp,
+            }
+      );
+    } else {
+      savedAps.push(newAp);
+    }
+
+    console.log({ savedAps });
+    this.setState({
+      savedAps,
+    });
   }
 
   sendPreferredAp({ e, ap = {}}) {
@@ -303,7 +321,7 @@ export class ApSettings extends Component {
     const { ssid, pass } = preferredAp;
     let url = `${protocol}://${host}/settings/wifi/preferred/set?ssid=${ssid}&pwd=${pass}`;
 
-    fetch(url)
+    fetch({ url })
       .then(
         res =>
         this._isMounted &&
@@ -333,7 +351,9 @@ export class ApSettings extends Component {
       uploadingNewAp: true,
     });
 
-    fetch(`${protocol}://${host}/settings/wifi/add?ssid=${ap.ssid}&pwd=${ap.pass}`)
+    const url = `${protocol}://${host}/settings/wifi/add?ssid=${ap.ssid}&pwd=${ap.pass}`;
+
+    fetch({ url })
       .then(
         res =>
         this._isMounted &&
@@ -455,15 +475,16 @@ export class ApSettings extends Component {
             )
               : <li>No Accesspoints found</li>
           }
-          {availableAps && availableAps.length > 0 &&
-          <li>
-            <input
-              type='button'
-              value='save'
-              disabled={loadingAvailableAps}
-              onClick={this.addApToState}
-            />
-          </li>
+          {
+            availableAps && availableAps.length > 0 &&
+            <li>
+              <input
+                type='button'
+                value='save'
+                disabled={loadingAvailableAps}
+                onClick={this.addActiveApToState}
+              />
+            </li>
           }
         </ul>
 
