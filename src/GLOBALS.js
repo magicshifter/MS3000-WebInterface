@@ -42,6 +42,9 @@ export const zoomLevel = 1;
 export const minZoomLevel = 0.5;
 export const maxZoomLevel = 3;
 
+export const savedAps = [];
+export const availableAps = [];
+
 export const links = [
   { to: '/info', icon: 'info' },
   { to: '/settings', icon: 'settings' },
