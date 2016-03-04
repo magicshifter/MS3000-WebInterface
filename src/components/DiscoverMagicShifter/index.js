@@ -41,6 +41,7 @@ export class DiscoverMagicShifter extends Component {
 
     this.connectToMagicShifter = this.connectToMagicShifter.bind(this);
     this.connectToHost = this.connectToHost.bind(this);
+    this.reconnect = this.reconnect.bind(this);
 
     this._isMounted = true;
     this.connectToMagicShifter();
@@ -57,8 +58,37 @@ export class DiscoverMagicShifter extends Component {
     hosts.forEach(this.connectToHost);
   }
 
+  foundHost({ host, protocol }) {
+    const { setSettings, setConnectState } = this.props;
+
+    setSettings({
+      host,
+      protocol,
+    });
+
+    setConnectState({
+      connectError: false,
+      connecting: false,
+      connected: true,
+    });
+  }
+
+  reconnect(host) {
+    const { setConnectState, connected } = this.props;
+
+    setTimeout(
+      () => {
+        if (!connected) {
+          setConnectState({
+            connectError: true,
+          });
+          this.connectToHost(host);
+        }
+      }, 1000);
+  }
+
   connectToHost(host) {
-    const { setSettings, connected, setConnectState } = this.props;
+    const { connected } = this.props;
 
     if (connected) {
       return;
@@ -66,37 +96,16 @@ export class DiscoverMagicShifter extends Component {
 
     const [protocol, hostName] = host.path.split('://');
 
-    fetch(host.path)
+    fetch({ url: host.path })
       .then(
-        res => {
-          if (res.status === 200) {
-            setSettings({
-              host: hostName,
-              protocol,
-            });
-
-            setConnectState({
-              connectError: false,
-              connecting: false,
-              connected: true,
-            });
-          } else {
-            setConnectState({
-              connectError: true,
-            });
-
-            this.connectToHost(host);
-          }
-        }
+        res =>
+          res.status === 200
+            ? this.foundHost({ host: hostName, protocol })
+            : this.reconnect(host)
       )
       .catch(
-        e => {
-          setConnectState({
-            connectError: true,
-          });
-
-          this.connectToHost(host);
-        }
+        e =>
+          this.reconnect(host)
       );
   }
 
@@ -109,7 +118,7 @@ export class DiscoverMagicShifter extends Component {
         title={title}
         to={to}
         style={{
-          color: (connectError && 'red') || (connected && 'green'),
+          color: (connected && 'green') || (connectError && 'red'),
         }}
         iconClass={
           getIconCssClass(

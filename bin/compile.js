@@ -52,11 +52,16 @@ compiler.run(function (err, stats) {
 
   fs.writeFileSync(path.join(paths.dist(), 'min.html'), fileContent, 'utf8');
 
-  var appCacheContent = fs.readFileSync(path.join(paths.client(), 'magicshifter.appcache'), 'utf8');
+  var appCacheDistFile = path.join(paths.dist(), 'magicshifter.appcache');
+  var appCacheSrcFile = path.join(paths.client(), 'magicshifter.appcache')
+  console.log('writing from', appCacheSrcFile, 'to', appCacheDistFile);
+
+  var appCacheContent = fs.readFileSync(appCacheSrcFile, 'utf8');
   appCacheContent = appCacheContent.replace(
     '|DATE|',
     new Date()
   );
 
-  fs.writeFileSync(path.join(paths.dist(), 'magicshifter.appcache'), appCacheContent, 'utf8');
+  fs.writeFileSync(appCacheDistFile, appCacheContent, 'utf8');
+  console.log('appcache copying finished');
 });

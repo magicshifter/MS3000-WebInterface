@@ -23,12 +23,30 @@ export class Effects extends Component {
     pixels: pixelsType.isRequired,
   };
 
-  render() {
-    const {
-      invertPixels, darkenPixels, lightenPixels, // actions
-      pixels,
-    } = this.props;
+  constructor(props) {
+    super(props);
 
+    this.invert = this.invert.bind(this);
+    this.lighten = this.lighten.bind(this);
+    this.darken = this.darken.bind(this);
+  }
+
+  invert() {
+    const { pixels, invertPixels } = this.props;
+    invertPixels(pixels);
+  }
+
+  lighten() {
+    const { pixels, lightenPixels } = this.props;
+    lightenPixels(pixels);
+  }
+
+  darken() {
+    const { pixels, darkenPixels } = this.props;
+    darkenPixels(pixels);
+  }
+
+  render() {
     return (
       <div
         className={classes['container']}
@@ -40,14 +58,14 @@ export class Effects extends Component {
         <ul>
           <li>
             <button
-              onClick={() => invertPixels(pixels)}
+              onClick={this.invert}
             >
               Invert
             </button>
           </li>
           <li>
             <button
-              onClick={() => darkenPixels(pixels)}
+              onClick={this.darken}
             >
               Darken
             </button>
@@ -55,7 +73,7 @@ export class Effects extends Component {
 
           <li>
             <button
-              onClick={() => lightenPixels(pixels)}
+              onClick={this.lighten}
             >
               Lighten
             </button>
