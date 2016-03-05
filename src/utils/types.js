@@ -126,6 +126,10 @@ export const isEmpty =
     !ele ||
     !Object.keys(ele).length;
 
+export const isError =
+  ele =>
+    Object.getPrototypeOf(ele).name === 'error';
+
 export const isNodeList =
   ele =>
     toStr.call(ele) === '[object NodeList]';
