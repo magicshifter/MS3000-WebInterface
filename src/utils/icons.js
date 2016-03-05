@@ -15,8 +15,3 @@ export const getIconCssClass =
 
     return classArray.join(' ');
   };
-
-export const getIconCssClassObject =
-  icon => ({
-    className: getIconCssClass(icon),
-  });
