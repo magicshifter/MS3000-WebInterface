@@ -1,3 +1,7 @@
+import { httpRequestTimeout } from 'GLOBALS';
+
+import { isString, isError } from 'utils/types';
+
 const log =
   startTime =>
     console.log(
@@ -5,6 +9,16 @@ const log =
       (new Date().getTime() - startTime) / 1000,
       'seconds'
     );
+
+export const getPort =
+  port =>
+    parseInt(port, 10) === 80
+      ? ''
+      : `:${port}`;
+
+export const getHost =
+  ({ host, protocol, port, path = '' }) =>
+    `${protocol}://${host}${getPort(port)}${path}`;
 
 export const fetchJSON =
   ({ url, method = 'GET' }) =>
@@ -18,37 +32,52 @@ export const fetch =
   ({ url, method = 'GET', json = false }) =>
     new Promise((resolve, reject) => {
       const requestStart = new Date().getTime();
+
       console.log('fetching', { url, method, json });
+
       const req = new window.XMLHttpRequest();
 
-      req.timeout = 10000;
+      req.timeout = httpRequestTimeout;
       req.open(method, url);
 
       req.onload =
         () => {
           log(requestStart);
-          if (req.status === 200) {
-            if (json) {
-              resolve(parseJSONResult(req));
-            } else {
-              resolve(req);
-            }
-            return;
-          }
 
-          reject(new Error(req.statusText));
+          if (req.status === 200) {
+            if (!json) {
+              console.log('not a json request');
+              return resolve(req);
+            }
+
+            const parsed = parseJSONResult(req.response || req.responseText);
+            if (isString(parsed)) {
+              console.log('json returned string');
+              return reject(parsed);
+            }
+
+            if (isError(parsed)) {
+              console.log('json returned error');
+              return reject(parsed.message);
+            }
+            console.log({ parsed, isError: isError(parsed) });
+            console.log('json resolved');
+            return resolve(parsed);
+          }
+          console.log('http unknown error');
+          reject(req.statusText || 'Unkown Error');
         };
 
       req.onerror =
         () => {
           log(requestStart);
-          reject(new Error('Network Error'));
+          reject('Network Error');
         };
 
       req.ontimeout =
         () => {
           log(requestStart);
-          reject(new Error('Request timed out'));
+          reject('Request timed out');
         };
 
       req.send();
@@ -56,12 +85,11 @@ export const fetch =
 
 export const parseJSONResult =
   res => {
-    let parsed = new Error('invalid Response');
-    console.log('parseJSON', { res });
+    let parsed = new Error('Response invalid');
     try {
-      parsed = JSON.parse(res.response || res.responseText);
+      parsed = JSON.parse(res);
     } catch (e) {
-      parsed = e;
+      console.error('JSON parsing error', { e, res });
     }
 
     return parsed;

@@ -7,6 +7,7 @@ export const materialColors = colorsToObj(mColors);
 // export const host = 'magicshifter.local';
 export const host = '192.168.4.1';
 export const protocol = 'http';
+export const httpRequestTimeout = 5000;
 
 // hosts the Magicshifter connects to on boot of the app
 export const hosts = [
@@ -25,7 +26,10 @@ export const connected = false;
 export const newApName = 'MS3000';
 export const newApPass = '';
 
-export const preferredApSSID = '';
+export const preferredAp = {
+  ssid: '',
+  pass: '',
+};
 export const preferredApPass = '';
 
 export const syslogIp = '';
