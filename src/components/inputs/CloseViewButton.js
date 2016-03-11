@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import { getIconCssClassObject } from 'utils/icons';
+import { getIconCssClass } from 'utils/icons';
 
 import classes from './CloseViewButton.scss';
 
@@ -11,7 +11,7 @@ export const CloseViewButton =
       className={classes['container']}
       to='/'
     >
-      <i {...getIconCssClassObject('close')} />
+      <i className={getIconCssClass('close')} />
     </Link>;
 
 export default CloseViewButton;
