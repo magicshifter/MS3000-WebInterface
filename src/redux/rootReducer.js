@@ -13,6 +13,8 @@ import imageView from 'redux/modules/views/image';
 import textView from 'redux/modules/views/text';
 import settingsView from 'redux/modules/views/settings';
 
+import accesspoints from 'redux/modules/accesspoints';
+
 export default Immutable.fromJS(combineReducers({
   routeReducer,
   form,
@@ -21,6 +23,7 @@ export default Immutable.fromJS(combineReducers({
   colorList,
   pixels,
   connect,
+  accesspoints,
 
   imageView,
   textView,

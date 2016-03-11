@@ -5,23 +5,28 @@ import { getIconCssClass } from 'utils/icons';
 
 import { fetch, parseJSONResult } from 'utils/http';
 
-import uniqueBy from 'unique-by';
-
 import classes from './ApSettings.scss';
 import errorClasses from 'styles/errors.scss';
 
 import { actions } from 'redux/modules/views/settings';
 
+import { actions as apActions } from 'redux/modules/accesspoints';
+
 const mapStateToProps =
-  ({ settingsView }) => {
+  ({ settingsView, accesspoints }) => {
     const {
       protocol,
       host,
     } = settingsView.toJS();
 
+    const { availableAps, savedAps, preferredAp } = accesspoints.toJS();
+
     return {
       protocol,
       host,
+      availableAps,
+      savedAps,
+      preferredAp,
     };
   };
 
@@ -30,69 +35,58 @@ export class ApSettings extends Component {
     addAp: PropTypes.func.isRequired,
     host: PropTypes.string.isRequired,
     protocol: PropTypes.string.isRequired,
+    removeSavedAp: PropTypes.func.isRequired,
+    fetchAvailableAps: PropTypes.func.isRequired,
+    fetchAvailableApsError: PropTypes.string,
+    availableAps: PropTypes.array.isRequired,
+    fetchSavedAps: PropTypes.func.isRequired,
+    fetchSavedApsError: PropTypes.string,
+    preferredAp: PropTypes.object,
+    fetchPreferredAp: PropTypes.func.isRequired,
+    fetchPreferredApError: PropTypes.string,
+    postNewAp: PropTypes.func.isRequired,
+    postNewApError: PropTypes.string,
+    savedAps: PropTypes.array.isRequired,
+  };
+
+  state = {
+    newApSSID: '',
+    newApPass: '',
+    fetchingAvailableAps: false,
+    fetchingSavedAps: false,
+    fetchingPreferredAp: false,
+    postingPreferredAp: false,
+    postingNewAp: false,
   };
 
   constructor(props) {
     super(props);
 
-    this.state = {
-      loadingAvailableAps: true,
-      loadingAvailableApsError: false,
-      loadingSavedAps: true,
-      loadingSavedApsError: false,
-      preferredAp: {},
-      savedAps: [],
-      availableAps: [],
-      uploadingNewAp: false,
-      uploadingNewApError: false,
-      uploadingPreferredAp: false,
-      uploadingPreferredApError: false,
-      newApSSID: '',
-      newApPass: '',
-    };
-
     this.toggleAddApMode = this.toggleAddApMode.bind(this);
-    this.loadAvailableAps = this.loadAvailableAps.bind(this);
-    this.handleScanApClick = this.handleScanApClick.bind(this);
-    this.loadsavedAps = this.loadsavedAps.bind(this);
-    this.handleLoadSavedApsClick = this.handleLoadSavedApsClick.bind(this);
+    this.fetchAvailableAps = this.fetchAvailableAps.bind(this);
+    this.fetchSavedAps = this.fetchSavedAps.bind(this);
     this.removeSavedAp = this.removeSavedAp.bind(this);
     this.sendPreferredAp = this.sendPreferredAp.bind(this);
     this.uploadNewAp = this.uploadNewAp.bind(this);
     this.setNewApPass = this.setNewApPass.bind(this);
     this.setNewApSSID = this.setNewApSSID.bind(this);
 
-    this.addApToState = this.addApToState.bind(this);
+    this.setApActive = this.setApActive.bind(this);
     this.addActiveApToState = this.addActiveApToState.bind(this);
     this.addCustomApToState = this.addCustomApToState.bind(this);
 
     this.handleHostActiveClick = this.handleHostActiveClick.bind(this);
 
-    this.loadAvailableAps();
-    this.loadsavedAps();
     this._isMounted = true;
+  }
+
+  componentDidMount() {
+    this.fetchAvailableAps();
+    this.fetchSavedAps();
   }
 
   componentWillUnmount() {
     this._isMounted = false;
-  }
-
-  handleScanApClick() {
-    this.setState({
-      loadingAvailableAps: true,
-      loadingAvailableApsError: false,
-    });
-
-    this.loadAvailableAps();
-  }
-
-  handleLoadSavedApsClick() {
-    this.setState({
-      loadingSavedAps: true,
-      loadingSavedApsError: false,
-    });
-
-    this.loadsavedAps();
   }
 
   handleHostActiveClick(e) {
@@ -103,114 +97,78 @@ export class ApSettings extends Component {
     }
   }
 
-  loadPreferredAp() {
-    const { protocol, host } = this.props;
+  fetchPreferredAp() {
+    const { protocol, host, fetchPreferredAp } = this.props;
 
     const url = `${protocol}://${host}/settings/wifi/preferred`;
 
     this.setState({
       loadingPreferredAp: true,
-      loadingPreferredApError: false,
     });
 
-    fetch({ url })
+    fetchPreferredAp(url)
       .then(
-        res =>
-        this._isMounted &&
-        this.setState({
-          loadingPreferredAp: false,
-          loadingPreferredApError: res.status !== 200 && 'Network Error',
-          preferredAp: parseJSONResult(res.response || res.responseText),
-        })
-      )
-      .catch(
-        e =>
-        this._isMounted &&
-        this.setState({
-          loadingPreferredAp: false,
-          loadingPreferredApError: e.message || 'Network Error',
-        })
+        () =>
+          this._isMounted &&
+          this.setState({
+            loadingPreferredAp: false,
+          })
       );
   }
 
   removeSavedAp({ e, ap = {}}) {
-    const { protocol, host } = this.props;
-    let { savedAps } = this.state;
+    const { protocol, host, removeSavedAp } = this.props;
 
     if (ap.ssid) {
-      savedAps = savedAps.filter(
-        testAp =>
-          testAp.ssid !== ap.ssid
-      );
+      const url = `${protocol}://${host}/settings/wifi/delete?ssid=${ap.ssid}`;
 
       this.setState({
         removingSavedAp: true,
       });
 
-      const url = `${protocol}://${host}/settings/wifi/delete?ssid=${ap.ssid}`;
-      fetch({ url })
+      removeSavedAp(url)
         .then(
           res =>
             this._isMounted &&
             this.setState({
               removingSavedAp: false,
-              removingSavedApError: res.status !== 200 && 'Network Error',
-              savedAps,
-            })
-        )
-        .catch(
-          e =>
-            this._isMounted &&
-            this.setState({
-              removingSavedAp: false,
-              removingSavedApError: e.message || 'Network Error',
             })
         );
     }
   }
 
-  loadAvailableAps() {
-    const { host, protocol } = this.props;
+  fetchAvailableAps() {
+    const { host, protocol, fetchAvailableAps } = this.props;
+    const url = `${protocol}://${host}/listwlans`;
 
-    fetch({ url: `${protocol}://${host}/listwlans` })
+    this.setState({
+      fetchingAvailableAps: true,
+    });
+
+    fetchAvailableAps(url)
       .then(
-        res =>
-        this._isMounted &&
-        this.setState({
-          loadingAvailableAps: false,
-          availableAps: uniqueBy(parseJSONResult(res.response || res.responseText), 'ssid'),
-        })
-      )
-      .catch(
-        e =>
-        this._isMounted &&
-        this.setState({
-          loadingAvailableAps: false,
-          loadingAvailableApsError: e.message || 'Unknown Error',
-        })
+        () =>
+          this.setState({
+            fetchingAvailableAps: false,
+          })
       );
   }
 
-  loadsavedAps() {
-    const { host, protocol } = this.props;
-
+  fetchSavedAps() {
+    const { host, protocol, fetchSavedAps } = this.props;
     const url = `${protocol}://${host}/settings/wifi/list`;
-    fetch({ url })
+
+    this.setState({
+      fetchingSavedAps: true,
+    });
+
+    fetchSavedAps(url)
       .then(
-        res =>
-        this._isMounted &&
-        this.setState({
-          loadingSavedAps: false,
-          savedAps: uniqueBy(parseJSONResult(res.response || res.responseText), 'ssid'),
-        })
-      ).catch(
-      e =>
-      this._isMounted &&
-      this.setState({
-        loadingSavedAps: false,
-        loadingSavedApsError: e.message || 'Unknown Error',
-      })
-    );
+        () =>
+          this.setState({
+            fetchingSavedAps: false,
+          })
+      );
   }
 
   toggleAddApMode() {
@@ -226,7 +184,7 @@ export class ApSettings extends Component {
       pass: newApPass,
       free: true,
     };
-    this.addApToState(ap);
+    this.setApActive(ap);
   }
 
   addActiveApToState() {
@@ -241,14 +199,12 @@ export class ApSettings extends Component {
       newAp.pass = newApPassInput.value;
     }
 
-    console.log({ newAp });
-
-    this.addApToState(newAp);
+    this.setApActive(newAp);
   }
 
-  addApToState(newAp) {
-    const { availableAps } = this.state;
-    let { savedAps } = this.state;
+  setApActive(newAp) {
+    const { availableAps } = this.props;
+    let { savedAps } = this.props;
 
     if (!newAp || !newAp.ssid) {
       console.error('newAp is not defined');
@@ -260,8 +216,6 @@ export class ApSettings extends Component {
         ap.ssid === newAp.ssid
     )[0] || newAp;
 
-    console.log('add ap first if');
-
     if (!newAp.free && !newAp.pass) {
       this.setState({
         pwError: 'This Accesspoint needs a password',
@@ -270,7 +224,6 @@ export class ApSettings extends Component {
       return;
     }
 
-    console.log('add ap second if');
     if (savedAps.some(ap => newAp.ssid === ap.ssid)) {
       savedAps = savedAps.map(
         ap =>
@@ -285,15 +238,13 @@ export class ApSettings extends Component {
       savedAps.push(newAp);
     }
 
-    console.log({ savedAps });
     this.setState({
       savedAps,
     });
   }
 
   sendPreferredAp({ e, ap = {}}) {
-    const { host, protocol } = this.props;
-    const { savedAps } = this.state;
+    const { host, protocol, savedAps } = this.props;
 
     if (!ap || !ap.ssid) {
       this.setState({
@@ -341,7 +292,7 @@ export class ApSettings extends Component {
   }
 
   uploadNewAp({ e, ap = {}}) {
-    const { host, protocol } = this.props;
+    const { host, protocol, postNewAp } = this.props;
 
     if (!ap || !ap.ssid) {
       return;
@@ -353,14 +304,14 @@ export class ApSettings extends Component {
 
     const url = `${protocol}://${host}/settings/wifi/add?ssid=${ap.ssid}&pwd=${ap.pass}`;
 
-    fetch({ url })
+    postNewAp(url)
       .then(
         res =>
-        this._isMounted &&
-        this.setState({
-          uploadingNewAp: false,
-          uploadingNewApError: res.status !== 200 && 'Network Error',
-        })
+          this._isMounted &&
+          this.setState({
+            uploadingNewAp: false,
+            uploadingNewApError: res.status !== 200 && 'Network Error',
+          })
       )
       .catch(
         e =>
@@ -386,47 +337,50 @@ export class ApSettings extends Component {
 
   render() {
     const {
-      availableAps, loadingAvailableAps, loadingAvailableApsError,
-      savedAps, loadingSavedAps, loadingSavedApsError,
+      availableAps,
+      savedAps,
+      fetchAvailableApsError,
+      preferredAp,
+      fetchSavedApsError,
+    } = this.props;
+
+    const {
+      fetchingAvailableAps,
+      fetchingSavedAps,
       uploadingNewAp, uploadingNewApError,
       uploadingPreferredAp, uploadingPreferredApError,
       removingSavedAp, removingSavedApError,
       addApModeActive, newApSSID, newApPass,
-      activeAp, pwError, preferredAp,
-      } = this.state;
+      activeAp, pwError,
+    } = this.state;
 
     return (
-      <div
-        className={classes['container']}
-      >
-
-        <div
-          className={classes['scan']}
-        >
+      <div className={classes['container']}>
+        <div className={classes['scan']}>
           <h5>
             Available Accesspoints:
           </h5>
 
           <button
-            type='button'
-            onClick={this.handleScanApClick}
+            disabled={fetchingAvailableAps}
+            onClick={this.fetchAvailableAps}
           >
-
             <i
               className={[
-                getIconCssClass(loadingAvailableAps ? ['loading', 'spin'] : 'download'),
-                loadingAvailableAps ? classes['loading'] : '',
+                getIconCssClass(fetchingAvailableAps ? ['loading', 'spin'] : 'download'),
+                fetchingAvailableAps ? classes['loading'] : '',
               ].join(' ').trim()}
             />
 
-            {loadingAvailableAps
+            {fetchingAvailableAps
               ? 'Scanning for Accesspoints'
               : 'Scan for Accesspoints'
             }
           </button>
+
           {
-            loadingAvailableApsError &&
-            <p className={errorClasses['error']}>{loadingAvailableApsError}</p>
+            fetchAvailableApsError &&
+            <p className={errorClasses['error']}>{fetchAvailableApsError}</p>
           }
         </div>
 
@@ -481,7 +435,7 @@ export class ApSettings extends Component {
               <input
                 type='button'
                 value='save'
-                disabled={loadingAvailableAps}
+                disabled={fetchingAvailableAps}
                 onClick={this.addActiveApToState}
               />
             </li>
@@ -496,23 +450,23 @@ export class ApSettings extends Component {
 
           <button
             type='button'
-            onClick={this.handleLoadSavedApsClick}
+            onClick={this.fetchSavedAps}
           >
 
             <i
               className={[
-                getIconCssClass(loadingSavedAps ? ['loading', 'spin'] : 'download'),
-                loadingSavedAps ? classes['loading'] : '',
+                getIconCssClass(fetchingSavedAps ? ['loading', 'spin'] : 'download'),
+                fetchingSavedAps ? classes['loading'] : '',
               ].join(' ').trim()}
             />
 
-            {loadingSavedAps
+            {fetchingSavedAps
               ? 'Loading '
               : 'Load '
             }
             saved Accesspoints
           </button>
-          {loadingSavedApsError && <p className={errorClasses['error']}>{loadingSavedApsError}</p>}
+          {fetchSavedApsError && <fetchSavedApsp className={errorClasses['error']}>{fetchSavedApsError}</fetchSavedApsp>}
         </div>
 
         <ul>
@@ -551,7 +505,7 @@ export class ApSettings extends Component {
 
                     <li>
                       <button
-                        disabled={uploadingPreferredAp || preferredAp.ssid === ap.ssid}
+                        disabled={uploadingPreferredAp}
                         onClick={e => this.sendPreferredAp({ e, ap })}
                       >
                         <i
@@ -559,7 +513,7 @@ export class ApSettings extends Component {
                             getIconCssClass(
                               uploadingPreferredAp
                                 ? ['loading', 'spin']
-                                : preferredAp.ssid === ap.ssid
+                                : preferredAp && preferredAp.ssid === ap.ssid
                                   ? 'ok'
                                   : uploadingPreferredApError
                                     ? 'close'
@@ -642,4 +596,4 @@ export class ApSettings extends Component {
   }
 }
 
-export default connect(mapStateToProps, actions)(ApSettings);
+export default connect(mapStateToProps, { ...actions, ...apActions })(ApSettings);
