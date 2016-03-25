@@ -46,25 +46,20 @@ export const fetch =
 
           if (req.status === 200) {
             if (!json) {
-              console.log('not a json request');
               return resolve(req);
             }
 
             const parsed = parseJSONResult(req.response || req.responseText);
             if (isString(parsed)) {
-              console.log('json returned string');
               return reject(parsed);
             }
 
             if (isError(parsed)) {
-              console.log('json returned error');
               return reject(parsed.message);
             }
             console.log({ parsed, isError: isError(parsed) });
-            console.log('json resolved');
             return resolve(parsed);
           }
-          console.log('http unknown error');
           reject(req.statusText || 'Unkown Error');
         };
 
