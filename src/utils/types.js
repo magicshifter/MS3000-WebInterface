@@ -17,12 +17,11 @@ export const cleanTypes =
   };
 
 export const test =
-  (ele, types, ...addTypes) => (
+  (ele, types, ...addTypes) =>
     addTypes
       .concat(types)
       .some(t => test(ele, cleanTypes(t)))
-      .length > 0
-  );
+      .length > 0;
 
 export const isType =
   (ele, ...types) =>
