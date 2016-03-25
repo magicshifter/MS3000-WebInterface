@@ -1,7 +1,7 @@
 import thunk from 'redux-thunk';
 import rootReducer from './rootReducer';
 import { applyMiddleware, compose, createStore } from 'redux';
-import { syncHistory } from 'react-router-redux';
+import { routerMiddleware } from 'react-router-redux';
 import promiseMiddleware from 'redux-promise';
 import { browserHistory } from 'react-router';
 
@@ -10,7 +10,7 @@ import devTools from 'containers/DevTools';
 export default function configureStore(initialState) {
   let createStoreWithMiddleware;
 
-  const syncedHistory = syncHistory(browserHistory);
+  const syncedHistory = routerMiddleware(browserHistory);
 
   const middleware = applyMiddleware(thunk, promiseMiddleware, syncedHistory);
 
