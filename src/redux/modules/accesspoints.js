@@ -117,7 +117,6 @@ export default handleActions({
       console.log('fetchPreferredAp returned', { payload });
     },
     throw(state, { payload }) {
-      'use strict';
       return Immutable.fromJS({
         ...state.toJS(),
         fetchPreferredApError: payload.message || 'Unkown Error',
@@ -131,7 +130,7 @@ export default handleActions({
       return state;
     },
     throw(state, { payload }) {
-      console.log('POST_NEW_AP next', { payload });
+      console.log('POST_NEW_AP throw', { payload });
       return state;
     },
   },
@@ -139,9 +138,11 @@ export default handleActions({
   [REMOVE_SAVED_AP]: {
     next(state, { payload }) {
       console.log({ payload });
+      return state;
     },
     throw(state, { payload }) {
       console.log({ payload });
+      return state;
     },
   },
 
