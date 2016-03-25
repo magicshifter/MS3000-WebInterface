@@ -119,8 +119,10 @@ export class ApSettings extends Component {
   removeSavedAp({ e, ap = {}}) {
     const { protocol, host, removeSavedAp } = this.props;
 
-    if (ap.ssid) {
-      const url = `${protocol}://${host}/settings/wifi/delete?ssid=${ap.ssid}`;
+    const { ssid } = ap;
+
+    if (ssid) {
+      const url = `${protocol}://${host}/settings/wifi/delete?ssid=${ssid}`;
 
       this.setState({
         removingSavedAp: true,
@@ -182,7 +184,7 @@ export class ApSettings extends Component {
     const ap = {
       ssid: newApSSID,
       pass: newApPass,
-      free: true,
+      free: !!newApPass,
     };
 
     this.setApActive(ap);
@@ -191,14 +193,12 @@ export class ApSettings extends Component {
   addActiveApToState() {
     const { activeAp } = this.state;
 
+    const { value = '' } = this.refs.newApPass;
+
     let newAp = {
       ssid: activeAp,
+      pass: value,
     };
-
-    const newApPassInput = this.refs.newApPass;
-    if (newApPassInput) {
-      newAp.pass = newApPassInput.value;
-    }
 
     this.setApActive(newAp);
   }
@@ -212,10 +212,15 @@ export class ApSettings extends Component {
       return;
     }
 
-    newAp = availableAps.filter(
+    const filteredAp = availableAps.filter(
       ap =>
         ap.ssid === newAp.ssid
-    )[0] || newAp;
+    )[0];
+
+    newAp = {
+      ...filteredAp,
+      ...newAp,
+    };
 
     if (!newAp.free && !newAp.pass) {
       this.setState({
@@ -271,7 +276,7 @@ export class ApSettings extends Component {
     });
 
     const { ssid, pass } = preferredAp;
-    let url = `${protocol}://${host}/settings/wifi/preferred/set?ssid=${ssid}&pwd=${pass}`;
+    const url = `${protocol}://${host}/settings/wifi/preferred/set?ssid=${ssid}&pwd=${pass}`;
 
     fetch({ url })
       .then(
@@ -295,7 +300,9 @@ export class ApSettings extends Component {
   uploadNewAp({ e, ap = {}}) {
     const { host, protocol, postNewAp } = this.props;
 
-    if (!ap || !ap.ssid) {
+    const { ssid, pass = '' } = ap;
+
+    if (!ssid) {
       return;
     }
 
@@ -303,7 +310,7 @@ export class ApSettings extends Component {
       uploadingNewAp: true,
     });
 
-    const url = `${protocol}://${host}/settings/wifi/add?ssid=${ap.ssid}&pwd=${ap.pass}`;
+    const url = `${protocol}://${host}/settings/wifi/add?ssid=${ssid}&pwd=${pass}`;
 
     postNewAp(url)
       .then(
