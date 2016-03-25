@@ -36,7 +36,7 @@ class CoreLayout extends Component {
     const { windowResize, scrollEvent } = props;
 
     window.addEventListener('resize', windowResize);
-    window.addEventListener('mousewheel', scrollEvent);
+    window.addEventListener('zoom', scrollEvent);
   }
 
   render() {

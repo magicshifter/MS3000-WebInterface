@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { getIconCssClass } from 'utils/icons';
 
-import { fetch, parseJSONResult } from 'utils/http';
+import { fetch } from 'utils/http';
 
 import classes from './ApSettings.scss';
 import errorClasses from 'styles/errors.scss';
@@ -184,6 +184,7 @@ export class ApSettings extends Component {
       pass: newApPass,
       free: true,
     };
+
     this.setApActive(ap);
   }
 

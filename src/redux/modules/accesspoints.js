@@ -133,7 +133,7 @@ export default handleActions({
     throw(state, { payload }) {
       console.log('POST_NEW_AP next', { payload });
       return state;
-    }
+    },
   },
 
   [REMOVE_SAVED_AP]: {

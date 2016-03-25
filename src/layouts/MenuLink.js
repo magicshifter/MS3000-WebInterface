@@ -4,13 +4,15 @@ import rgba from 'rgba-convert';
 
 import { getIconCssClass } from 'utils/icons';
 import { isColor } from 'utils/types';
+import { colorType } from 'utils/propTypes';
 
 import classes from './MenuLink.scss';
 
 export const MenuLink =
-  ({ text, title, to, icon, iconClass, style, color }) => {
+  ({ text, title, to, icon, iconClass, style = {}, color }) => {
     if (isColor(color) && icon === 'colors') {
       style = {
+        ...style,
         color: rgba.css(color),
       };
     }
@@ -56,6 +58,8 @@ MenuLink.propTypes = {
   icon: PropTypes.string,
   iconClass: PropTypes.string,
   to: PropTypes.string.isRequired,
+  style: PropTypes.object,
+  color: colorType,
 };
 
 export default MenuLink;
