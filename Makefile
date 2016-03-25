@@ -97,6 +97,7 @@ inline:
 
 	@cp ${JS_DIST_DIR}index.js ${JS_DIST_DIR}bundled/index.js
 	@cp ${JS_DIST_DIR}magicshifter.appcache ${JS_DIST_DIR}bundled/magicshifter.appcache
+	@cp ${JS_DIST_DIR}favicon.ico ${JS_DIST_DIR}bundled/favicon.ico
 
 	@gzip --keep --force --best dist/bundled/index.js
 	@echo "inlining finished"
