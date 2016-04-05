@@ -48,18 +48,12 @@ export class Font extends Component {
     fonts: PropTypes.arrayOf(fontType).isRequired,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.uploadText = this.uploadText.bind(this);
-  }
-
-  uploadText() {
+  uploadText = () => {
     const {
       text, fontId, fonts, // text state
       pixels, // pixel state
       totalColumns, rows, color, // ImageView state
-      setPixels, setColumns, // actions
+      setPixels, setColumns, setText, // actions
     } = this.props;
 
     const canvas = document.createElement('canvas');
@@ -94,11 +88,12 @@ export class Font extends Component {
       }
     }
 
+    setText(text);
     setPixels(pixels);
     setColumns({ value: w });
   }
 
-  setText(e) {
+  setText = e => {
     const { setText } = this.props;
     setText(e.target.value);
   }
