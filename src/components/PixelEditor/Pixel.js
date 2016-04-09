@@ -25,28 +25,32 @@ export class Pixel extends Component {
     pixelHover: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
+  onClick =
+    e => {
+      const { pixel, color, pixelClick } = this.props;
 
-    this.onMouseOver = this.onMouseOver.bind(this);
+      pixelClick({ pixel, color });
 
-    this.defaultStyle = {
-      table: {},
-      tr: {},
+      e.preventDefault();
+      return false;
     };
-  }
 
-  onMouseOver(args) {
-    const { pixelHover, color } = this.props;
-    const { e, pixel } = args;
+  onMouseOver =
+    e => {
+      const { pixelHover, pixel, color } = this.props;
 
-    if (e.touches || e.buttons === 1) {
-      pixelHover({ pixel, color });
-    }
-  }
+      console.log('onmouseover');
+
+      if (e.touches || e.buttons === 1) {
+        pixelHover({ pixel, color });
+      }
+
+      e.preventDefault();
+      return false;
+    };
 
   render() {
-    const { pixel, pixelClick, color, size } = this.props;
+    const { pixel, size } = this.props;
 
     const style = {
       backgroundColor: rgba.css(pixel.color),
@@ -57,10 +61,10 @@ export class Pixel extends Component {
     return (
       <td
         className={classes['container']}
-        onMouseDown={() => pixelClick({ pixel, color })}
-        onMouseOver={e => this.onMouseOver({ e, pixel })}
-        onTouchStart={e => this.onMouseOver({ e, pixel })}
-        onTouchMove={e => this.onMouseOver({ e, pixel })}
+        onMouseDown={this.onClick}
+        onMouseOver={this.onMouseOver}
+        onTouchStart={this.onClick}
+        onTouchMove={this.onMouseOver}
         style={style}
       ></td>
     );
@@ -68,4 +72,3 @@ export class Pixel extends Component {
 }
 
 export default connect(mapStateToProps, actions)(Pixel);
-
