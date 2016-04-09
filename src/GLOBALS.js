@@ -76,7 +76,7 @@ export const secondaryLinks =
       to: `${pixelEditorUrlBase}/${url}`,
       text: url,
       icon: url,
-      style: { ...pixelEditorSubUrls[url]},
+      style: { ...pixelEditorSubUrls[url] },
     })
   );
 
