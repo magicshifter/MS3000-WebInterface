@@ -38,15 +38,40 @@ export class Pixel extends Component {
   onMouseOver =
     e => {
       const { pixelHover, pixel, color } = this.props;
+      const { touches, buttons } = e;
+      const touchExists = touches && touches.length > 0;
 
-      console.log('onmouseover');
+      const { target } = e;
 
-      if (e.touches || e.buttons === 1) {
+      if (touchExists || buttons === 1) {
+        console.log({ tar: target, id: pixel.id, touches: e.touches });
+        // console.log({ evt: 'onmouseover', e, touches: touches });
+        // console.log({ pixel, color });
         pixelHover({ pixel, color });
       }
 
       e.preventDefault();
       return false;
+    };
+
+  onTouchMove =
+    e => {
+      const { color, pixelHover } = this.props;
+
+      const touches = e.changedTouches;
+      const first = touches[0];
+
+      const { clientX, clientY } = first;
+
+      const target = document.elementFromPoint(clientX, clientY);
+
+      if (target) {
+        const id = target.id.replace('c-', '');
+        const pixel = { id };
+        pixelHover({ pixel, color });
+      }
+
+      e.preventDefault();
     };
 
   render() {
@@ -60,11 +85,12 @@ export class Pixel extends Component {
 
     return (
       <td
+        id={`c-${pixel.id}`}
         className={classes['container']}
         onMouseDown={this.onClick}
         onMouseOver={this.onMouseOver}
         onTouchStart={this.onClick}
-        onTouchMove={this.onMouseOver}
+        onTouchMove={this.onTouchMove}
         style={style}
       ></td>
     );
