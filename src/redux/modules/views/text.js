@@ -11,6 +11,7 @@ const defaultValues = {
   fonts: Immutable.List(fonts),
   textColor: Immutable.Map(textColor),
 };
+
 const initialState = Immutable.Map(defaultValues);
 
 // ------------------------------------
@@ -59,5 +60,4 @@ export default handleActions({
   [SET_COLOR]:
     (state, { payload: { name, value } }) =>
       state.setIn(['textColor', name], value),
-
 }, initialState);
