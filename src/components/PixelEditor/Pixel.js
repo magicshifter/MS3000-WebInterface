@@ -41,12 +41,7 @@ export class Pixel extends Component {
       const { touches, buttons } = e;
       const touchExists = touches && touches.length > 0;
 
-      const { target } = e;
-
       if (touchExists || buttons === 1) {
-        console.log({ tar: target, id: pixel.id, touches: e.touches });
-        // console.log({ evt: 'onmouseover', e, touches: touches });
-        // console.log({ pixel, color });
         pixelHover({ pixel, color });
       }
 
