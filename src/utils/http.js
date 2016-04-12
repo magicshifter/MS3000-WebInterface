@@ -2,9 +2,18 @@ import { httpRequestTimeout } from 'GLOBALS';
 
 import { isString, isError } from 'utils/types';
 
+const isDebug =
+  () =>
+    window.__DEBUG__ && window.__DEBUG__.http === true;
+
 const log =
+  (...msgs) =>
+    isDebug() &&
+    console.log(...msgs);
+
+const logRequest =
   startTime =>
-    console.log(
+    log(
       'request took',
       (new Date().getTime() - startTime) / 1000,
       'seconds'
@@ -33,7 +42,7 @@ export const fetch =
     new Promise((resolve, reject) => {
       const requestStart = new Date().getTime();
 
-      console.log('fetching', { url, method, json });
+      log('fetching', { url, method, json });
 
       const req = new window.XMLHttpRequest();
 
@@ -42,7 +51,7 @@ export const fetch =
 
       req.onload =
         () => {
-          log(requestStart);
+          logRequest(requestStart);
 
           if (req.status === 200) {
             if (!json) {
@@ -57,7 +66,7 @@ export const fetch =
             if (isError(parsed)) {
               return reject(parsed.message);
             }
-            console.log({ parsed, isError: isError(parsed) });
+            log({ parsed, isError: isError(parsed) });
             return resolve(parsed);
           }
           reject(req.statusText || 'Unkown Error');
@@ -65,13 +74,13 @@ export const fetch =
 
       req.onerror =
         () => {
-          log(requestStart);
+          logRequest(requestStart);
           reject('Network Error');
         };
 
       req.ontimeout =
         () => {
-          log(requestStart);
+          logRequest(requestStart);
           reject('Request timed out');
         };
 
