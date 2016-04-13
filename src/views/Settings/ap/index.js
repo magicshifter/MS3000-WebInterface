@@ -62,21 +62,6 @@ export class ApSettings extends Component {
   constructor(props) {
     super(props);
 
-    this.toggleAddApMode = this.toggleAddApMode.bind(this);
-    this.fetchAvailableAps = this.fetchAvailableAps.bind(this);
-    this.fetchSavedAps = this.fetchSavedAps.bind(this);
-    this.removeSavedAp = this.removeSavedAp.bind(this);
-    this.sendPreferredAp = this.sendPreferredAp.bind(this);
-    this.uploadNewAp = this.uploadNewAp.bind(this);
-    this.setNewApPass = this.setNewApPass.bind(this);
-    this.setNewApSSID = this.setNewApSSID.bind(this);
-
-    this.setApActive = this.setApActive.bind(this);
-    this.addActiveApToState = this.addActiveApToState.bind(this);
-    this.addCustomApToState = this.addCustomApToState.bind(this);
-
-    this.handleHostActiveClick = this.handleHostActiveClick.bind(this);
-
     this._isMounted = true;
   }
 
@@ -89,259 +74,272 @@ export class ApSettings extends Component {
     this._isMounted = false;
   }
 
-  handleHostActiveClick(e) {
-    if (e.target && e.target.value) {
+  handleHostActiveClick =
+    e => {
+      if (e.target && e.target.value) {
+        this.setState({
+          activeAp: e.target.value,
+        });
+      }
+    };
+
+  fetchPreferredAp =
+    () => {
+      const { protocol, host, fetchPreferredAp } = this.props;
+
+      const url = `${protocol}://${host}/settings/wifi/preferred`;
+
       this.setState({
-        activeAp: e.target.value,
+        loadingPreferredAp: true,
       });
-    }
-  }
 
-  fetchPreferredAp() {
-    const { protocol, host, fetchPreferredAp } = this.props;
+      fetchPreferredAp(url)
+        .then(
+          () =>
+            this._isMounted &&
+            this.setState({
+              loadingPreferredAp: false,
+            })
+        );
+    };
 
-    const url = `${protocol}://${host}/settings/wifi/preferred`;
+  removeSavedAp =
+    ({ e, ap = {}}) => {
+      const { protocol, host, removeSavedAp } = this.props;
 
-    this.setState({
-      loadingPreferredAp: true,
-    });
+      const { ssid } = ap;
 
-    fetchPreferredAp(url)
-      .then(
-        () =>
+      if (ssid) {
+        const url = `${protocol}://${host}/settings/wifi/delete?ssid=${ssid}`;
+
+        this.setState({
+          removingSavedAp: true,
+        });
+
+        removeSavedAp(url)
+          .then(
+            res =>
+              this._isMounted &&
+              this.setState({
+                removingSavedAp: false,
+              })
+          );
+      }
+    };
+
+  fetchAvailableAps =
+    () => {
+      const { host, protocol, fetchAvailableAps } = this.props;
+      const url = `${protocol}://${host}/listwlans`;
+
+      this.setState({
+        fetchingAvailableAps: true,
+      });
+
+      fetchAvailableAps(url)
+        .then(
+          () =>
+            this.setState({
+              fetchingAvailableAps: false,
+            })
+        );
+    };
+
+  fetchSavedAps =
+    () => {
+      const { host, protocol, fetchSavedAps } = this.props;
+      const url = `${protocol}://${host}/settings/wifi/list`;
+
+      this.setState({
+        fetchingSavedAps: true,
+      });
+
+      fetchSavedAps(url)
+        .then(
+          () =>
+            this.setState({
+              fetchingSavedAps: false,
+            })
+        );
+    };
+
+  toggleAddApMode =
+    () => {
+      this.setState({
+        addApModeActive: !this.state.addApModeActive,
+      });
+    };
+
+  addCustomApToState =
+    () => {
+      const { newApSSID, newApPass } = this.state;
+      const ap = {
+        ssid: newApSSID,
+        pass: newApPass,
+        free: !!newApPass,
+      };
+
+      this.setApActive(ap);
+    };
+
+  addActiveApToState =
+    () => {
+      const { activeAp } = this.state;
+
+      const { value = '' } = this.refs.newApPass;
+
+      let newAp = {
+        ssid: activeAp,
+        pass: value,
+      };
+
+      this.setApActive(newAp);
+    };
+
+  setApActive =
+    newAp => {
+      const { availableAps } = this.props;
+      let { savedAps } = this.props;
+
+      if (!newAp || !newAp.ssid) {
+        console.error('newAp is not defined');
+        return;
+      }
+
+      const filteredAp = availableAps.filter(
+        ap =>
+          ap.ssid === newAp.ssid
+      )[0];
+
+      newAp = {
+        ...filteredAp,
+        ...newAp,
+      };
+
+      if (!newAp.free && !newAp.pass) {
+        this.setState({
+          pwError: 'This Accesspoint needs a password',
+        });
+
+        return;
+      }
+
+      if (savedAps.some(ap => newAp.ssid === ap.ssid)) {
+        savedAps = savedAps.map(
+          ap =>
+            ap.ssid !== newAp.ssid
+              ? ap
+              : {
+                ...ap,
+                ...newAp,
+              }
+        );
+      } else {
+        savedAps.push(newAp);
+      }
+
+      this.setState({
+        savedAps,
+      });
+    };
+
+  sendPreferredAp =
+    ({ e, ap = {}}) => {
+      const { host, protocol, savedAps } = this.props;
+
+      if (!ap || !ap.ssid) {
+        this.setState({
+          uploadingPreferredApError: 'Can not send empty preferred Ap to MagicShifter',
+        });
+        return;
+      }
+
+      const preferredAp = savedAps.filter(
+        existingAp =>
+          ap.ssid === existingAp.ssid
+      )[0];
+      console.log({ preferredAp });
+
+      if (!preferredAp || !preferredAp.ssid) {
+        return;
+      }
+
+      this.setState({
+        uploadingPreferredAp: true,
+        uploadingPreferredApError: false,
+        preferredAp,
+      });
+
+      const { ssid, pass } = preferredAp;
+      const url = `${protocol}://${host}/settings/wifi/preferred/set?ssid=${ssid}&pwd=${pass}`;
+
+      fetch({ url })
+        .then(
+          res =>
           this._isMounted &&
           this.setState({
-            loadingPreferredAp: false,
+            uploadingPreferredAp: false,
+            uploadingPreferredApError: res.status !== 200 && 'Network Error',
           })
-      );
-  }
+        )
+        .catch(
+          e =>
+          this._isMounted &&
+          this.setState({
+            uploadingPreferredAp: false,
+            uploadingPreferredApError: e.message || 'Unknown Error',
+          })
+        );
+    };
 
-  removeSavedAp({ e, ap = {}}) {
-    const { protocol, host, removeSavedAp } = this.props;
+  uploadNewAp =
+    ({ e, ap = {}}) => {
+      const { host, protocol, postNewAp } = this.props;
 
-    const { ssid } = ap;
+      const { ssid, pass = '' } = ap;
 
-    if (ssid) {
-      const url = `${protocol}://${host}/settings/wifi/delete?ssid=${ssid}`;
+      if (!ssid) {
+        return;
+      }
 
       this.setState({
-        removingSavedAp: true,
+        uploadingNewAp: true,
       });
 
-      removeSavedAp(url)
+      const url = `${protocol}://${host}/settings/wifi/add?ssid=${ssid}&pwd=${pass}`;
+
+      postNewAp(url)
         .then(
           res =>
             this._isMounted &&
             this.setState({
-              removingSavedAp: false,
+              uploadingNewAp: false,
+              uploadingNewApError: res.status !== 200 && 'Network Error',
             })
-        );
-    }
-  }
-
-  fetchAvailableAps() {
-    const { host, protocol, fetchAvailableAps } = this.props;
-    const url = `${protocol}://${host}/listwlans`;
-
-    this.setState({
-      fetchingAvailableAps: true,
-    });
-
-    fetchAvailableAps(url)
-      .then(
-        () =>
-          this.setState({
-            fetchingAvailableAps: false,
-          })
-      );
-  }
-
-  fetchSavedAps() {
-    const { host, protocol, fetchSavedAps } = this.props;
-    const url = `${protocol}://${host}/settings/wifi/list`;
-
-    this.setState({
-      fetchingSavedAps: true,
-    });
-
-    fetchSavedAps(url)
-      .then(
-        () =>
-          this.setState({
-            fetchingSavedAps: false,
-          })
-      );
-  }
-
-  toggleAddApMode() {
-    this.setState({
-      addApModeActive: !this.state.addApModeActive,
-    });
-  }
-
-  addCustomApToState() {
-    const { newApSSID, newApPass } = this.state;
-    const ap = {
-      ssid: newApSSID,
-      pass: newApPass,
-      free: !!newApPass,
-    };
-
-    this.setApActive(ap);
-  }
-
-  addActiveApToState() {
-    const { activeAp } = this.state;
-
-    const { value = '' } = this.refs.newApPass;
-
-    let newAp = {
-      ssid: activeAp,
-      pass: value,
-    };
-
-    this.setApActive(newAp);
-  }
-
-  setApActive(newAp) {
-    const { availableAps } = this.props;
-    let { savedAps } = this.props;
-
-    if (!newAp || !newAp.ssid) {
-      console.error('newAp is not defined');
-      return;
-    }
-
-    const filteredAp = availableAps.filter(
-      ap =>
-        ap.ssid === newAp.ssid
-    )[0];
-
-    newAp = {
-      ...filteredAp,
-      ...newAp,
-    };
-
-    if (!newAp.free && !newAp.pass) {
-      this.setState({
-        pwError: 'This Accesspoint needs a password',
-      });
-
-      return;
-    }
-
-    if (savedAps.some(ap => newAp.ssid === ap.ssid)) {
-      savedAps = savedAps.map(
-        ap =>
-          ap.ssid !== newAp.ssid
-            ? ap
-            : {
-              ...ap,
-              ...newAp,
-            }
-      );
-    } else {
-      savedAps.push(newAp);
-    }
-
-    this.setState({
-      savedAps,
-    });
-  }
-
-  sendPreferredAp({ e, ap = {}}) {
-    const { host, protocol, savedAps } = this.props;
-
-    if (!ap || !ap.ssid) {
-      this.setState({
-        uploadingPreferredApError: 'Can not send empty preferred Ap to MagicShifter',
-      });
-      return;
-    }
-
-    const preferredAp = savedAps.filter(
-      existingAp =>
-        ap.ssid === existingAp.ssid
-    )[0];
-    console.log({ preferredAp });
-
-    if (!preferredAp || !preferredAp.ssid) {
-      return;
-    }
-
-    this.setState({
-      uploadingPreferredAp: true,
-      uploadingPreferredApError: false,
-      preferredAp,
-    });
-
-    const { ssid, pass } = preferredAp;
-    const url = `${protocol}://${host}/settings/wifi/preferred/set?ssid=${ssid}&pwd=${pass}`;
-
-    fetch({ url })
-      .then(
-        res =>
-        this._isMounted &&
-        this.setState({
-          uploadingPreferredAp: false,
-          uploadingPreferredApError: res.status !== 200 && 'Network Error',
-        })
-      )
-      .catch(
-        e =>
-        this._isMounted &&
-        this.setState({
-          uploadingPreferredAp: false,
-          uploadingPreferredApError: e.message || 'Unknown Error',
-        })
-      );
-  }
-
-  uploadNewAp({ e, ap = {}}) {
-    const { host, protocol, postNewAp } = this.props;
-
-    const { ssid, pass = '' } = ap;
-
-    if (!ssid) {
-      return;
-    }
-
-    this.setState({
-      uploadingNewAp: true,
-    });
-
-    const url = `${protocol}://${host}/settings/wifi/add?ssid=${ssid}&pwd=${pass}`;
-
-    postNewAp(url)
-      .then(
-        res =>
+        )
+        .catch(
+          e =>
           this._isMounted &&
           this.setState({
             uploadingNewAp: false,
-            uploadingNewApError: res.status !== 200 && 'Network Error',
+            uploadingNewApError: e.message || 'Unknown Error',
           })
-      )
-      .catch(
-        e =>
-        this._isMounted &&
-        this.setState({
-          uploadingNewAp: false,
-          uploadingNewApError: e.message || 'Unknown Error',
-        })
-      );
-  }
+        );
+    };
 
-  setNewApSSID(e) {
-    this.setState({
-      newApSSID: e.target.value,
-    });
-  }
+  setNewApSSID =
+    e => {
+      this.setState({
+        newApSSID: e.target.value,
+      });
+    };
 
-  setNewApPass(e) {
-    this.setState({
-      newApPass: e.target.value,
-    });
-  }
+  setNewApPass =
+    e => {
+      this.setState({
+        newApPass: e.target.value,
+      });
+    };
 
   render() {
     const {

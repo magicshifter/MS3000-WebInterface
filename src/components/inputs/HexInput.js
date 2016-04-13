@@ -14,33 +14,27 @@ export default class HexInput extends Component {
     setColor: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
+  handleColorChange =
+    e => {
+      const { setColor } = this.props;
+      const { value } = e.target;
+      const hex = this.cleanHex(value);
+      const rgb = rgba.obj(hex);
 
-    this.handleColorChange = this.handleColorChange.bind(this);
-    this.cleanHex = this.cleanHex.bind(this);
-  }
-
-  handleColorChange(e) {
-    const { setColor } = this.props;
-    const { value } = e.target;
-    const hex = this.cleanHex(value);
-    const rgb = rgba.obj(hex);
-
-    this.setState({
-      currentColor: hex,
-    });
-
-    if (isHexColor(hex)) {
-      setColor({
-        color: rgb,
+      this.setState({
+        currentColor: hex,
       });
-    }
-  }
 
-  cleanHex(hex) {
-    return rgba.hex(hex).substr(0, 7).replace('#', '');
-  }
+      if (isHexColor(hex)) {
+        setColor({
+          color: rgb,
+        });
+      }
+    };
+
+  cleanHex =
+    hex =>
+      rgba.hex(hex).substr(0, 7).replace('#', '');
 
   render() {
     const { currentColor } = this.state;

@@ -41,33 +41,28 @@ export class Colors extends Component {
     colors: PropTypes.arrayOf(colorType).isRequired,
   };
 
-  constructor(props) {
-    super(props);
+  handleColorChange =
+    e => {
+      const { setColor } = this.props;
+      const { rgb } = e;
 
-    this.handleColorChange = this.handleColorChange.bind(this);
-    this.handleAddColorClick = this.handleAddColorClick.bind(this);
-  };
+      setColor({ color: rgb });
+    };
 
-  handleColorChange(e) {
-    const { setColor } = this.props;
-    const { rgb } = e;
+  handleAddColorClick =
+    e => {
+      const { colors, color, addColor } = this.props;
 
-    setColor({ color: rgb });
-  }
+      const colorExists =
+        colors.some(
+          c =>
+            Immutable.Map(c).equals(Immutable.Map(color))
+        );
 
-  handleAddColorClick(e) {
-    const { colors, color, addColor } = this.props;
-
-    const colorExists =
-      colors.some(
-        c =>
-          Immutable.Map(c).equals(Immutable.Map(color))
-      );
-
-    if (!colorExists) {
-      addColor([...colors, color]);
-    }
-  };
+      if (!colorExists) {
+        addColor([...colors, color]);
+      }
+    };
 
   render() {
     const {

@@ -22,23 +22,18 @@ export default class NumberInput extends Component {
     step: 1,
   };
 
-  constructor(props) {
-    super(props);
+  onChange =
+    e => {
+      const { name, min, max, action } = this.props;
 
-    this.onChange = this.onChange.bind(this);
-  }
+      let value = minmax(parseInt(e.target.value, 10), min, max);
 
-  onChange(e) {
-    const { name, min, max, action } = this.props;
+      if (!isNumber(value)) {
+        value = 0;
+      }
 
-    let value = minmax(parseInt(e.target.value, 10), min, max);
-
-    if (!isNumber(value)) {
-      value = 0;
-    }
-
-    action({ name, value });
-  }
+      action({ name, value });
+    };
 
   render() {
     const { val, name, label, min, max, step } = this.props;

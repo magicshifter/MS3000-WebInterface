@@ -39,10 +39,6 @@ export class DiscoverMagicShifter extends Component {
   constructor(props) {
     super(props);
 
-    this.connectToMagicShifter = this.connectToMagicShifter.bind(this);
-    this.connectToHost = this.connectToHost.bind(this);
-    this.reconnect = this.reconnect.bind(this);
-
     this._isMounted = true;
     this.connectToMagicShifter();
   }
@@ -52,62 +48,67 @@ export class DiscoverMagicShifter extends Component {
     this._isMounted = false;
   }
 
-  connectToMagicShifter() {
-    const { hosts } = this.props;
+  connectToMagicShifter =
+    () => {
+      const { hosts } = this.props;
 
-    hosts.forEach(this.connectToHost);
-  }
+      hosts.forEach(this.connectToHost);
+    };
 
-  foundHost({ host, protocol }) {
-    const { setSettings, setConnectState } = this.props;
+  foundHost =
+    ({ host, protocol }) => {
+      const { setSettings, setConnectState } = this.props;
 
-    setSettings({
-      host,
-      protocol,
-    });
+      setSettings({
+        host,
+        protocol,
+      });
 
-    setConnectState({
-      connectError: false,
-      connecting: false,
-      connected: true,
-    });
-  }
+      setConnectState({
+        connectError: false,
+        connecting: false,
+        connected: true,
+      });
+    };
 
-  reconnect(host) {
-    const { setConnectState, connected } = this.props;
+  reconnect =
+    (host) => {
+      setTimeout(this.reconnectTimeout(host), 1000);
+    };
 
-    setTimeout(
-      () => {
-        if (!connected) {
-          setConnectState({
-            connectError: true,
-          });
-          this.connectToHost(host);
-        }
-      }, 1000);
-  }
+  reconnectTimeout =
+    (host) => {
+      const { setConnectState, connected } = this.props;
+      if (!connected) {
+        setConnectState({
+          connectError: true,
+        });
+        this.connectToHost(host);
+      }
+    };
 
-  connectToHost(host) {
-    const { connected } = this.props;
+  connectToHost =
+    (host) => {
+      const { connected } = this.props;
 
-    if (connected) {
-      return;
-    }
+      if (connected) {
+        return;
+      }
 
-    const [protocol, hostName] = host.path.split('://');
+      const [protocol, hostName] = host.path.split('://');
 
-    fetch({ url: host.path })
-      .then(
-        res =>
-          res.status === 200
-            ? this.foundHost({ host: hostName, protocol })
-            : this.reconnect(host)
-      )
-      .catch(
-        e =>
-          this.reconnect(host)
-      );
-  }
+      fetch({ url: host.path })
+        .then(
+          res =>
+            res.status === 200
+              ? this.foundHost({ host: hostName, protocol })
+              : this.reconnect(host)
+        )
+        .catch(
+          e =>
+            this.reconnect(host)
+        );
+    };
 
   render() {
     const { text, icon, to, title, connecting, connected, connectError } = this.props;

@@ -42,16 +42,11 @@ export class UiSettings extends Component {
     handleSubmit: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.submit = this.submit.bind(this);
-  }
-
-  submit(values, dispatch) {
-    const { setSettings } = this.props;
-    dispatch(setSettings(values));
-  };
+  submit =
+    (values, dispatch) => {
+      const { setSettings } = this.props;
+      dispatch(setSettings(values));
+    };
 
   render() {
     const {

@@ -61,20 +61,15 @@ class PowerSettings extends Component {
     setSettings: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
+  submit =
+    (values, dispatch) => {
+      const { setSettings } = this.props;
 
-    this.submit = this.submit.bind(this);
-  }
+      dispatch(setSettings(values));
 
-  submit(values, dispatch) {
-    const { setSettings } = this.props;
-
-    dispatch(setSettings(values));
-
-    // XXX TODO transmit settings to MagicShifter
-    // fetch(``);
-  };
+      // XXX TODO transmit settings to MagicShifter
+      // fetch(``);
+    };
 
   render() {
     const {

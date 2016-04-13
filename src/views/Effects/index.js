@@ -23,28 +23,23 @@ export class Effects extends Component {
     pixels: pixelsType.isRequired,
   };
 
-  constructor(props) {
-    super(props);
+  invert =
+    () => {
+      const { pixels, invertPixels } = this.props;
+      invertPixels(pixels);
+    };
 
-    this.invert = this.invert.bind(this);
-    this.lighten = this.lighten.bind(this);
-    this.darken = this.darken.bind(this);
-  }
+  lighten =
+    () => {
+      const { pixels, lightenPixels } = this.props;
+      lightenPixels(pixels);
+    };
 
-  invert() {
-    const { pixels, invertPixels } = this.props;
-    invertPixels(pixels);
-  }
-
-  lighten() {
-    const { pixels, lightenPixels } = this.props;
-    lightenPixels(pixels);
-  }
-
-  darken() {
-    const { pixels, darkenPixels } = this.props;
-    darkenPixels(pixels);
-  }
+  darken =
+    () => {
+      const { pixels, darkenPixels } = this.props;
+      darkenPixels(pixels);
+    };
 
   render() {
     return (

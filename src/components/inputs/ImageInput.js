@@ -38,53 +38,52 @@ export class ImageInput extends Component {
     this.state = {
       pixels: [],
     };
-
-    this.onUseImageClick = this.onUseImageClick.bind(this);
-    this.onClearCanvasClick = this.onClearCanvasClick.bind(this);
-    this.onImageInputchange = this.onImageInputchange.bind(this);
   }
 
-  onClearCanvasClick(e) {
-    const { canvas } = this.refs;
+  onClearCanvasClick =
+    e => {
+      const { canvas } = this.refs;
 
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    this.setState({
-      pixels: [],
-    });
-  }
-
-  onUseImageClick() {
-    const {
-      setPixels, setColumns, // actions
-    } = this.props;
-
-    const {
-      pixels, columns,
-    } = this.state;
-
-    if (pixels.length) {
-      setPixels(pixels);
-      setColumns({ value: columns });
-    }
-  }
-
-  onImageInputchange(e) {
-    const { pixels, rows, visibleColumns, totalColumns } = this.props;
-    const { canvas } = this.refs;
-
-    const { files } = e.target;
-    const file = files[0];
-
-    getImagePixels(file, canvas, pixels, totalColumns, visibleColumns, rows, ({ data, pixels, width, height }) => {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       this.setState({
-        imageUrl: data,
-        pixels,
-        columns: width,
+        pixels: [],
       });
-      this.onUseImageClick();
-    });
-  }
+    };
+
+  onUseImageClick =
+    () => {
+      const {
+        setPixels, setColumns, // actions
+      } = this.props;
+
+      const {
+        pixels, columns,
+      } = this.state;
+
+      if (pixels.length) {
+        setPixels(pixels);
+        setColumns({ value: columns });
+      }
+    };
+
+  onImageInputchange =
+    e => {
+      const { pixels, rows, visibleColumns, totalColumns } = this.props;
+      const { canvas } = this.refs;
+
+      const { files } = e.target;
+      const file = files[0];
+
+      getImagePixels(file, canvas, pixels, totalColumns, visibleColumns, rows, ({ data, pixels, width, height }) => {
+        this.setState({
+          imageUrl: data,
+          pixels,
+          columns: width,
+        });
+        this.onUseImageClick();
+      });
+    };
 
   render() {
     const { label } = this.props;
