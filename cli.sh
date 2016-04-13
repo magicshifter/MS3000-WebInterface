@@ -45,7 +45,9 @@ function lint() {
 
 function lint-fix() {
   echo "start lint and fix task"
+
   $BIN_DIR/eslint  --fix . ./
+
   echo "lint-fix completed"
 }
 
