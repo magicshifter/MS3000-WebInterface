@@ -1,8 +1,13 @@
 .container {
   position: absolute;
+ 
 
   nav {
     font-size: .8em;
+  }
+
+  ul {
+    display: inline-table;
   }
 
   li {
@@ -32,7 +37,8 @@
 @media (orientation: portrait) {
   .container {
     bottom: 0;
-
+    width: 100%;
+    text-align: center;
     li {
       float: left;
       text-align: center;
