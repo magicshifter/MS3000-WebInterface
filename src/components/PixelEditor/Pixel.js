@@ -9,12 +9,10 @@ import { actions } from 'redux/modules/pixels';
 import classes from './Pixel.scss';
 
 const mapStateToProps =
-  ({ imageView }) => {
-    return {
-      color: imageView.get('color'),
-      rows: imageView.get('rows'),
-    };
-  };
+  ({ imageView }) => ({
+    color: imageView.get('color'),
+    rows: imageView.get('rows'),
+  });
 
 export class Pixel extends Component {
   static propTypes = {
@@ -38,10 +36,9 @@ export class Pixel extends Component {
   onMouseOver =
     e => {
       const { pixelHover, pixel, color } = this.props;
-      const { touches, buttons } = e;
-      const touchExists = touches && touches.length > 0;
+      const { buttons } = e;
 
-      if (touchExists || buttons === 1) {
+      if (buttons === 1) {
         pixelHover({ pixel, color });
       }
 
@@ -53,14 +50,11 @@ export class Pixel extends Component {
     e => {
       const { color, pixelHover } = this.props;
 
-      const touches = e.changedTouches;
-      const first = touches[0];
-
-      const { clientX, clientY } = first;
+      const { clientX, clientY } = e.changedTouches[0];
 
       const target = document.elementFromPoint(clientX, clientY);
 
-      if (target) {
+      if (target && target.id) {
         const id = target.id.replace('c-', '');
         const pixel = { id };
         pixelHover({ pixel, color });
