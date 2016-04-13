@@ -36,7 +36,7 @@ webpackConfig.entry = {
 // Bundle Output
 // ------------------------------------
 webpackConfig.output = {
-  filename: `[name].js`,
+  filename: '[name].js',
   path: paths.base(config.dir_dist),
   publicPath: config.compiler_public_path,
 };
