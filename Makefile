@@ -1,5 +1,6 @@
-BIN_DIR = node_modules/.bin/
-JS_DIST_DIR = ./dist/
+CLI=./cli.sh
+BIN_DIR=node_modules/.bin/
+JS_DIST_DIR=./dist/
 
 .PHONY: \
 	all \
@@ -20,113 +21,58 @@ JS_DIST_DIR = ./dist/
 all: dev
 
 clean:
-	@echo 'clean dist directory'
-	@rm -rf dist;
-	@echo "cleaned dist dir"
+	${CLI} $@
 
 compile:
-	@echo "start compilation process"
-	@node -r dotenv/config --harmony bin/compile
-	@echo "build completed in dist/"
+	${CLI} $@
 
-build: clean
-	export NODE_ENV=production && ${MAKE} clean compile cheap-concat inline
-	@echo "build finished"
+build:
+	${CLI} $@
+
+deploy:
+	${CLI} build
 
 install:
-	@echo "start install using npm"
-	@npm install
-	@echo "install completed"
+	${CLI} $@
 
 lint:
-	@echo "start lint task"
-	@${BIN_DIR}eslint . ./
-	@echo "lint completed"
+	${CLI} $@
 
 lint-fix:
-	@echo "start lint and fix task"
-	@${BIN_DIR}eslint  --fix . ./
-	@echo "lint-fix completed"
+	${CLI} $@
 
 cheap-concat:
-	@cat ${JS_DIST_DIR}vendor.js ${JS_DIST_DIR}app.js >> ${JS_DIST_DIR}index.js
+	${CLI} $@
 
-# run google closure library through java
 closure-compile:
-	@echo "start closure compilation"
-	@mkdir -p ${JS_DIST_DIR}bundled
-	@java \
-		-jar node_modules/google-closure-compiler/compiler.jar \
-		--language_in ECMASCRIPT5 \
-		--compilation_level ADVANCED_OPTIMIZATIONS \
-		--js ${JS_DIST_DIR}vendor.js ${JS_DIST_DIR}app.js\
-		> ${JS_DIST_DIR}index.js
-	@echo "closure compilation completed"
+	${CLI} $@
 
 server:
-	@echo "start node koa development server"
-	node -r dotenv/config bin/server --hot
+	${CLI} $@
 
 dev:
-	@echo "spawn debug environment"
-	${BIN_DIR}nodemon -r dotenv/config bin/server --hot
+	${CLI} $@
 
-# start dev mode with production environment
 dev-no-debug:
-	@${BIN_DIR}nodemon -r dotenv/config bin/server --hot --no_debug
+	${CLI} $@
 
 flow:
-	@${BIN_DIR}flow ./src/
+	${CLI} $@
 
 test:
-	@echo 'start tests'
-	@node -r dotenv/config ./node_modules/karma/bin/karma start bin/karma.js
-	@echo 'tests finished'
+	${CLI} $@
 
 test-dev:
-	@node -r dotenv/config ./node_modules/karma/bin/karma start bin/karma.js --watch
+	${CLI} $@
 
 inline:
-	@echo "start inlining js/css/images"
-	@mkdir -p ${JS_DIST_DIR}bundled/
-	@${BIN_DIR}html-inline \
-		-i ${JS_DIST_DIR}min.html \
-		-o ${JS_DIST_DIR}bundled/index.html \
-		-b ${JS_DIST_DIR}/ \
-		--ignore-scripts
-
-	@cp ${JS_DIST_DIR}index.js ${JS_DIST_DIR}bundled/index.js
-	@cp ${JS_DIST_DIR}magicshifter.appcache ${JS_DIST_DIR}bundled/magicshifter.appcache
-	@cp ${JS_DIST_DIR}favicon.ico ${JS_DIST_DIR}bundled/favicon.ico
-
-	@gzip --keep --force --best dist/bundled/index.js
-	@echo "inlining finished"
+	${CLI} $@
 
 scss-lint:
-	scss-lint src
+	${CLI} $@
 
 nw-build:
-	cp dist/package.json dist/bundled
-	${BIN_DIR}nwbuild -p win64 -o ./nw dist/bundled/
-	#win32,win64,osx32,osx64,linux32,linux64
-
-deploy: build
+	${CLI} $@
 
 help:
-	@echo " \n\
-make [task] \n\
-\n\
-running make without task starts a dev env \n\
-\n\
-dev - start dev env \n\
-install - install node dependencies \n\
-clean - remove dist/ \n\
-build - compile sources to dist dir \n\
-lint - lint code using eslint \n\
-lint-fix - lint and fix code \n\
-server - run server only, no build chain \n\
-dev-no-debug - start dev env in production mode \n\
-test - run tests \n\
-test-dev - run and watch tests \n\
-deploy - test, clean then build \n\
-"
+	${CLI} $@
