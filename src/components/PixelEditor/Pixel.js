@@ -56,8 +56,10 @@ export class Pixel extends Component {
 
       if (target && target.id) {
         const id = target.id.replace('c-', '');
-        const pixel = { id };
-        pixelHover({ pixel, color });
+        if (id) {
+          const pixel = { id };
+          pixelHover({ pixel, color });
+        }
       }
 
       e.preventDefault();
