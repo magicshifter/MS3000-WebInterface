@@ -5,9 +5,10 @@ export class NotFoundView extends React.Component {
   render() {
     return (
       <div className='container text-center'>
-        <h1>This is a demo 404 page!</h1>
+        <h1>This is a 404 page!</h1>
+        <div>Seems like whatever you where looking for can not be found</div>
         <hr />
-        <Link to='/'>Back To Home View</Link>
+        <Link to='/'>Back To Start</Link>
       </div>
     );
   }
