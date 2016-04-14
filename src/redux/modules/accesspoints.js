@@ -51,13 +51,13 @@ export const fetchSavedAps = createAction(
 export const removeSavedAp = createAction(
   REMOVE_SAVED_AP,
   async url =>
-    await fetch({ url, method: 'POST' })
+    await fetch({ url })
 );
 
 export const postNewAp = createAction(
   POST_NEW_AP,
   async url =>
-    await fetch({ url, method: 'POST' })
+    await fetch({ url })
 );
 
 export const fetchPreferredAp = createAction(
