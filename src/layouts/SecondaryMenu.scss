@@ -1,6 +1,7 @@
 .container {
-  position: absolute;
- 
+  background-color: rgba(240, 240, 240, 0.95);
+  position: fixed;
+  z-index: 1;
 
   nav {
     font-size: .8em;
@@ -8,11 +9,6 @@
 
   ul {
     display: inline-table;
-  }
-
-  li {
-    position: relative;
-    z-index: 2;
   }
 
   a {
@@ -39,6 +35,7 @@
     bottom: 0;
     width: 100%;
     text-align: center;
+
     li {
       float: left;
       text-align: center;
@@ -67,13 +64,20 @@
 
 @media (orientation: landscape) {
   .container {
-    top: 65px;
+    height: 100vh;
     left: 0;
-    padding: 0 5px;
+    padding: 65px 5px 0;
+    text-align: center;
+    top: 0;
+    width: 120px;
 
     nav {
       display: inline-block;
       margin: 0 0 .2em;
+    }
+
+    li {
+      text-align: left;
     }
 
     a {

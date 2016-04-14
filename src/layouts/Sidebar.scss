@@ -4,6 +4,7 @@
 
   nav {
     margin: 1em 0;
+
     ul {
       li {
         display: inline;
@@ -19,9 +20,13 @@
   position: fixed;
   top: 0;
   width: 100vw;
+  z-index: 3;
 }
 
 .children {
+  position: relative;
+  z-index: 4;
+
   > div {
     background-color: rgba(53, 53, 53, .9);
     box-shadow: 3px 4px 5px rgba(53, 53, 53, .9);

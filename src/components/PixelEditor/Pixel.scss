@@ -1,6 +1,9 @@
 .container {
-  margin: 0 1px;
+  margin: 1px;
   border-radius: 2px;
-  cursor: pointer;
-  float: left;
+
+  &.active {
+    cursor: pointer;
+  }
 }
+

@@ -1,30 +1,14 @@
 .container {
-  text-align: center;
-  max-width: 100%;
-  overflow: hidden;
-
   user-select: none;
 }
 
 .sub_container {
-  width: 100000px;
-  height: 100000px;
+  display: inline-flex;
+  flex-direction: column;
   position: relative;
-}
 
-.table {
-  display: inline-block;
-  float: left;
-  list-style: none;
-  left: 0;
-  margin: 0;
-  padding: 0;
-  position: relative;
-  top: 0;
-
-  tr {
-    margin: 0;
-    padding: 0;
+  ul {
+    display: flex;
   }
 }
 
@@ -32,6 +16,7 @@
   left: 120px;
   position: fixed;
   top: 10px;
+  z-index: 3;
 
   ul {
     li {

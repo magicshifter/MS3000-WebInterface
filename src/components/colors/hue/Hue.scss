@@ -1,0 +1,47 @@
+.container {
+  background: linear-gradient(to right,
+                              #f00 0%,
+                              #ff0 17%,
+                              #0f0 33%,
+                              #0ff 50%,
+                              #00f 67%,
+                              #f0f 83%,
+                              #f00 100%
+                            );
+  border-radius: 2px;
+  box-shadow: rgba(0, 0, 0, 0.3);
+  margin: 0 2px;
+  position: relative;
+  height: 100%;
+}
+
+.pointer {
+  z-index: 2;
+  position: absolute;
+}
+
+.slider {
+  margin-top: 1px;
+  width: 4px;
+  border-radius: 1px;
+  height: 8px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, .6);
+  background: #fff;
+  transform: translateX(-2px);
+}
+
+.vertical {
+  background: linear-gradient(to top,
+                              #f00 0%,
+                              #ff0 17%,
+                              #0f0 33%,
+                              #0ff 50%,
+                              #00f 67%,
+                              #f0f 83%,
+                              #f00 100%
+                            );
+}
+
+.pointer {
+  left: 0;
+}

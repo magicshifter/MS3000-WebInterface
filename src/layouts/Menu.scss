@@ -1,6 +1,7 @@
 .container {
-  float: right;
   margin: .3em 0 0;
+  position: fixed;
+  right: 0;
 
   ul {
     list-style: none;

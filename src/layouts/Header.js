@@ -7,10 +7,10 @@ import classes from './Header.scss';
 
 export const Header =
   () =>
-    <header className={classes['main']}>
+    <header className={classes['container']}>
       <Link
         to='/'
-        className={classes['container']}
+        className={classes['link']}
       >
         <span className={classes['logo']} />
       </Link>

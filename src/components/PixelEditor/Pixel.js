@@ -75,7 +75,7 @@ export class Pixel extends Component {
     };
 
     return (
-      <td
+      <li
         id={`c-${pixel.id}`}
         className={classes['container']}
         onMouseDown={this.onClick}
@@ -83,7 +83,7 @@ export class Pixel extends Component {
         onTouchStart={this.onClick}
         onTouchMove={this.onTouchMove}
         style={style}
-      ></td>
+      />
     );
   }
 }

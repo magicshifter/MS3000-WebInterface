@@ -37,12 +37,12 @@ export class PixelEditor extends Component {
     const { layout, rows, totalColumns, visibleColumns, pixels } = this.props;
 
     const zoom = layout.zoomLevel;
-    const widthMargin = layout.width * 0.2;
+    // const widthMargin = layout.width * 0.2;
     const heightMargin = layout.height * 0.2;
-    const maxWidth = (layout.width - widthMargin) * zoom;
+    // const maxWidth = (layout.width - widthMargin) * zoom;
     const maxHeight = (layout.height - heightMargin) * zoom;
 
-    const pxSize = Math.min(maxWidth / visibleColumns, maxHeight / rows);
+    const pxSize = maxHeight / rows;
 
     let rowArray = [];
     for (let i = 0; i < rows; i++) {
@@ -57,32 +57,34 @@ export class PixelEditor extends Component {
     return (
       <div className={classes['container']}>
         <div className={classes['sub_container']}>
-          <table className={classes['table']}>
-            <tbody>
-              {rowArray.map(
-                row => (
-                  <tr key={`r-${row + 1}`}>
-                    {columnArray.map(
-                      column => {
-                        if (column < visibleColumns) {
-                          const pixelId = getPixelId(totalColumns, column, row);
-                          const pixel = pixels[pixelId];
+          {rowArray.map(
+            row => (
+              <ul key={`r-${row + 1}`}>
+                {columnArray.map(
+                  column => {
+                    if (column >= visibleColumns) {
+                      return;
+                    }
+                    const pixelId = getPixelId(totalColumns, column, row);
+                    const pixel = pixels[pixelId];
 
-                          return (
-                            <Pixel
-                              key={`r-${row + 1}-c-${column + 1}`}
-                              pixel={pixel}
-                              size={pxSize}
-                            />
-                          );
-                        }
-                      }
-                    )}
-                  </tr>
-                )
-              )}
-            </tbody>
-          </table>
+                    if (column >= visibleColumns) {
+                      pixel.color.a = 20;
+                    }
+
+                    return (
+                      <Pixel
+                        key={`r-${row + 1}-c-${column + 1}`}
+                        pixel={pixel}
+                        size={pxSize}
+                        active={column < visibleColumns}
+                      />
+                    );
+                  }
+                )}
+              </ul>
+              )
+            )}
         </div>
         <div className={classes['color_list']}>
           <ColorList />
