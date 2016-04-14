@@ -21,58 +21,58 @@ JS_DIST_DIR=./dist/
 all: dev
 
 clean:
-	${CLI} $@
+	@${CLI} $@
 
 compile:
-	${CLI} $@
+	@${CLI} $@
 
 build:
-	${CLI} $@
+	@${CLI} $@
 
 deploy:
 	${CLI} build
 
 install:
-	${CLI} $@
+	@${CLI} $@
 
 lint:
-	${CLI} $@
+	@${CLI} $@
 
 lint-fix:
-	${CLI} $@
+	@${CLI} $@
 
 cheap-concat:
-	${CLI} $@
+	@${CLI} $@
 
 closure-compile:
-	${CLI} $@
+	@${CLI} $@
 
 server:
-	${CLI} $@
+	@${CLI} $@
 
 dev:
-	${CLI} $@
+	@${CLI} $@
 
 dev-no-debug:
-	${CLI} $@
+	@${CLI} $@
 
 flow:
-	${CLI} $@
+	@${CLI} $@
 
 test:
-	${CLI} $@
+	@${CLI} $@
 
 test-dev:
-	${CLI} $@
+	@${CLI} $@
 
 inline:
-	${CLI} $@
+	@${CLI} $@
 
 scss-lint:
-	${CLI} $@
+	@${CLI} $@
 
 nw-build:
-	${CLI} $@
+	@${CLI} $@
 
 help:
-	${CLI} $@
+	@${CLI} $@
