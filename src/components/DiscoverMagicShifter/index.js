@@ -73,11 +73,11 @@ export class DiscoverMagicShifter extends Component {
 
   reconnect =
     (host) => {
-      setTimeout(this.reconnectTimeout(host), 1000);
+      setTimeout(() => this.reconnectTimeout(host), 5000);
     };
 
   reconnectTimeout =
-    (host) => {
+    host => {
       const { setConnectState, connected } = this.props;
       if (!connected) {
         setConnectState({
