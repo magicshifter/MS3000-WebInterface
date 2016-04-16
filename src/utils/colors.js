@@ -108,6 +108,22 @@ export const lightenPixel =
     return px;
   };
 
+export const clear =
+ pixels =>
+    pixels.map(clearPixel);
+
+export const clearPixel =
+  px => {
+    px.color = {
+      r: 0,
+      g: 0,
+      b: 0,
+      a: px.color.a,
+    };
+
+    return px;
+  };
+
 /**
  * Converts an HSL color value to RGB. Conversion formula
  * adapted from http://en.wikipedia.org/wiki/HSL_color_space.

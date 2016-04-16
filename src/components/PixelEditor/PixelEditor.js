@@ -11,6 +11,8 @@ import PixelEditorMenu from 'components/PixelEditor/PixelEditorMenu';
 
 import ColorList from 'components/colors/list';
 
+import ClearPixelsButton from 'components/inputs/ClearPixelsButton';
+
 import classes from './PixelEditor.scss';
 
 const mapStateToProps =
@@ -86,8 +88,11 @@ export class PixelEditor extends Component {
               )
             )}
         </div>
-        <div className={classes['color_list']}>
-          <ColorList />
+        <div className={classes['sub_menu']}>
+          <ClearPixelsButton />
+          <ColorList
+            showRemover={false}
+          />
         </div>
         <PixelEditorMenu />
       </div>

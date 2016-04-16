@@ -23,17 +23,21 @@ const mapStateToProps =
   });
 
 export class ColorList extends Component {
+  static defaultProps = {
+    showRemover: true,
+  };
+
   static propTypes = {
     addColor: PropTypes.func.isRequired, // action
     removeColor: PropTypes.func.isRequired, // action
     setColor: PropTypes.func.isRequired, // action
-
+    showRemover: PropTypes.bool,
     colors: PropTypes.arrayOf(colorType).isRequired,
     uiColor: colorType.isRequired,
   };
 
   render() {
-    const { colors, setColor, removeColor } = this.props;
+    const { showRemover, colors, setColor, removeColor } = this.props;
 
     return (
       <div className={classes['container']}>
@@ -44,10 +48,13 @@ export class ColorList extends Component {
                 color={colors[key]}
                 setColor={setColor}
               />
-              <ColorRemover
-                colorId={key}
-                removeColor={removeColor}
-              />
+              {
+                showRemover &&
+                <ColorRemover
+                  colorId={key}
+                  removeColor={removeColor}
+                />
+              }
             </li>
           )}
         </ul>

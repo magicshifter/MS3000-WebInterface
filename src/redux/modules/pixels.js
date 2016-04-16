@@ -3,7 +3,7 @@ import Immutable from 'immutable';
 
 import { isObject } from 'utils/types';
 import { createImmutablePixels, makePixelsImmutable } from 'utils/pixels';
-import { invert, lighten, darken } from 'utils/colors';
+import { invert, lighten, darken, clear } from 'utils/colors';
 
 import { rows, totalColumns, visibleColumns, defaultLedColor } from 'GLOBALS';
 
@@ -19,6 +19,7 @@ const initialState = Immutable.List(pixels);
 
 export const PIXEL_CLICK = 'PIXEL_CLICK';
 export const PIXEL_HOVER = 'PIXEL_HOVER';
+export const CLEAR_PIXELS = 'CLEAR_PIXELS';
 export const SET_PIXELS = 'SET_PIXELS';
 export const INVERT = 'INVERT';
 export const DARKEN = 'DARKEN';
@@ -64,6 +65,12 @@ export const lightenPixels =
     pixels => makePixelsImmutable(lighten(pixels))
   );
 
+export const clearPixels =
+  createAction(
+    CLEAR_PIXELS,
+    pixels => makePixelsImmutable(clear(pixels))
+  );
+
 export const actions = {
   pixelClick,
   pixelHover,
@@ -71,6 +78,7 @@ export const actions = {
   invertPixels,
   darkenPixels,
   lightenPixels,
+  clearPixels,
 };
 
 // ------------------------------------
@@ -102,6 +110,13 @@ export default handleActions({
   // set all pixels
   [SET_PIXELS]:
     (state, { payload: pixels }) =>
+      isObject(pixels)
+        ? pixels
+        : state,
+
+  // all pixels should be reset
+  [CLEAR_PIXELS]:
+    (state, { payload: p }) =>
       isObject(pixels)
         ? pixels
         : state,
