@@ -33,7 +33,8 @@ export class ClearPixelsButton extends Component {
         <ul>
           <li>
             <i
-              className={getIconCssClass('eraser')}
+              title='Clear Pixels'
+              className={getIconCssClass('trash')}
               onClick={this.onClick}
             />
           </li>
