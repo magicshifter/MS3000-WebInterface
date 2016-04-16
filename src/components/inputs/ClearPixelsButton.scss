@@ -1,0 +1,17 @@
+.container {
+  float: left;
+
+  ul li {
+    color: #1cfffa;
+    display: inline-block;
+    margin: .2em;
+  }
+
+  i:before {
+    background-color: #353535;
+    border-radius: 100%;
+    font-size: 30px;
+    padding: 0;
+    border: 2px solid #353535;
+  }
+}
