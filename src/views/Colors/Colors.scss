@@ -22,8 +22,11 @@
   }
 }
 
+.list {
+  display: inline-block;
+}
+
 .picker {
-  height: 200px;
   position: relative;
   width: 100%;
 }
