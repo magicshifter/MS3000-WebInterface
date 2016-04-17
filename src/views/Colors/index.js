@@ -98,16 +98,16 @@ export class Colors extends Component {
             color={color}
             onChange={this.handleColorChange}
             onChangeComplete={this.handleColorChange}
-            custom={ColorPickerInput}
+            type='sketch'
           />
         </div>
 
-        <div className={classes['rgba']}>
+        {/* <div className={classes['rgba']}>
           <RGBAInput
             color={color}
             setColorValue={setColorValue}
           />
-        </div>
+        </div> */}
 
         {/* XXX BLOCK(time)
           <div className={classes['hex']}>
