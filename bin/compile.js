@@ -43,14 +43,17 @@ compiler.run(function (err, stats) {
     '<script src="vendor.js"></script><script src="app.js"></script>',
     '<script src="index.js"></script>'
   );
-  var cssContent = fs.readFileSync(path.join(paths.dist(), 'app.css'), 'utf8');
-  fileContent = fileContent.replace(
-    '<link href="app.css" rel="stylesheet">',
-    // the leading space is intended!
-    ` <style>${cssContent}</style>`
-  );
 
   fs.writeFileSync(path.join(paths.dist(), 'min.html'), fileContent, 'utf8');
+
+  var cssDistFile = path.join(paths.dist(), 'bundled', 'app.css');
+  var cssSrcFile = path.join(paths.dist(), 'app.css');
+  console.log('writing css file from', cssSrcFile, 'to', cssDistFile);
+
+  var cssContent = fs.readFileSync(cssSrcFile, 'utf8');
+
+  fs.writeFileSync(cssDistFile, cssContent, 'utf8');
+  console.log('css copying finished');
 
   var appCacheDistFile = path.join(paths.dist(), 'magicshifter.appcache');
   var appCacheSrcFile = path.join(paths.client(), 'magicshifter.appcache');
