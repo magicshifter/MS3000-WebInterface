@@ -1,6 +1,6 @@
 // Get binary file using XMLHttpRequest
 function getBinary(file) {
-  var xhr = new XMLHttpRequest();
+  var xhr = new window.XMLHttpRequest();
   xhr.open('GET', file, false);
   xhr.overrideMimeType('text/plain; charset=x-user-defined');
   xhr.send(null);
@@ -14,14 +14,14 @@ function base64Encode(str) {
   var out = '', i = 0, len = str.length, c1, c2, c3;
   while (i < len) {
     c1 = str.charCodeAt(i++) & 0xff;
-    if (i == len) {
+    if (i === len) {
       out += CHARS.charAt(c1 >> 2);
       out += CHARS.charAt((c1 & 0x3) << 4);
       out += '==';
       break;
     }
     c2 = str.charCodeAt(i++);
-    if (i == len) {
+    if (i === len) {
       out += CHARS.charAt(c1 >> 2);
       out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
       out += CHARS.charAt((c2 & 0xF) << 2);
