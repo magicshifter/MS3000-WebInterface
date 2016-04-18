@@ -10,8 +10,8 @@ import { actions as colorListActions } from 'redux/modules/colorList';
 
 import { colorType, layoutType } from 'utils/propTypes';
 
-import ColorPickerInput from 'components/inputs/ColorPickerInput';
-import RGBAInput from 'components/inputs/RGBAInput';
+// import ColorPickerInput from 'components/inputs/ColorPickerInput';
+// import RGBAInput from 'components/inputs/RGBAInput';
 // XXX BLOCK(time) import HexInput from 'components/inputs/HexInput';
 import ColorList from 'components/colors/list';
 import ColorNav from 'components/colors/nav';
@@ -66,7 +66,7 @@ export class Colors extends Component {
 
   render() {
     const {
-      setColorValue, // action
+      // setColorValue, // action
       // XXX BLOCK(time) TIME setColor, // action
       color,
       layout,
