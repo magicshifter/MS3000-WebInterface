@@ -46,15 +46,6 @@ compiler.run(function (err, stats) {
 
   fs.writeFileSync(path.join(paths.dist(), 'min.html'), fileContent, 'utf8');
 
-  var cssDistFile = path.join(paths.dist(), 'bundled', 'app.css');
-  var cssSrcFile = path.join(paths.dist(), 'app.css');
-  console.log('writing css file from', cssSrcFile, 'to', cssDistFile);
-
-  var cssContent = fs.readFileSync(cssSrcFile, 'utf8');
-
-  fs.writeFileSync(cssDistFile, cssContent, 'utf8');
-  console.log('css copying finished');
-
   var appCacheDistFile = path.join(paths.dist(), 'magicshifter.appcache');
   var appCacheSrcFile = path.join(paths.client(), 'magicshifter.appcache');
   console.log('writing from', appCacheSrcFile, 'to', appCacheDistFile);
