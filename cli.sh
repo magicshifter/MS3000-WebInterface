@@ -110,12 +110,13 @@ function inline() {
   $BIN_DIR/html-inline \
     -i $JS_DIST_DIR/min.html \
     -o $JS_DIST_DIR/bundled/index.html \
-    -b $JS_DIST_DIR// \
+    -b $JS_DIST_DIR/ \
     --ignore-scripts
 
   cp $JS_DIST_DIR/index.js $JS_DIST_DIR/bundled/index.js
   cp $JS_DIST_DIR/magicshifter.appcache $JS_DIST_DIR/bundled/magicshifter.appcache
   cp $JS_DIST_DIR/favicon.ico $JS_DIST_DIR/bundled/favicon.ico
+  cp $JS_DIST_DIR/app.css $JS_DIST_DIR/bundled/app.css
 
   gzip --keep --force --best dist/bundled/index.js
 
