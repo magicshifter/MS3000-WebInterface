@@ -5,7 +5,6 @@ JS_DIST_DIR=./dist/
 .PHONY: \
 	all \
 	dev \
-	sed \
 	install \
 	clean \
 	build \
