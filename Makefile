@@ -4,18 +4,25 @@ JS_DIST_DIR=./dist/
 
 .PHONY: \
 	all \
-	dev \
-	install \
 	clean \
+	compile \
 	build \
+	deploy \
+	install \
 	lint \
 	lint-fix \
+	cheap-concat \
+	closure-compile \
 	server \
-	nw-build \
+	dev \
 	dev-no-debug \
+	flow \
 	test \
 	test-dev \
-	deploy
+	inline \
+	scss-lint \
+	nw-build \
+	help
 
 all: dev
 
