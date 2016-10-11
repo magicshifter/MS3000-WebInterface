@@ -44,6 +44,13 @@ compiler.run(function (err, stats) {
     '<script src="index.js"></script>'
   );
 
+  var cssFileContents = fs.readFileSync(path.join(paths.dist(), 'app.css'), 'utf8');
+  fileContent = fileContent.replace(
+    '</head>',
+    '<link href="app.css" rel="stylesheet"></head>'
+  )
+
+
   fs.writeFileSync(path.join(paths.dist(), 'min.html'), fileContent, 'utf8');
 
   var appCacheDistFile = path.join(paths.dist(), 'magicshifter.appcache');
