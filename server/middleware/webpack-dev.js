@@ -24,8 +24,10 @@ export default function (compiler, publicPath) {
     let req = this.req;
 
     let runNext = yield applyExpressMiddleware(middleware, req, {
-      end: (content) => ctx.body = content,
-      setHeader: function () {
+      end: (content) => {
+        ctx.body = content;
+      },
+      setHeader: () => {
         ctx.set.apply(ctx, arguments);
       },
     });
