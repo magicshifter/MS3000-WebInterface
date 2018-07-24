@@ -18,6 +18,7 @@ protobuf.load(process.env.PUBLIC_URL + "MS3000.proto", function(err, root) {
 
   // Obtain a message type
   hacktransporter.MS3KG = root.lookupType("MS3KG");
+  hacktransporter.root = root
 
   console.log("stage2", hacktransporter)
 

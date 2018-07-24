@@ -3,21 +3,41 @@ import logo from './logo.svg';
 import './App.css';
 
 import hacktransporter from './protobufhack'
+import { fetch } from './utils/http'
 
 class App extends Component {
   render() {
 
 
     var testObj = {
-      current: {
-        current: "pov"
+      modes: {
+        current: "light",
+        light: {
+          name: "light evil hacked",
+          subMode: hacktransporter.MS3KG.Modes.Light.LightMode.SCANNER_RGB,
+          color: {
+            R: 0, G: 255, B: 255
+          }
+        }
       },
-      lucky_number: 23,
-      luckyNumber:24,
     };
 
     var check = hacktransporter.MS3KG.verify(testObj);
-    console.log(check)
+
+    var bufferU8 = hacktransporter.MS3KG.encode(testObj).finish()
+    var decoder = new TextDecoder('utf8');
+
+    var funkyStr = String.fromCharCode.apply(null, bufferU8)
+
+    var b64encoded = btoa(funkyStr);
+
+    //b64encoded = "abc"
+
+
+    fetch({method: "post", url: 'http://192.168.4.1/protobuf?myArg=' + b64encoded})
+
+    console.log(check, bufferU8)
+
     var message = (check == null ? "success :)" : check);
 
     //message = "hello"
