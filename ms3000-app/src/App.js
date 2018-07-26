@@ -2,10 +2,18 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import hacktransporter from './protobufhack'
+import hacktransporter from './utils/protobufhack'
 import { fetch } from './utils/http'
 
 class App extends Component {
+  // constructor() {
+  //
+  // }
+
+  sendPing = () => {
+    window.location.reload();
+  }
+
   render() {
 
 
@@ -51,7 +59,7 @@ class App extends Component {
           <h1 className="App-title">MS3000 HyperVisor</h1>
         </header>
         <p className="App-intro">
-          <button value="kjjkj"> </button>
+          <button value="kjjkj" onClick={this.sendPing}>refreshhh</button>
           {message}
         </p>
       </div>
