@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import hacktransporter from './utils/protobufhack'
+import protobufs from './utils/protoBufLoader'
 import { fetch } from './utils/http'
 
 class App extends Component {
@@ -22,7 +22,7 @@ class App extends Component {
         current: "light",
         light: {
           name: "light evil hacked",
-          subMode: hacktransporter.MS3KG.Modes.Light.LightMode.SCANNER_RGB,
+          subMode: protobufs.MS3KG.Modes.Light.LightMode.SCANNER_RGB,
           color: {
             R: 0, G: 255, B: 255
           }
@@ -30,9 +30,9 @@ class App extends Component {
       },
     };
 
-    var check = hacktransporter.MS3KG.verify(testObj);
+    var check = protobufs.MS3KG.verify(testObj);
 
-    var bufferU8 = hacktransporter.MS3KG.encode(testObj).finish()
+    var bufferU8 = protobufs.MS3KG.encode(testObj).finish()
     var decoder = new TextDecoder('utf8');
 
     var funkyStr = String.fromCharCode.apply(null, bufferU8)
