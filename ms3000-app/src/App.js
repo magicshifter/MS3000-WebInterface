@@ -17,6 +17,10 @@ class App extends Component {
   render() {
 
 
+    var r = Math.floor(Math.random()*256)
+    var g = Math.floor(Math.random()*256)
+    var b = Math.floor(Math.random()*256)
+
     var testObj = {
       modes: {
         current: "light",
@@ -24,7 +28,7 @@ class App extends Component {
           name: "light evil hacked",
           subMode: protobufs.MS3KG.Modes.Light.LightMode.SCANNER_RGB,
           color: {
-            R: 0, G: 255, B: 255
+            R: r, G: g, B: b
           }
         }
       },

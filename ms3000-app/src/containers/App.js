@@ -1,20 +1,20 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { fetchShifterState } from '../actions'
+import { fetchShifterState, receiveShifterState } from '../actions'
+import protobufs from '../utils/protoBufLoader'
+
+import AutoInterface from '../components/AutoInterface'
 
 import './App.css';
 import logo from '../logo.svg';
 
 
 class App extends Component {
-  // static propTypes = {
-  //   fetchingState: isFetching, shifterState : PropTypes.string.isRequired,
-  //   posts: PropTypes.array.isRequired,
-  //   isFetching: PropTypes.bool.isRequired,
-  //   lastUpdated: PropTypes.number,
-  //   dispatch: PropTypes.func.isRequired
-  // }
+  static propTypes = {
+    isFetching: PropTypes.bool.isRequired,
+    shifterState : PropTypes.object.optional,
+  }
 
   componentDidMount() {
     const { dispatch, selectedSubreddit } = this.props
@@ -36,6 +36,30 @@ class App extends Component {
     dispatch(fetchShifterState())
   }
 
+  handleTestDataClick = e => {
+    e.preventDefault()
+
+    const { dispatch } = this.props
+
+
+    var r = Math.floor(Math.random()*256)
+    var g = Math.floor(Math.random()*256)
+    var b = Math.floor(Math.random()*256)
+
+
+    dispatch(receiveShifterState({
+      modes: {
+        light: {
+          name: Math.random() < 0.4 ? "The Light" : Math.random() < 0.4 ? "Licht" : "MagicLight",
+          color: {
+            R: r, G: g, B: b
+          },
+          subMode: 2
+        }
+      }
+    }))
+  }
+
   render() {
     const { isFetching, shifterState } = this.props
 
@@ -51,8 +75,14 @@ class App extends Component {
           </button>
             : <p><img src={logo} className="App-logo" alt="logo" /></p>
           }
+          <button onClick={this.handleTestDataClick}>
+            Get TestData
+          </button>
         </div>
         <pre> {JSON.stringify(shifterState, null, 2) }</pre>
+        <AutoInterface protocolBuffer={protobufs.Light}
+                       onChange={alert}
+                       theState={shifterState ? shifterState.modes.light : null} />
       </div>
     )
   }
