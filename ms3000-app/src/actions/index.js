@@ -4,6 +4,8 @@ import pb from '../utils/protoBufLoader'
 export const REQUEST_SHIFTER_STATE = 'REQUEST_POSTS'
 export const RECEIVE_SHIFTER_STATE = 'RECEIVE_POSTS'
 
+export const SET_STATE_BUFFER = ''
+
 
 export const requestShifterState = () => ({
   type: REQUEST_SHIFTER_STATE

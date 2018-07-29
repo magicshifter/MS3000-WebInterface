@@ -30,6 +30,15 @@ export default class AutoInterface extends Component {
     }
   }
 
+  onChangeGenerator = (field) => {
+    const { theState, onChange } = this.props
+
+    return (newValue) => {
+      var ns = Object.assign({}, theState, { [field.name]: newValue })
+      onChange(ns)
+    }
+  }
+
   render() {
     const { protocolBuffer, theState, onChange } = this.props
     const controls = []
@@ -39,13 +48,12 @@ export default class AutoInterface extends Component {
 
       console.log(f, theState)
 
-      controls.push(<AutoControl field={f} value={this.getFromTheState(f)} onChange={alert}/>)
+      controls.push(<div>{f.name}:&nbsp;<AutoControl field={f} value={this.getFromTheState(f)} onChange={this.onChangeGenerator(f)}/></div>)
     }
 
     return (
       <div>
         { controls }
-        <pre> {JSON.stringify(theState, null, 2) }</pre>
       </div>
     )
   }

@@ -18,10 +18,6 @@ export default class AutoControl extends Component {
   componentWillReceiveProps(nextProps) {
   }
 
-  onChange = () => {
-
-  }
-
   render() {
     const { field , value, onChange } = this.props
 
@@ -30,23 +26,26 @@ export default class AutoControl extends Component {
 
     switch (field.type) {
       case 'string':
-        controls.push(<div><span>field.name</span><input type='text' value={value} onChange={onChange} /></div>)
+        controls.push(<input type='text' value={value} onChange={(evt) => {
+          console.log("text chnage", evt)
+          onChange(evt.target.value)
+        }
+        } />)
         break;
 
       case 'RGB':
-        controls.push(<RGBControl field={field} value={value} onChange={() => alert("dd")} /> )
+        controls.push(<RGBControl field={field} value={value} onChange={onChange} /> )
         break;
 
       default:
-        controls.push(<div><span>field.name</span></div>)
+        controls.push(<span>{field.name} has unknown type {field.type}</span>)
         break;
     }
 
     return (
-      <div>
+      <span>
         { controls }
-        <pre> {JSON.stringify(value, null, 2) }</pre>
-      </div>
+      </span>
     )
   }
 }

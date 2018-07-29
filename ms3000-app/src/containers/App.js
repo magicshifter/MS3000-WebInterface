@@ -29,6 +29,15 @@ class App extends Component {
   }
 
 
+  // TODO: this must go to shadow state!
+  onChangeLightState = (newLightState) => {
+    const { shifterState, dispatch } = this.props
+    const newS = Object.assign({}, shifterState,
+      { modes: Object.assign({}, shifterState ? shifterState.modes : null, {light: newLightState})})
+    dispatch(receiveShifterState(newS))
+  }
+
+
   handleRefreshClick = e => {
     e.preventDefault()
 
@@ -81,7 +90,7 @@ class App extends Component {
         </div>
         <pre> {JSON.stringify(shifterState, null, 2) }</pre>
         <AutoInterface protocolBuffer={protobufs.Light}
-                       onChange={alert}
+                       onChange={this.onChangeLightState}
                        theState={shifterState ? shifterState.modes.light : null} />
       </div>
     )
