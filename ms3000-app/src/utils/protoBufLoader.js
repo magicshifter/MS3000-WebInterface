@@ -18,6 +18,9 @@ export function getProtocolBuffersPromise() {
       xxx.Light = root.lookupType("Light");
       xxx.root = root
 
+
+      window.myR = root
+
       console.log("stage2", xxx)
 
       resolve();
