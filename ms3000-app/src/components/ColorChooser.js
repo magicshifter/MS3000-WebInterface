@@ -15,9 +15,11 @@ export default class ColorChooser extends Component {
   render() {
     const { color } = this.props
 
+    const hex = hexFromRGB(color)
     return (
-      <span className="ColorChooser" style={{backgroundColor: hexFromRGB(color)}}>
+      <span className="ColorChooser" style={{backgroundColor: hex}}>
         <input  type="color" value={hexFromRGB(color)} onChange={this.onChangeColor}/>
+        <div>{hex}</div>
       </span>
     )
   }

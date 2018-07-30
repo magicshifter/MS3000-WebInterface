@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from "prop-types";
 import { hexFromRGB, equRGB } from '../utils/color'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
 import './ColorPalette.css'
+
 
 class ColorButton extends Component {
   static propTypes = {
@@ -52,15 +51,10 @@ export default class ColorPalette extends Component {
       const elem = palette[i]
 
       controls.push(
-        <ColorButton color={elem} activeColor={activeColor} onClick={this.onClickPalette}/>
+        <li className="pure-menu-item"><ColorButton color={elem} activeColor={activeColor} onClick={this.onClickPalette}/></li>
       )
-
     }
 
-    return (
-      <span>
-        {controls}
-      </span>
-    )
+    return controls
   }
 }

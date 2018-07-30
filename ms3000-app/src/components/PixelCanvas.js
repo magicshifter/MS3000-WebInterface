@@ -53,7 +53,7 @@ export default class PixelCanvas extends Component {
       for (var x = 0; x < width; x++) {
 
         ctx.fillStyle= hexFromRGB(pixel.get(index));
-        ctx.fillRect(x*scale,y*scale,scale-2,scale-4);
+        ctx.fillRect(x*scale,y*scale,scale-1,scale-1);
 
         index++;
       }
@@ -76,7 +76,7 @@ export default class PixelCanvas extends Component {
     if (!equRGB(rgb, color)) {
       const shaded = shadeRGB(rgb)
       ctx.fillStyle = hexFromRGB(shaded);
-      ctx.fillRect(x * scale, y * scale, scale - 2, scale - 4);
+      ctx.fillRect(x * scale, y * scale, scale - 1, scale - 1);
     }
   }
 
@@ -135,7 +135,7 @@ export default class PixelCanvas extends Component {
               onMouseDown={this.onMouseDownCanvas}
               onMouseMove={this.onMouseMoveCanvas}
               onMouseLeave={this.onMouseLeaveCanvas}
-              style={{border: "1px solid #000000"}}/>
+              style={{border: "0px solid #FFFFFF"}}/>
     )
   }
 }

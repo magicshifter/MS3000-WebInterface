@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from "prop-types";
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import './ToolsMenu.css'
@@ -32,93 +31,13 @@ export default class ToolsMenu extends Component {
       const className = elem.name === tool ? "ToolsMenuSelectedTool" : "ToolsMenuTool"
 
       controls.push(
-        <span data-tool={elem.name} onClick={this.onClickTool} className="ToolsMenuTooltip">
+        <li className="pure-menu-item ToolsMenuTooltip" data-tool={elem.name} onClick={this.onClickTool} >
           <span className="ToolsMenuTooltipText">{elem.label || elem.name}</span>
           <FontAwesomeIcon icon={elem.icon} className={className} size="3x"/>
-        </span>
+        </li>
       )
-
     }
 
-    return (
-      <span>
-        {controls}
-      </span>
-    )
+    return controls
   }
 }
-/*
-
-const ToolsMenu =
-  ({ mode, setMode }) => {
-  // TODO: if other menu is needed make this props
-    const items = [
-      {
-        name: 'mutate',
-        icon: IconMutate,
-      },
-      {
-        name: 'draw',
-        icon: IconDraw,
-      },
-      {
-        name: 'random',
-        icon: IconRandomize,
-      },
-      {
-        name: 'select',
-        icon: IconSelectRect,
-      },
-    ]
-
-    const buttons = items.map(
-      ({ name, icon }) =>
-        <li
-          key={name}
-        >
-          <Tab
-            Icon={icon}
-            text={name}
-            active={name === mode}
-            onClick={
-              (evt) => {
-                // console.log('clicked mode', name)
-                setMode(name)
-              }
-            }
-          />
-        </li>
-    )
-
-    return (
-      <nav className={classes['container']}>
-        <ul>
-          {buttons}
-        </ul>
-      </nav>
-    )
-  }
-
-ToolsMenu.propTypes = {
-  mode: PropTypes.string.isRequired,
-  setMode: PropTypes.func.isRequired,
-}
-
-const mapStateToProps = (state, ownProps) => {
-  const {tool} = state.pixelEditor;
-
-  return {tool}
-}
-
-const mapDispatchToProps =
-  (dispatch) => ({
-    setMode:
-      (mode) => {
-        dispatch(actions.setMode(mode))
-      },
-  })
-
-const ToolsMenuContainer = connect(mapStateToProps)(ToolsMenu)
-
-export default ToolsMenuContainer
-*/

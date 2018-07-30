@@ -8,6 +8,8 @@ import ToolsMenu from '../components/ToolsMenu'
 import ColorPalette from "../components/ColorPalette";
 import ColorChooser from  '../components/ColorChooser'
 
+
+
 import {connect} from "react-redux";
 
 import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper } from '@fortawesome/free-solid-svg-icons'
@@ -17,6 +19,22 @@ import './PixelEditor.css'
 
 import { RGB } from '../utils/color'
 const bogusPalette = [
+  RGB(255,0,0),
+  RGB(255,255,0),
+  RGB(255,0,255),
+  RGB(0,255,255),
+  RGB(0,0,0),
+  RGB(255,255,255),
+  RGB(127,255,0),
+  RGB(0,127,255),
+  RGB(255,0,0),
+  RGB(255,255,0),
+  RGB(255,0,255),
+  RGB(0,255,255),
+  RGB(0,0,0),
+  RGB(255,255,255),
+  RGB(127,255,0),
+  RGB(0,127,255),
   RGB(255,0,0),
   RGB(255,255,0),
   RGB(255,0,255),
@@ -75,10 +93,26 @@ class PixelEditor extends Component {
 
     return (
       <div>
-        <ToolsMenu structure={toolbarStructure} tool={tool} onChange={this.onClickTool}/>
-        <ColorChooser color={color} onChange={this.onChangePalette}/>
-        <ColorPalette palette={bogusPalette} onChange={this.onChangePalette} activeColor={color}/>
-        <PixelCanvas width={width} height={height} tool={tool} color={color} pixel={pixel} scale={20} onChange={this.onChangePixel}/>
+        <div className="pure-menu pure-menu-horizontal">
+          <ul className="pure-menu-list">
+            <ToolsMenu structure={toolbarStructure} tool={tool} onChange={this.onClickTool}/>
+          </ul>
+          <ul className="pure-menu-list">
+            <li className="pure-menu-item">
+              <ColorChooser color={color} onChange={this.onChangePalette}/>
+            </li>
+          </ul>
+        </div>
+        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable">
+          <ul className="pure-menu-list">
+            <ColorPalette palette={bogusPalette} onChange={this.onChangePalette} activeColor={color}/>
+          </ul>
+
+        </div>
+
+
+
+        <PixelCanvas width={width} height={height} tool={tool} color={color} pixel={pixel} scale={25} onChange={this.onChangePixel}/>
       </div>
     )
   }
