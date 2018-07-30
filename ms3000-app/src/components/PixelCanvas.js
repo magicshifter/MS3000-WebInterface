@@ -42,12 +42,17 @@ export default class PixelCanvas extends Component {
     this.drawPixel()
   }
 
+  getPixel = (x, y) => {
+    const idx = y * this.props.width + x
+    const v =  this.props.pixel.get(idx)
+    return v
+  }
+
   drawPixel = () => {
     var index = 0
 
     const { pixel, width, height, scale } = this.props
     const ctx = this.canvasContext
-
 
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
@@ -60,17 +65,9 @@ export default class PixelCanvas extends Component {
     }
   }
 
-  getPixel = (x, y) => {
-    const idx = y * this.props.width + x
-    const v =  this.props.pixel.get(idx)
-    return v
-}
-
   drawTool = (x, y) => {
     const { pixel, width, height, color, scale } = this.props
     const ctx = this.canvasContext
-
-
 
     const rgb = this.getPixel(x,y)
     if (!equRGB(rgb, color)) {
@@ -97,6 +94,37 @@ export default class PixelCanvas extends Component {
     else if (py >= height) py = height - 1
 
     return {x: px, y: py}
+  }
+
+  useDrawTool = (evt) => {
+    const { onChange, color } = this.props
+    var p = this.getPos(evt)
+    p.color = color
+    onChange([p], { usedColor: color })
+  }
+
+  useFillTool = (evt) => {
+    const { onChange, color } = this.props
+    var p = this.getPos(evt)
+    p.color = color
+    onChange([p], { usedColor: color })
+  }
+
+  useToole = (evt) => {
+    const { tool } = this.props
+    switch (tool) {
+      case "draw":
+        this.useDrawTool(evt)
+        break;
+
+      case "fill":
+        this.useDrawTool(evt)
+        break;
+
+      default:
+        console.log("unknown tool", tool);
+
+    }
   }
 
   onMouseDownCanvas = (evt) => {

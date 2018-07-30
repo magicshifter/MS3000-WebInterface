@@ -33,6 +33,26 @@ export function avg(rgb) {
 }
 
 
+export function paletteFromImage(pixel) {
+  const colors = {}
+
+  for (var i = 0; i < pixel.size; i++) {
+    var c = pixel.get(i)
+    var hex = hexFromRGB(c)
+    colors[hex] = true
+  }
+
+  const keys = Object.keys(colors).sort((a, b) => {
+    var c1 = Color(a)
+    var c2 = Color(b)
+    return c1.hue() - c2.hue()
+  })
+
+  const p = keys.map(hex => createRGBFromHex(hex))
+  return p
+}
+
+
 export function shadeRGB(rgb, offset=100) {
   const a = avg(rgb)
 

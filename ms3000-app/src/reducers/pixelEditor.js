@@ -1,15 +1,43 @@
 import { List }  from 'immutable'
+import {
+  PIXEL_EDITOR_CHANGE_TOOL,
+  PIXEL_EDITOR_CHANGE_PIXEL,
+  PIXEL_EDITOR_SET_COLOR,
+  PIXEL_EDITOR_CHANGE_SIZE,
+  PIXEL_EDITOR_SET_PALETTE,
+  PIXEL_EDITOR_CHANGE_IMAGE,
+} from '../actions'
+import { RGB } from '../utils/color'
 
-import {PIXEL_EDITOR_CHANGE_TOOL, PIXEL_EDITOR_CHANGE_PIXEL, PIXEL_EDITOR_SET_COLOR, PIXEL_EDITOR_CHANGE_SIZE} from '../actions'
 
-import {  RGB} from '../utils/color'
+const DEFAULT_WIDTH = 16
+const DEFAULT_HEIGHT = 16
+const DEFAULT_PALETTE = [
+  RGB(0,0,0),
+  RGB(127,127,127),
+  RGB(255,255,255),
+  RGB(255,0,0),
+  RGB(0,255,0),
+  RGB(0,0,255),
+  RGB(255,255,0),
+  RGB(255,0,255),
+  RGB(0,255,255),
+
+  RGB(255,0,127),
+  RGB(255,127,0),
+  RGB(127,255,0),
+  RGB(0,255,127),
+  RGB(0,127,255),
+  RGB(127,0,255),
+
+]
+
 
 function emptyImage(w, h) {
   const pixel = []
   for (var i = 0; i < w*h; i++) {
     pixel.push({R:0, G: 0, B: 0})
   }
-
   return List(pixel)
 }
 
@@ -55,9 +83,6 @@ function resizePixel(state, width, height) {
   return pixel
 }
 
-const DEFAULT_WIDTH = 16
-const DEFAULT_HEIGHT = 16
-
 const pixelEditor = (state = null, action) => {
   state = state || {
     width: DEFAULT_WIDTH,
@@ -65,6 +90,7 @@ const pixelEditor = (state = null, action) => {
     pixel: emptyImage(DEFAULT_WIDTH, DEFAULT_HEIGHT),
     tool: "erase",
     color: RGB(255, 255, 255),
+    palette: DEFAULT_PALETTE,
   }
 
   switch (action.type) {
@@ -78,6 +104,14 @@ const pixelEditor = (state = null, action) => {
       return {
         ...state,
         color: action.color
+      }
+
+    case PIXEL_EDITOR_CHANGE_IMAGE:
+      return {
+        ...state,
+        pixel: action.image.pixel,
+        width: action.image.width,
+        height: action.image.height,
       }
 
     case PIXEL_EDITOR_CHANGE_PIXEL:
@@ -96,6 +130,12 @@ const pixelEditor = (state = null, action) => {
         height: nH,
         pixel: resizePixel(state, nW, nH),
         resizePixel: state.resizePixel || { pixel: state.pixel, width: state.width, height: state.height }
+      }
+
+    case PIXEL_EDITOR_SET_PALETTE:
+      return {
+        ...state,
+        palette: action.palette
       }
 
     default:
