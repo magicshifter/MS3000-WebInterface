@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { pixelEditorSetTool, pixelEditorChangePixelList, pixelEditorSetColor } from '../actions'
+import { pixelEditorSetTool, pixelEditorChangePixelList, pixelEditorSetColor, pixelEditorChangeSize } from '../actions'
 
 import PixelCanvas from '../components/PixelCanvas'
 import ToolsMenu from '../components/ToolsMenu'
-import ColorPalette from "../components/ColorPalette";
+import ColorPalette from '../components/ColorPalette'
 import ColorChooser from  '../components/ColorChooser'
+import NumberInput from '../components/NumberInput'
 
 
 
@@ -88,6 +89,12 @@ class PixelEditor extends Component {
     dispatch(pixelEditorSetColor(color))
   }
 
+  onChangeWidth = (newWidth) => {
+    const { dispatch } = this.props
+    dispatch(pixelEditorChangeSize(newWidth))
+  }
+
+
   render() {
     const { width, height, tool, color, pixel } = this.props
 
@@ -100,6 +107,9 @@ class PixelEditor extends Component {
           <ul className="pure-menu-list">
             <li className="pure-menu-item">
               <ColorChooser color={color} onChange={this.onChangePalette}/>
+            </li>
+            <li className="pure-menu-item">
+              width: <NumberInput value={width} min={1} max={64} onChange={this.onChangeWidth} />
             </li>
           </ul>
         </div>

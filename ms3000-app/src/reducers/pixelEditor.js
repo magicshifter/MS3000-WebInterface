@@ -1,6 +1,6 @@
 import { List }  from 'immutable'
 
-import {PIXEL_EDITOR_CHANGE_TOOL, PIXEL_EDITOR_CHANGE_PIXEL, PIXEL_EDITOR_SET_COLOR} from '../actions'
+import {PIXEL_EDITOR_CHANGE_TOOL, PIXEL_EDITOR_CHANGE_PIXEL, PIXEL_EDITOR_SET_COLOR, PIXEL_EDITOR_CHANGE_SIZE} from '../actions'
 
 import {  RGB} from '../utils/color'
 
@@ -24,6 +24,32 @@ function applyPixelChanges(state, changes) {
   for (var i = 0; i < changes.length; i++) {
     const c = changes[i]
     pixel = pixel.set(getIndex(state, c.x, c.y), c.color)
+  }
+
+  return pixel
+}
+
+function resizePixel(state, width, height) {
+  var pixel =  emptyImage(width, height)
+
+  var oW = state.width
+  var oH = state.height
+  var oldPix = state.pixel
+
+  if (state.resizePixel) {
+    oldPix = state.resizePixel.pixel
+    oW = state.resizePixel.width
+    oH = state.resizePixel.height
+  }
+
+  for (var y = 0; y < Math.min(height, oH); y++) {
+    for (var x = 0; x < Math.min(width, oW); x++) {
+      const oldIdx = oW * y + x
+      const newIdx = width * y + x
+
+      const oldV = oldPix.get(oldIdx)
+      pixel = pixel.set(newIdx, oldV)
+    }
   }
 
   return pixel
@@ -57,10 +83,20 @@ const pixelEditor = (state = null, action) => {
     case PIXEL_EDITOR_CHANGE_PIXEL:
       return {
         ...state,
-        pixel: applyPixelChanges(state, action.changes)
+        pixel: applyPixelChanges(state, action.changes),
+        resizePixel: null,
       }
 
-
+    case PIXEL_EDITOR_CHANGE_SIZE:
+      const nW = action.width || state.width
+      const nH = action.height || state.height
+      return {
+        ...state,
+        width: nW,
+        height: nH,
+        pixel: resizePixel(state, nW, nH),
+        resizePixel: state.resizePixel || { pixel: state.pixel, width: state.width, height: state.height }
+      }
 
     default:
       return state
