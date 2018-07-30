@@ -17,6 +17,15 @@ export const pixelEditorSetTool = (tool) => ({
   tool
 })
 
+export const pixelEditorChangePixel = (x, y, color) => ({
+  type: PIXEL_EDITOR_CHANGE_PIXEL,
+  changes: [{x, y, color}]
+})
+
+export const pixelEditorChangePixelList = (changes) => ({
+  type: PIXEL_EDITOR_CHANGE_PIXEL,
+  changes
+})
 
 export const requestShifterState = () => ({
   type: REQUEST_SHIFTER_STATE

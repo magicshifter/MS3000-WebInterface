@@ -73,7 +73,7 @@ class PixelEditor extends Component {
       <div>
         <ToolsMenu structure={toolbarStructure} tool={tool} onChange={this.onClickTool}/>
         <ColorPalette palette={bogusPalette} onChange={this.onChangePalette}/>
-        <PixelCanvas width={width} height={height} tool={tool} color={color} pixel={pixel} onChange={this.onChangePixel}/>
+        <PixelCanvas width={width} height={height} tool={tool} color={color} pixel={pixel} scale={20} onChange={this.onChangePixel}/>
       </div>
     )
   }
@@ -86,10 +86,10 @@ class PixelEditor extends Component {
 }
 
 const mapStateToProps = state => {
-  const { width, height, color, tool } = state.pixelEditor
+  const { width, height, color, tool, pixel } = state.pixelEditor
 
   return {
-    width, height, color, tool
+    width, height, color, tool, pixel
   }
 }
 

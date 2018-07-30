@@ -13,10 +13,10 @@ const ms3000 = (state = {isFetching: false, shifterState: {}}, action) => {
         ...state,
         shifterState: action.shifterState,
         isFetching: false
-      }
+      };
     default:
       return state
   }
-}
+};
 
 export default ms3000
