@@ -37,6 +37,11 @@ class App extends Component {
     dispatch(receiveShifterState(newS))
   }
 
+  onChangeAutoInterface = (newState) => {
+    const { dispatch } = this.props
+    dispatch(receiveShifterState(newState))
+  }
+
 
   handleRefreshClick = e => {
     e.preventDefault()
@@ -87,11 +92,12 @@ class App extends Component {
           <button onClick={this.handleTestDataClick}>
             Get TestData
           </button>
+          fast sync: <input type="checkbox" />
         </div>
         <pre> {JSON.stringify(shifterState, null, 2) }</pre>
-        <AutoInterface protocolBuffer={protobufs.Light}
-                       onChange={this.onChangeLightState}
-                       theState={shifterState ? shifterState.modes.light : null} />
+        <AutoInterface type={protobufs.MS3KG}
+                       onChange={this.onChangeAutoInterface}
+                       value={shifterState} />
       </div>
     )
   }

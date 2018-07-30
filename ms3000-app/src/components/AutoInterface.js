@@ -4,12 +4,10 @@ import AutoControl from './AutoControl'
 
 
 
-
-
 export default class AutoInterface extends Component {
   static propTypes = {
-    protocolBuffer: PropTypes.object.isRequired,
-    theState: PropTypes.object.isRequired,
+    type: PropTypes.object.isRequired,
+    value: PropTypes.object.isRequired,
     onChange: PropTypes.func.optional,
   }
 
@@ -20,35 +18,35 @@ export default class AutoInterface extends Component {
   componentWillReceiveProps(nextProps) {
   }
 
-  getFromTheState = (f) => {
-    const { theState } = this.props
-    if (theState) {
-      return theState[f.name]
+  getFromValue = (f) => {
+    const { value } = this.props
+    if (value) {
+      return value[f.name]
     }
     else {
       return null
     }
   }
 
-  onChangeGenerator = (field) => {
-    const { theState, onChange } = this.props
+  onChangeGenerator = (type) => {
+    const { value, onChange } = this.props
 
     return (newValue) => {
-      var ns = Object.assign({}, theState, { [field.name]: newValue })
+      var ns = Object.assign({}, value, { [type.name]: newValue })
       onChange(ns)
     }
   }
 
   render() {
-    const { protocolBuffer, theState, onChange } = this.props
+    const { type, value } = this.props
     const controls = []
 
-    for (var k in protocolBuffer.fields) {
-      const f = protocolBuffer.fields[k]
+    for (var k in type.fields) {
+      const f = type.fields[k]
 
-      console.log(f, theState)
+      console.log(f, value)
 
-      controls.push(<div>{f.name}:&nbsp;<AutoControl field={f} value={this.getFromTheState(f)} onChange={this.onChangeGenerator(f)}/></div>)
+      controls.push(<div>{f.name}:&nbsp;<AutoControl field={f} value={this.getFromValue(f)} onChange={this.onChangeGenerator(f)}/></div>)
     }
 
     return (
