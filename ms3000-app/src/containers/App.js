@@ -13,21 +13,8 @@ import logo from '../logo.svg';
 class App extends Component {
   static propTypes = {
     isFetching: PropTypes.bool.isRequired,
-    shifterState : PropTypes.object.optional,
+    shifterState : PropTypes.object,
   }
-
-  componentDidMount() {
-    const { dispatch, selectedSubreddit } = this.props
-    //dispatch(fetchPostsIfNeeded(selectedSubreddit))
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // if (nextProps.selectedSubreddit !== this.props.selectedSubreddit) {
-    //   const { dispatch, selectedSubreddit } = nextProps
-    //   dispatch(fetchPostsIfNeeded(selectedSubreddit))
-    // }
-  }
-
 
   // TODO: this must go to shadow state!
   onChangeLightState = (newLightState) => {
@@ -37,7 +24,7 @@ class App extends Component {
     dispatch(receiveShifterState(newS))
   }
 
-  onChangeAutoInterface = (newState) => {
+  onChangeAutoInterface = (newState, theType) => {
     const { dispatch } = this.props
     dispatch(receiveShifterState(newState))
   }
@@ -52,15 +39,10 @@ class App extends Component {
 
   handleTestDataClick = e => {
     e.preventDefault()
-
     const { dispatch } = this.props
-
-
     var r = Math.floor(Math.random()*256)
     var g = Math.floor(Math.random()*256)
     var b = Math.floor(Math.random()*256)
-
-
     dispatch(receiveShifterState({
       modes: {
         light: {
@@ -77,7 +59,7 @@ class App extends Component {
   render() {
     const { isFetching, shifterState } = this.props
 
-    console.log("render", isFetching, shifterState )
+    //console.log("render", isFetching, shifterState )
 
     return (
       <div>

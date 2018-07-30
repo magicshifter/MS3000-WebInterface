@@ -12,55 +12,47 @@ import protobuf from 'protobufjs'
 export default class AutoControl extends Component {
   static propTypes = {
     field: PropTypes.object.isRequired,
-    value: PropTypes.any.isRequired,
-    onChange: PropTypes.func.optional,
+    value: PropTypes.any,
+    onChange: PropTypes.func.isRequired,
   }
 
-  componentDidMount() {
-
-  }
-
-  componentWillReceiveProps(nextProps) {
+  onChangeRecursive = (newValue, type) => {
+    const { field, onChange } = this.props
+    onChange(newValue, field)
   }
 
   render() {
     const { field , value, onChange } = this.props
 
-
     const root = field.root
-
     const lookup = root.lookup(field.type)
     const isEnum = lookup instanceof protobuf.Enum
-    const isType =  lookup instanceof protobuf.Type
-
+    const isType = lookup instanceof protobuf.Type
 
     const controls = []
-
-    console.log("Render AutoCntrl", field, lookup)
-
+    //console.log("Render AutoCntrl", field, lookup)
 
     switch (field.type) {
       case 'string':
-        controls.push(<input type='text' value={value} onChange={(evt) => {
+        controls.push(<input key="str" type='text' value={value || ""} onChange={(evt) => {
           //console.log("text chnage", evt)
-          onChange(evt.target.value)
-        }
-        }/>)
+          onChange(evt.target.value, field)
+        }}/>)
         break;
 
       case 'RGB':
-        controls.push(<RGBControl field={field} value={value} onChange={onChange}/>)
+        controls.push(<RGBControl key="rgb" field={field} value={value} onChange={onChange}/>)
         break;
 
       default:
         if (isEnum) {
-          controls.push(<EnumControl field={field} value={value} onChange={onChange} /> )
+          controls.push(<EnumControl key="enu" field={field} value={value} onChange={onChange} /> )
         }
         else if (isType) {
-          controls.push(<AutoInterface type={lookup} value={value} onChange={onChange} />)
+          controls.push(<AutoInterface key="rec" type={lookup} value={value} onChange={this.onChangeRecursive} />)
         }
         else {
-          controls.push(<span>!!! {field.name} has unknown type {field.type}</span>)
+          controls.push(<span key="u">!!! {field.name} has unknown type {field.type}</span>)
         }
         break;
     }

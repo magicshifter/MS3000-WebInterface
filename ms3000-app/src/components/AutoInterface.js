@@ -7,15 +7,8 @@ import AutoControl from './AutoControl'
 export default class AutoInterface extends Component {
   static propTypes = {
     type: PropTypes.object.isRequired,
-    value: PropTypes.object.isRequired,
-    onChange: PropTypes.func.optional,
-  }
-
-  componentDidMount() {
-
-  }
-
-  componentWillReceiveProps(nextProps) {
+    value: PropTypes.any,
+    onChange: PropTypes.func.isRequired,
   }
 
   getFromValue = (f) => {
@@ -28,25 +21,23 @@ export default class AutoInterface extends Component {
     }
   }
 
-  onChangeGenerator = (type) => {
-    const { value, onChange } = this.props
+  onChangeControl = (newSubValue, field) => {
+    const { value, type, onChange } = this.props
 
-    return (newValue) => {
-      var ns = Object.assign({}, value, { [type.name]: newValue })
-      onChange(ns)
-    }
+    //console.log("cntrl changed", newSubValue, field)
+
+    var newValue = Object.assign({}, value, { [field.name]: newSubValue })
+    onChange(newValue, type)
   }
 
   render() {
-    const { type, value } = this.props
+    const { type } = this.props
     const controls = []
 
     for (var k in type.fields) {
       const f = type.fields[k]
-
-      console.log(f, value)
-
-      controls.push(<div>{f.name}:&nbsp;<AutoControl field={f} value={this.getFromValue(f)} onChange={this.onChangeGenerator(f)}/></div>)
+      //console.log(f, value)
+      controls.push(<div key={k}>{f.name}:&nbsp;<AutoControl field={f} value={this.getFromValue(f)} onChange={this.onChangeControl}/></div>)
     }
 
     return (

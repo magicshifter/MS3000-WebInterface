@@ -15,8 +15,6 @@ class App extends Component {
   }
 
   render() {
-
-
     var r = Math.floor(Math.random()*256)
     var g = Math.floor(Math.random()*256)
     var b = Math.floor(Math.random()*256)
@@ -37,7 +35,7 @@ class App extends Component {
     var check = protobufs.MS3KG.verify(testObj);
 
     var bufferU8 = protobufs.MS3KG.encode(testObj).finish()
-    var decoder = new TextDecoder('utf8');
+    //var decoder = new TextDecoder('utf8');
 
     var funkyStr = String.fromCharCode.apply(null, bufferU8)
 

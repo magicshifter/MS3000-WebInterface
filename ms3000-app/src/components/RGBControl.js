@@ -1,42 +1,28 @@
 import React, { Component } from 'react'
 import PropTypes from "prop-types";
-
 import Color from "color"
-
-function toHex(c) {
-  return "#" + c.R.toString(16) + c.G.toString(16) + c.B.toString(16)
-}
 
 export default class RGBControl extends Component {
   static propTypes = {
     field: PropTypes.object.isRequired,
-    value: PropTypes.any.isRequired,
-    onChange: PropTypes.func.optional,
-  }
-
-  componentDidMount() {
-
-  }
-
-  componentWillReceiveProps(nextProps) {
+    value: PropTypes.any,
+    onChange: PropTypes.func.isRequired,
   }
 
   updateChannelFromRef = (channel) => {
-    const { onChange } = this.props
+    const { onChange, field } = this.props
 
     // get current RGB
     const value = this.getValue()
 
     var x = this.refs[channel].value
-    var n = parseInt(x)
+    var n = parseInt(x, 10)
     n = isNaN(n) ? 0 : n
 
-    console.log(x, n)
-
-    // onChange if needed
+    // change if needed
     if (n !== value[channel]) {
       const newValue = Object.assign({}, value, {[channel]: n})
-      onChange(newValue)
+      onChange(newValue, field)
     }
   }
 
@@ -53,7 +39,7 @@ export default class RGBControl extends Component {
   }
 
   onChangeRGBA = () => {
-    const { onChange } = this.props
+    const { onChange, field } = this.props
 
     const x = this.refs.RGBA.value
     console.log("color cng", x)
@@ -64,7 +50,7 @@ export default class RGBControl extends Component {
       G: color.green(),
       B: color.blue()
     }
-    onChange(newValue)
+    onChange(newValue, field)
 
   }
 

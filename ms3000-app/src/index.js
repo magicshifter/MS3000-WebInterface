@@ -34,7 +34,7 @@ const store = createStore(
 var p = getProtocolBuffersPromise();
 p.then( () => {
 
-  if (1 == 1) {
+  if (true) {
     ReactDOM.render(
       <Provider store={store}>
         <App/>
