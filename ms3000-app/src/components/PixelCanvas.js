@@ -119,6 +119,10 @@ export default class PixelCanvas extends Component {
     }
   }
 
+  onMouseLeaveCanvas = (evt) => {
+    this.drawPixel()
+  }
+
   render() {
     let { width, height, scale } = this.props
 
@@ -128,7 +132,10 @@ export default class PixelCanvas extends Component {
 
     return (
       <canvas ref="canvas" width={cw} height={ch}
-              onMouseDown={this.onMouseDownCanvas} onMouseMove={this.onMouseMoveCanvas} style={{border: "1px solid #000000"}}/>
+              onMouseDown={this.onMouseDownCanvas}
+              onMouseMove={this.onMouseMoveCanvas}
+              onMouseLeave={this.onMouseLeaveCanvas}
+              style={{border: "1px solid #000000"}}/>
     )
   }
 }

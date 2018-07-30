@@ -5,7 +5,8 @@ import { pixelEditorSetTool, pixelEditorChangePixelList, pixelEditorSetColor } f
 
 import PixelCanvas from '../components/PixelCanvas'
 import ToolsMenu from '../components/ToolsMenu'
-import ColorPalette from '../components/ColorPalette'
+import ColorPalette from "../components/ColorPalette";
+import ColorChooser from  '../components/ColorChooser'
 
 import {connect} from "react-redux";
 
@@ -75,6 +76,7 @@ class PixelEditor extends Component {
     return (
       <div>
         <ToolsMenu structure={toolbarStructure} tool={tool} onChange={this.onClickTool}/>
+        <ColorChooser color={color} onChange={this.onChangePalette}/>
         <ColorPalette palette={bogusPalette} onChange={this.onChangePalette} activeColor={color}/>
         <PixelCanvas width={width} height={height} tool={tool} color={color} pixel={pixel} scale={20} onChange={this.onChangePixel}/>
       </div>

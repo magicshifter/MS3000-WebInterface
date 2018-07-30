@@ -13,3 +13,50 @@
 .ToolsMenuTool:hover {
     background-color: lightgray;
 }
+
+
+.ToolsMenuTooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+/* top */
+.ToolsMenuTooltip .ToolsMenuTooltipText {
+    visibility: hidden;
+    width: 100px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -50px;
+}
+
+/* bottom */
+/*.ToolsMenuTooltip .ToolsMenuTooltipText{*/
+    /*visibility: hidden;*/
+    /*width: 120px;*/
+    /*background-color: black;*/
+    /*color: #fff;*/
+    /*text-align: center;*/
+    /*border-radius: 6px;*/
+    /*padding: 5px 0;*/
+
+/*!* Position the tooltip *!*/
+    /*position: absolute;*/
+    /*z-index: 1;*/
+    /*top: 100%;*/
+    /*left: 50%;*/
+    /*margin-left: -60px;*/
+/*}*/
+
+.ToolsMenuTooltip:hover .ToolsMenuTooltipText {
+    visibility: visible;
+}

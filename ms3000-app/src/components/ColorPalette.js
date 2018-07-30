@@ -9,15 +9,15 @@ import './ColorPalette.css'
 class ColorButton extends Component {
   static propTypes = {
     color: PropTypes.object.isRequired,
-    activeColor: PropTypes.object,
     onClick: PropTypes.func.isRequired,
+    activeColor: PropTypes.object,
   }
 
   render() {
     const { color, activeColor } = this.props
 
     var className = "PaletteItem"
-    if (equRGB(color, activeColor)) {
+    if (activeColor && equRGB(color, activeColor)) {
       className = "SelectedPaletteItem"
     }
 
