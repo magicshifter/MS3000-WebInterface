@@ -12,9 +12,6 @@ import {connect} from "react-redux";
 
 import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper } from '@fortawesome/free-solid-svg-icons'
 
-
-
-
 import './PixelEditor.css'
 
 
