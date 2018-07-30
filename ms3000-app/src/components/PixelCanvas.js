@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from "prop-types";
-import { hexFromRGB } from "../utils/color"
+import { hexFromRGB, shadeRGB, equRGB } from "../utils/color"
+
+
+
 
 
 
@@ -23,14 +26,27 @@ export default class PixelCanvas extends Component {
     scale: PropTypes.number.isRequired,
   }
 
-  // TODO: draw pixel here!
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      hover: {x:-100, y:-100}
+    }
+  }
+
   componentDidMount() {
     var c = this.refs.canvas
     var ctx = c.getContext("2d");
+    this.canvasContext = ctx
 
+    this.drawPixel()
+  }
+
+  drawPixel = () => {
     var index = 0
 
-    let { pixel, width, height, scale } = this.props
+    const { pixel, width, height, scale } = this.props
+    const ctx = this.canvasContext
 
 
     for (var y = 0; y < height; y++) {
@@ -42,32 +58,65 @@ export default class PixelCanvas extends Component {
         index++;
       }
     }
-
-
-    ctx.moveTo(0, 0);
-    ctx.lineTo(200, 100);
-    ctx.stroke();
-  }
-
-  componentWillReceiveProps(nextProps) {
   }
 
   getPixel = (x, y) => {
-    let { pixel, width } = this.props
-    const idx = x + y * width
-    return pixel[idx]
+    const idx = y * this.props.width + x
+    const v =  this.props.pixel.get(idx)
+    return v
+}
+
+  drawTool = (x, y) => {
+    const { pixel, width, height, color, scale } = this.props
+    const ctx = this.canvasContext
+
+
+
+    const rgb = this.getPixel(x,y)
+    if (!equRGB(rgb, color)) {
+      const shaded = shadeRGB(rgb)
+      ctx.fillStyle = hexFromRGB(shaded);
+      ctx.fillRect(x * scale, y * scale, scale - 2, scale - 4);
+    }
   }
 
-  onClickCanvas = (evt) => {
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    this.drawPixel()
+  }
+
+  getPos = (evt) => {
+    let { width, height, scale } = this.props
     var p = getMousePos(this.refs.canvas, evt)
 
-    
-    console.log("click canvas", p, evt.target)
+    var px = Math.floor(p.x / scale)
+    var py = Math.floor(p.y / scale)
+
+    if (px < 0) px = 0
+    else if (px >= width) px = width - 1
+    if (py < 0) py = 0
+    else if (py >= height) py = height - 1
+
+    return {x: px, y: py}
+  }
+
+  onMouseDownCanvas = (evt) => {
+    const { onChange, color } = this.props
+    var p = this.getPos(evt)
+    p.color = color
+    onChange([p])
   }
 
   onMouseMoveCanvas = (evt) => {
-    var p = getMousePos(this.refs.canvas, evt)
-    console.log("mouse move canvas", p, evt.target)
+    var p = this.getPos(evt)
+    if (evt.buttons) {
+      const {onChange, color} = this.props
+      p.color = color
+      onChange([p])
+    }
+    else {
+      this.drawPixel()
+      this.drawTool(p.x, p.y)
+    }
   }
 
   render() {
@@ -79,7 +128,7 @@ export default class PixelCanvas extends Component {
 
     return (
       <canvas ref="canvas" width={cw} height={ch}
-              onClick={this.onClickCanvas} onMouseMove={this.onMouseMoveCanvas} style={{border: "1px solid #000000"}}/>
+              onMouseDown={this.onMouseDownCanvas} onMouseMove={this.onMouseMoveCanvas} style={{border: "1px solid #000000"}}/>
     )
   }
 }

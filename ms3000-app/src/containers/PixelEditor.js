@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Color from "color"
 
-import { pixelEditorSetTool } from '../actions'
+import { pixelEditorSetTool, pixelEditorChangePixelList, pixelEditorSetColor } from '../actions'
 
 import PixelCanvas from '../components/PixelCanvas'
 import ToolsMenu from '../components/ToolsMenu'
@@ -23,6 +22,8 @@ const bogusPalette = [
   RGB(0,255,255),
   RGB(0,0,0),
   RGB(255,255,255),
+  RGB(127,255,0),
+  RGB(0,127,255),
 ]
 
 
@@ -56,14 +57,16 @@ class PixelEditor extends Component {
     onChange: PropTypes.func.isRequired,
   }
 
-  onChangePixel = (evt) => {
-    console.log("change pixel", evt)
+  onChangePixel = (pixelChanges) => {
+    const { dispatch } = this.props
+
+    dispatch(pixelEditorChangePixelList(pixelChanges))
   }
 
   onChangePalette = (color) => {
     const { dispatch } = this.props
-    console.log("color selected in App", color)
-    //dispatch(receiveShifterState(newState))
+    console.log("color selected in App from Palette", color)
+    dispatch(pixelEditorSetColor(color))
   }
 
   render() {
@@ -72,7 +75,7 @@ class PixelEditor extends Component {
     return (
       <div>
         <ToolsMenu structure={toolbarStructure} tool={tool} onChange={this.onClickTool}/>
-        <ColorPalette palette={bogusPalette} onChange={this.onChangePalette}/>
+        <ColorPalette palette={bogusPalette} onChange={this.onChangePalette} activeColor={color}/>
         <PixelCanvas width={width} height={height} tool={tool} color={color} pixel={pixel} scale={20} onChange={this.onChangePixel}/>
       </div>
     )

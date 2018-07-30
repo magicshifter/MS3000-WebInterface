@@ -1,13 +1,13 @@
 import { List }  from 'immutable'
 
-import {PIXEL_EDITOR_CHANGE_TOOL, PIXEL_EDITOR_CHANGE_PIXEL} from '../actions'
+import {PIXEL_EDITOR_CHANGE_TOOL, PIXEL_EDITOR_CHANGE_PIXEL, PIXEL_EDITOR_SET_COLOR} from '../actions'
+
+import {  RGB} from '../utils/color'
 
 function emptyImage(w, h) {
   const pixel = []
   for (var i = 0; i < w*h; i++) {
-    if (i % 5 == 3) pixel.push({R:0, G: 255, B: 255})
-      else if (i % 23 == 7) pixel.push({R:255, G: 0, B: 155})
-    else pixel.push({R:0, G: 0, B: 0})
+    pixel.push({R:0, G: 0, B: 0})
   }
 
   return List(pixel)
@@ -38,6 +38,7 @@ const pixelEditor = (state = null, action) => {
     height: DEFAULT_HEIGHT,
     pixel: emptyImage(DEFAULT_WIDTH, DEFAULT_HEIGHT),
     tool: "erase",
+    color: RGB(255, 255, 255),
   }
 
   switch (action.type) {
@@ -47,11 +48,19 @@ const pixelEditor = (state = null, action) => {
         tool: action.tool
       }
 
+    case PIXEL_EDITOR_SET_COLOR:
+      return {
+        ...state,
+        color: action.color
+      }
+
     case PIXEL_EDITOR_CHANGE_PIXEL:
       return {
         ...state,
         pixel: applyPixelChanges(state, action.changes)
       }
+
+
 
     default:
       return state

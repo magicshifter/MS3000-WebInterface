@@ -10,11 +10,16 @@ export const PIXEL_EDITOR_SET_TOOL = "PIXEL_EDITOR_SET_TOOL"
 export const PIXEL_EDITOR_SET_SIZE = "lkjk"
 export const PIXEL_EDITOR_CHANGE_PIXEL = "CHANGE_PIXEL"
 export const PIXEL_EDITOR_CHANGE_TOOL = "CHANGE_TOOL"
-export const PIXEL_EDITOR_CHANGE_COLOR = "PIXEL_EDITOR_CHANGE_COLOR"
+export const PIXEL_EDITOR_SET_COLOR = "PIXEL_EDITOR_SET_COLOR"
 
 export const pixelEditorSetTool = (tool) => ({
   type: PIXEL_EDITOR_CHANGE_TOOL,
   tool
+})
+
+export const pixelEditorSetColor = (color) => ({
+  type: PIXEL_EDITOR_SET_COLOR,
+  color
 })
 
 export const pixelEditorChangePixel = (x, y, color) => ({

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from "prop-types";
-import { hexFromRGB } from '../utils/color'
+import { hexFromRGB, equRGB } from '../utils/color'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -9,13 +9,19 @@ import './ColorPalette.css'
 class ColorButton extends Component {
   static propTypes = {
     color: PropTypes.object.isRequired,
+    activeColor: PropTypes.object,
     onClick: PropTypes.func.isRequired,
   }
 
   render() {
-    const { color, onClick} = this.props
+    const { color, activeColor } = this.props
 
-    return (<span data-color={color} onClick={onClick} className="PaletteItem" style={{backgroundColor: hexFromRGB(color)}} />)
+    var className = "PaletteItem"
+    if (equRGB(color, activeColor)) {
+      className = "SelectedPaletteItem"
+    }
+
+    return (<span data-color={color} onClick={this.onClickColor} className={className} style={{backgroundColor: hexFromRGB(color)}} />)
   }
 
   onClickColor = () => {
@@ -27,6 +33,7 @@ class ColorButton extends Component {
 export default class ColorPalette extends Component {
   static propTypes = {
     palette: PropTypes.array.isRequired,
+    activeColor: PropTypes.object,
     onChange: PropTypes.func.isRequired,
   }
 
@@ -39,13 +46,13 @@ export default class ColorPalette extends Component {
   render() {
     const controls = []
 
-    const {palette, tool} = this.props
+    const {palette, activeColor } = this.props
 
     for (let i = 0; i < palette.length; i++) {
       const elem = palette[i]
 
       controls.push(
-        <ColorButton color={elem} onClick={this.onClickPalette}/>
+        <ColorButton color={elem} activeColor={activeColor} onClick={this.onClickPalette}/>
       )
 
     }
