@@ -5,6 +5,7 @@ import { fetchShifterState, receiveShifterState } from '../actions'
 import protobufs from '../utils/protoBufLoader'
 
 import AutoInterface from '../components/AutoInterface'
+import PixelEditor from './PixelEditor'
 
 import './App.css';
 import logo from '../logo.svg';
@@ -28,7 +29,6 @@ class App extends Component {
     const { dispatch } = this.props
     dispatch(receiveShifterState(newState))
   }
-
 
   handleRefreshClick = e => {
     e.preventDefault()
@@ -80,6 +80,9 @@ class App extends Component {
         <AutoInterface type={protobufs.MS3KG}
                        onChange={this.onChangeAutoInterface}
                        value={shifterState} />
+        <PixelEditor />
+
+
       </div>
     )
   }

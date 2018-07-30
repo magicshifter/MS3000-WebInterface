@@ -1,0 +1,15 @@
+.ToolsMenuSelectedTool {
+    border: solid 0.1em yellow;
+    /*box-shadow: inset 0 0 15px gold; */
+    background-color: lightgray;
+    padding: 0.1em;
+}
+
+.ToolsMenuTool {
+    padding: 0.2em;
+    background-color: gray;
+}
+
+.ToolsMenuTool:hover {
+    background-color: lightgray;
+}

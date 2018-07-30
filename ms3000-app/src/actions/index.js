@@ -1,10 +1,21 @@
 import {fetch} from "../utils/http";
 import pb from '../utils/protoBufLoader'
 
-export const REQUEST_SHIFTER_STATE = 'REQUEST_POSTS'
-export const RECEIVE_SHIFTER_STATE = 'RECEIVE_POSTS'
+export const REQUEST_SHIFTER_STATE = 'REQUEST_SHIFTER_STATE'
+export const RECEIVE_SHIFTER_STATE = 'RECEIVE_SHIFTER_STATE'
 
 export const SET_STATE_BUFFER = ''
+
+export const PIXEL_EDITOR_SET_TOOL = "PIXEL_EDITOR_SET_TOOL"
+export const PIXEL_EDITOR_SET_SIZE = "lkjk"
+export const PIXEL_EDITOR_CHANGE_PIXEL = "CHANGE_PIXEL"
+export const PIXEL_EDITOR_CHANGE_TOOL = "CHANGE_TOOL"
+export const PIXEL_EDITOR_CHANGE_COLOR = "PIXEL_EDITOR_CHANGE_COLOR"
+
+export const pixelEditorSetTool = (tool) => ({
+  type: PIXEL_EDITOR_CHANGE_TOOL,
+  tool
+})
 
 
 export const requestShifterState = () => ({
