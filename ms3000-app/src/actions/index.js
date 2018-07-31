@@ -20,10 +20,6 @@ export const navigationSetLocation = (location) => ({
   location
 })
 
-
-
-
-
 export const pixelEditorSetTool = (tool) => ({
   type: PIXEL_EDITOR_CHANGE_TOOL,
   tool
@@ -32,11 +28,6 @@ export const pixelEditorSetTool = (tool) => ({
 export const pixelEditorSetImageName = (name) => ({
   type: PIXEL_EDITOR_SET_IMAGE_NAME,
   name
-})
-
-export const pixelEditorSetActiveFrame = (frame) => ({
-  type: PIXEL_EDITOR_SET_ACTIVE_FRAME,
-  frame
 })
 
 export const pixelEditorSetPalette = (palette) => ({
@@ -54,9 +45,18 @@ export const pixelEditorChangeSize = (width, height) => ({
   width, height
 })
 
-export const pixelEditorChangeImage = (image) => ({
+export const pixelEditorSetActiveFrame = (activeFrame) => {
+  console.log("pixelEditorSetActiveFrame", activeFrame)
+  return {
+    type: PIXEL_EDITOR_SET_ACTIVE_FRAME,
+    activeFrame
+  }
+}
+
+export const pixelEditorChangeImage = (image, activeFrame = 0) => ({
   type: PIXEL_EDITOR_CHANGE_IMAGE,
-  image
+  image,
+  activeFrame
 })
 
 export const pixelEditorChangePixel = (x, y, color, frame) => ({

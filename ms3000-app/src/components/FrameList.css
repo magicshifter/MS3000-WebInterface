@@ -13,3 +13,39 @@
 .FrameListFrame:hover {
     background-color: lightgray;
 }
+
+.FrameListFrame:hover .FrameListDrag,
+.FrameListActiveFrame:hover .FrameListDrag,
+.FrameListFrame:hover .FrameListDuplicate,
+.FrameListActiveFrame:hover .FrameListDuplicate,
+.FrameListFrame:hover .FrameListDelete,
+.FrameListActiveFrame:hover .FrameListDelete {
+    display: block;
+}
+
+.FrameListDrag {
+    display: none;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    /*border: 3px solid #73AD21;*/
+    padding: 2px;
+}
+
+.FrameListDuplicate {
+    display: none;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    /*border: 3px solid #73AD21;*/
+    padding: 2px;
+}
+
+.FrameListDelete {
+    display: none;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    /*border: 3px solid #73AD21;*/
+    padding: 2px;
+}

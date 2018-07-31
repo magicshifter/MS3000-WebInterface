@@ -113,15 +113,16 @@ class PixelEditor extends Component {
     dispatch(pixelEditorSetImageName(newName))
   }
 
-  // TODO: implement frameIdx!
-  onChangeFrameIdx = (newFrameIdx) => {
-    const { dispatch } = this.props
-    dispatch(pixelEditorSetActiveFrame(newFrameIdx))
-  }
-
-  onChangeFrames = (newFrames) => {
+  onChangeFrames = (newFrameIdx, newFrames) => {
     const { dispatch, width, height } = this.props
-    dispatch(pixelEditorChangeImage(new Image(width, height, newFrames)))
+    if (newFrames) {
+      console.log("onChangeFrames newFrames")
+      dispatch(pixelEditorChangeImage(new Image(width, height, newFrames), newFrameIdx))
+    }
+    else {
+      console.log("onChangeFrames only idx")
+      dispatch(pixelEditorSetActiveFrame(newFrameIdx))
+    }
   }
 
   onExportImage = () => {
@@ -237,7 +238,7 @@ class PixelEditor extends Component {
         <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
           <ul className="pure-menu-list">
             <FrameList frames={frames} width={width} height={height} activeFrame={frameIdx}
-                       onChange={this.onChangeFrameIdx} onChangeFrames={this.onChangeFrames}/>
+                       onChange={this.onChangeFrames} />
           </ul>
         </div>
         <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>

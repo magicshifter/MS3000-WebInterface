@@ -139,19 +139,25 @@ const pixelEditor = (state = null, action) => {
         color: action.color
       }
 
-    case PIXEL_EDITOR_CHANGE_IMAGE:
+    case PIXEL_EDITOR_SET_ACTIVE_FRAME:
+      console.log("PIXEL_EDITOR_SET_ACTIVE_FRAME", action)
       return {
         ...state,
-        frameIdx: 0,
+        frameIdx: action.activeFrame
+      }
+
+    case PIXEL_EDITOR_CHANGE_IMAGE:
+      console.log("PIXEL_EDITOR_CHANGE_IMAGE", action)
+      return {
+        ...state,
+        frameIdx: action.activeFrame,
         frames: action.image.frames,
         width: action.image.width,
         height: action.image.height,
         resizeFrames: null,
       }
 
-
     case PIXEL_EDITOR_CHANGE_PIXEL:
-
       const newFrames = applyPixelChanges(state, action)
 
       if (newFrames !== state.frames) {
@@ -180,12 +186,6 @@ const pixelEditor = (state = null, action) => {
       return {
         ...state,
         palette: action.palette
-      }
-
-    case PIXEL_EDITOR_SET_ACTIVE_FRAME:
-      return {
-        ...state,
-        frameIdx: action.frame
       }
 
     default:
