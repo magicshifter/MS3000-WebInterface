@@ -3,67 +3,78 @@ import UPNG from 'upng-js'
 import { RGB } from '../utils/color'
 
 export default class Image {
-  constructor(width, height, pixel) {
+  constructor(width, height, frames) {
     this.width = width
     this.height = height
-    this.pixel = pixel
+    this.frames = frames
   }
 
-  toPNG() {
-    const { width, height, pixel } = this
+  toPNG(frameDelay = 1000) {
+    const { width, height, frames } = this
 
-    const rgba = new Uint8Array(width * height * 4);
+    const fS = frames.length
+    const buffers = []
+    const delays = []
 
-    for (let y = 0; y < height; y++) {
-      for (let x = 0; x < width; x++) {
-        const idx = y * width + x
-        const rgbaIdx = (y * width + x) * 4
-        const rgb = pixel.get(idx)
+    for (var i=0; i < fS; i++) {
+      const pixel = frames[i]
 
-        rgba[rgbaIdx + 0] = rgb.R
-        rgba[rgbaIdx + 1] = rgb.G
-        rgba[rgbaIdx + 2] = rgb.B
-        rgba[rgbaIdx + 3] = 255
+      const rgba = new Uint8Array(width * height * 4);
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const idx = y * width + x
+          const rgbaIdx = (y * width + x) * 4
+          const rgb = pixel.get(idx)
+
+          rgba[rgbaIdx + 0] = rgb.R
+          rgba[rgbaIdx + 1] = rgb.G
+          rgba[rgbaIdx + 2] = rgb.B
+          rgba[rgbaIdx + 3] = 255
+        }
       }
+      buffers.push(rgba.buffer)
+      delays.push(frameDelay)
     }
-    console.log("encoding PNG", rgba)
 
-    const ab = rgba.buffer
-
-    return UPNG.encode([ab], width, height, 0)
+    return UPNG.encode(buffers, width, height, 0, delays)
   }
 
   static fromPNG(arrayBuffer) {
     var png = UPNG.decode(arrayBuffer);
-    const pngRGBAs = UPNG.toRGBA8(png)
-    // TODO: implement frames
-    const pngRGBA = new Uint8Array(pngRGBAs[0])
-
-    console.log(pngRGBA)
 
     const sizeX = png.width
     const sizeY = png.height
-    const patternData = []
-
     if (sizeY !== 16) {
       alert("PNG must be 16 pixel high. the given one is " + sizeY)
       return
     }
 
-    for (let yy = 0; yy < sizeY; yy++) {
-      for (let xx = 0; xx < sizeX; xx++) {
-        const idxPng = (yy * sizeX + xx) * 4
-        const r = pngRGBA[idxPng]
-        const g = pngRGBA[idxPng + 1]
-        const b = pngRGBA[idxPng + 2]
-        console.log("pixel png", r, g, b, idxPng)
-        const rgb = RGB(r, g, b)
-        patternData.push(rgb)
+    const frames = []
+    const pngRGBAs = UPNG.toRGBA8(png)
+    for (var i = 0; i < pngRGBAs.length; i++) {
+      const pngRGBA = new Uint8Array(pngRGBAs[i])
+      //console.log("working on frame", i, pngRGBA)
+
+      const patternData = []
+
+      for (let yy = 0; yy < sizeY; yy++) {
+        for (let xx = 0; xx < sizeX; xx++) {
+          const idxPng = (yy * sizeX + xx) * 4
+          const r = pngRGBA[idxPng]
+          const g = pngRGBA[idxPng + 1]
+          const b = pngRGBA[idxPng + 2]
+          //console.log("pixel png", r, g, b, idxPng)
+          const rgb = RGB(r, g, b)
+          patternData.push(rgb)
+        }
       }
+
+      frames.push(List(patternData))
     }
 
-    console.log("decoded PNG", patternData)
-    return new Image(sizeX, sizeY, List(patternData))
+    console.log("decoded PNG", frames)
+    return new Image(sizeX, sizeY, frames)
   }
 
   static fromMagicBitmap(arrayBuffer) {
@@ -75,8 +86,8 @@ export default class Image {
   }
 
   clone() {
-    const { width, height, pixel } = this
-    return new Image(width, height, pixel)
+    const { width, height, frames } = this
+    return new Image(width, height, frames)
   }
 
   mirror(x, y) {

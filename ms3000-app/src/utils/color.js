@@ -1,12 +1,21 @@
 import Color from "color"
 import { isInteger } from './types'
+import {List} from "immutable";
+
+export function emptyPixel(w, h) {
+  const pixel = []
+  const black = {R:0, G: 0, B: 0} // all share same black :)
+  for (var i = 0; i < w*h; i++) {
+    pixel.push(black)
+  }
+  return List(pixel)
+}
 
 export function createRGB(r, g, b) {
   return {
     R: r, G: g, B: b
   }
 }
-
 export const RGB = createRGB
 
 export function createRGBFromHex(hex) {

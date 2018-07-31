@@ -5,13 +5,15 @@ import {
   pixelEditorChangePixelList,
   pixelEditorSetColor,
   pixelEditorChangeSize,
-  pixelEditorChangeImage
+  pixelEditorChangeImage,
+  pixelEditorSetActiveFrame,
 } from '../actions'
 import PixelCanvas from '../components/PixelCanvas'
 import ToolsMenu from '../components/ToolsMenu'
 import ColorPalette from '../components/ColorPalette'
 import ColorChooser from  '../components/ColorChooser'
 import NumberInput from '../components/NumberInput'
+import FrameList from '../components/FrameList'
 
 import Image from '../ms3000/Image'
 
@@ -48,19 +50,19 @@ const toolbarStructure = [
 
 class PixelEditor extends Component {
   static propTypes = {
+    frameIdx: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     tool: PropTypes.string,
     color: PropTypes.object,
-    pixel: PropTypes.object.isRequired,
+    frames: PropTypes.array.isRequired,
     palette: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired,
   }
 
   onChangePixel = (pixelChanges) => {
-    const { dispatch } = this.props
-
-    dispatch(pixelEditorChangePixelList(pixelChanges))
+    const { dispatch, frameIdx } = this.props
+    dispatch(pixelEditorChangePixelList(pixelChanges, frameIdx))
   }
 
   onChangePalette = (color) => {
@@ -74,11 +76,23 @@ class PixelEditor extends Component {
     dispatch(pixelEditorChangeSize(newWidth))
   }
 
+  // TODO: implement frameIdx!
+  onChangeFrameIdx = (newFrameIdx) => {
+    const { dispatch } = this.props
+    dispatch(pixelEditorSetActiveFrame(newFrameIdx))
+  }
+
+  onChangeFrames = (newFrames) => {
+    const { dispatch, width, height } = this.props
+    dispatch(pixelEditorChangeImage(new Image(width, height, newFrames)))
+  }
+
+  // TODO: implement frames
   onExportImage = () => {
-    const { width, height, pixel } = this.props
+    const { width, height, frames } = this.props
 
     const fileName = "myExport.png"
-    const img = new Image(width, height, pixel)
+    const img = new Image(width, height, frames)
     const arrayBuffer = img.toPNG()
 
     console.log("aexorting arraybuffer", arrayBuffer)
@@ -103,7 +117,6 @@ class PixelEditor extends Component {
       const file = files[i]
       console.log(file)
       let pName = file.name;
-
       var reader = new FileReader();
       reader.onload = (evt) => {
         var arrayBuffer = evt.target.result;
@@ -119,17 +132,16 @@ class PixelEditor extends Component {
       }
       reader.readAsArrayBuffer(file) // start async operation
     }
-
     evt.target.value = null
-  }
-
+  };
 
   render() {
-    const { width, height, tool, color, pixel, palette } = this.props
+    const { width, height, tool, color, frames, frameIdx, palette } = this.props
+    const pixel = frames[frameIdx]
 
     return (
       <div>
-        <div className="pure-menu pure-menu-horizontal">
+        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable">
           <ul className="pure-menu-list">
             <ToolsMenu structure={toolbarStructure} tool={tool} onChange={this.onClickTool}/>
           </ul>
@@ -163,6 +175,12 @@ class PixelEditor extends Component {
         </div>
         <div className="pure-menu pure-menu-horizontal pure-menu-scrollable">
           <ul className="pure-menu-list">
+            <FrameList frames={frames} width={width} height={height} activeFrame={frameIdx}
+                       onChange={this.onChangeFrameIdx} onChangeFrames={this.onChangeFrames}/>
+          </ul>
+        </div>
+        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable">
+          <ul className="pure-menu-list">
             <ColorPalette palette={palette} onChange={this.onChangePalette} activeColor={color}/>
           </ul>
         </div>
@@ -183,10 +201,10 @@ class PixelEditor extends Component {
 }
 
 const mapStateToProps = state => {
-  const { width, height, color, tool, pixel, palette } = state.pixelEditor
+  const { width, height, color, tool, frames, palette, frameIdx } = state.pixelEditor
 
   return {
-    width, height, color, tool, pixel, palette
+    width, height, color, tool, frames, palette, frameIdx
   }
 }
 

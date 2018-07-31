@@ -6,8 +6,9 @@ import {
   PIXEL_EDITOR_CHANGE_SIZE,
   PIXEL_EDITOR_SET_PALETTE,
   PIXEL_EDITOR_CHANGE_IMAGE,
+  PIXEL_EDITOR_SET_ACTIVE_FRAME,
 } from '../actions'
-import { RGB } from '../utils/color'
+import { RGB, emptyPixel } from '../utils/color'
 
 
 const DEFAULT_WIDTH = 16
@@ -33,42 +34,51 @@ const DEFAULT_PALETTE = [
 ]
 
 
-function emptyImage(w, h) {
-  const pixel = []
-  for (var i = 0; i < w*h; i++) {
-    pixel.push({R:0, G: 0, B: 0})
-  }
-  return List(pixel)
-}
-
 function getIndex(state, x, y) {
   return state.width * y + x
 }
 
-function applyPixelChanges(state, changes) {
-  var { pixel } = state
-
+function applyPixelChanges(state, action) {
+  const { changes, frame } = action
+  const { frames } = state
+  var pixel = frames[frame]
+  const newFrames = frames.slice()
 
   for (var i = 0; i < changes.length; i++) {
     const c = changes[i]
     pixel = pixel.set(getIndex(state, c.x, c.y), c.color)
   }
 
-  return pixel
+  newFrames[frame] = pixel
+
+  return newFrames
 }
 
-function resizePixel(state, width, height) {
-  var pixel =  emptyImage(width, height)
+function resizeFrames(state, w, h) {
+  const { frames, resizeFrames } = state
 
-  var oW = state.width
-  var oH = state.height
-  var oldPix = state.pixel
-
-  if (state.resizePixel) {
-    oldPix = state.resizePixel.pixel
-    oW = state.resizePixel.width
-    oH = state.resizePixel.height
+  const newFrames = []
+  for (var i = 0; i < frames.length; i++) {
+    var oldPix = frames[i]
+    var oW = state.width
+    var oH = state.height
+    if (resizeFrames) {
+      oldPix = resizeFrames.frames[i]
+      oW = resizeFrames.width
+      oH = resizeFrames.height
+    }
+    const pixel = resizePixel(oW, oH, oldPix, w, h)
+    newFrames.push(pixel)
   }
+  return newFrames
+}
+
+function resizePixel(oW, oH, oldPix, width, height) {
+  var pixel =  emptyPixel(width, height)
+
+  // var oW = state.width
+  // var oH = state.height
+  // var oldPix = state.pixel
 
   for (var y = 0; y < Math.min(height, oH); y++) {
     for (var x = 0; x < Math.min(width, oW); x++) {
@@ -87,10 +97,12 @@ const pixelEditor = (state = null, action) => {
   state = state || {
     width: DEFAULT_WIDTH,
     height: DEFAULT_HEIGHT,
-    pixel: emptyImage(DEFAULT_WIDTH, DEFAULT_HEIGHT),
+    frameIdx: 0,
+    frames: [emptyPixel(DEFAULT_WIDTH, DEFAULT_HEIGHT)],
     tool: "erase",
     color: RGB(255, 255, 255),
     palette: DEFAULT_PALETTE,
+    frameDelay: 400,
   }
 
   switch (action.type) {
@@ -109,16 +121,19 @@ const pixelEditor = (state = null, action) => {
     case PIXEL_EDITOR_CHANGE_IMAGE:
       return {
         ...state,
-        pixel: action.image.pixel,
+        frameIdx: 0,
+        frames: action.image.frames,
         width: action.image.width,
         height: action.image.height,
+        resizeFrames: null,
       }
+
 
     case PIXEL_EDITOR_CHANGE_PIXEL:
       return {
         ...state,
-        pixel: applyPixelChanges(state, action.changes),
-        resizePixel: null,
+        frames: applyPixelChanges(state, action),
+        resizeFrames: null,
       }
 
     case PIXEL_EDITOR_CHANGE_SIZE:
@@ -128,14 +143,20 @@ const pixelEditor = (state = null, action) => {
         ...state,
         width: nW,
         height: nH,
-        pixel: resizePixel(state, nW, nH),
-        resizePixel: state.resizePixel || { pixel: state.pixel, width: state.width, height: state.height }
+        frames: resizeFrames(state, nW, nH),
+        resizeFrames: state.resizeFrames || { frames: state.frames, width: state.width, height: state.height }
       }
 
     case PIXEL_EDITOR_SET_PALETTE:
       return {
         ...state,
         palette: action.palette
+      }
+
+    case PIXEL_EDITOR_SET_ACTIVE_FRAME:
+      return {
+        ...state,
+        frameIdx: action.frame
       }
 
     default:

@@ -1,0 +1,13 @@
+.FrameListActiveFrame {
+    border: solid 0.2em yellow;
+    padding: 0.4em;
+}
+
+.FrameListFrame {
+    border: solid 0.2em black;
+    padding: 0.4em;
+}
+
+.FrameListFrame:hover {
+    border: solid 0.2em yellow;
+}
