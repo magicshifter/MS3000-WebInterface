@@ -7,11 +7,13 @@ import {
   pixelEditorChangeSize,
   pixelEditorChangeImage,
   pixelEditorSetActiveFrame,
+  pixelEditorSetImageName,
 } from '../actions'
 import PixelCanvas from '../components/PixelCanvas'
 import ToolsMenu from '../components/ToolsMenu'
 import ColorPalette from '../components/ColorPalette'
 import ColorChooser from  '../components/ColorChooser'
+import StringInput from '../components/StringInput'
 import NumberInput from '../components/NumberInput'
 import FrameList from '../components/FrameList'
 
@@ -51,6 +53,7 @@ const toolbarStructure = [
 class PixelEditor extends Component {
   static propTypes = {
     frameIdx: PropTypes.number.isRequired,
+    imageName: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     tool: PropTypes.string,
@@ -76,6 +79,11 @@ class PixelEditor extends Component {
     dispatch(pixelEditorChangeSize(newWidth))
   }
 
+  onChangeName = (newName) => {
+    const { dispatch } = this.props
+    dispatch(pixelEditorSetImageName(newName))
+  }
+
   // TODO: implement frameIdx!
   onChangeFrameIdx = (newFrameIdx) => {
     const { dispatch } = this.props
@@ -87,15 +95,14 @@ class PixelEditor extends Component {
     dispatch(pixelEditorChangeImage(new Image(width, height, newFrames)))
   }
 
-  // TODO: implement frames
   onExportImage = () => {
-    const { width, height, frames } = this.props
+    const { width, height, frames, imageName } = this.props
 
-    const fileName = "myExport.png"
+    const fileName = imageName + ".png"
     const img = new Image(width, height, frames)
     const arrayBuffer = img.toPNG()
 
-    console.log("aexorting arraybuffer", arrayBuffer)
+    //console.log("aexorting arraybuffer", arrayBuffer)
 
     const blob = new Blob([arrayBuffer], { type: 'application/octet-stream' })
     saveAs(blob, fileName);
@@ -136,7 +143,7 @@ class PixelEditor extends Component {
   };
 
   render() {
-    const { width, height, tool, color, frames, frameIdx, palette } = this.props
+    const { width, height, tool, color, frames, frameIdx, palette, imageName } = this.props
     const pixel = frames[frameIdx]
 
     return (
@@ -153,11 +160,14 @@ class PixelEditor extends Component {
               width: <NumberInput value={width} min={1} max={64} onChange={this.onChangeWidth} />
             </li>
             <li className="pure-menu-item">
-              <button className="pure-button" onClick={this.onExportImage}>save PNG</button>
+              name: <StringInput value={imageName} max={64} onChange={this.onChangeName} />
+            </li>
+            <li className="pure-menu-item">
+              <button className="pure-button" onClick={this.onExportImage}>save</button>
             </li>
             <li className="pure-menu-item">
               <button className="pure-button" onClick={this.uploadClickHAck}>
-                <label for="ImportImage"><div>import PNG</div>
+                <label for="ImportImage"><div>import</div>
                   <input
                     ref="fileUpload"
                     id="ImportImage"
@@ -201,10 +211,10 @@ class PixelEditor extends Component {
 }
 
 const mapStateToProps = state => {
-  const { width, height, color, tool, frames, palette, frameIdx } = state.pixelEditor
+  const { width, height, color, tool, frames, palette, frameIdx, imageName } = state.pixelEditor
 
   return {
-    width, height, color, tool, frames, palette, frameIdx
+    width, height, color, tool, frames, palette, frameIdx, imageName
   }
 }
 

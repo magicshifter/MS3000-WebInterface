@@ -11,10 +11,16 @@ export const PIXEL_EDITOR_CHANGE_PIXEL = "CHANGE_PIXEL"
 export const PIXEL_EDITOR_CHANGE_TOOL = "CHANGE_TOOL"
 export const PIXEL_EDITOR_SET_COLOR = "PIXEL_EDITOR_SET_COLOR"
 export const PIXEL_EDITOR_SET_ACTIVE_FRAME = "PIXEL_EDITOR_SET_ACTIVE_FRAME"
+export const PIXEL_EDITOR_SET_IMAGE_NAME = "PIXEL_EDITOR_SET_IMAGE_NAME"
 
 export const pixelEditorSetTool = (tool) => ({
   type: PIXEL_EDITOR_CHANGE_TOOL,
   tool
+})
+
+export const pixelEditorSetImageName = (name) => ({
+  type: PIXEL_EDITOR_SET_IMAGE_NAME,
+  name
 })
 
 export const pixelEditorSetActiveFrame = (frame) => ({

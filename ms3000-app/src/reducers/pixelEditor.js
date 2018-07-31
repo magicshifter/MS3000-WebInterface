@@ -7,6 +7,7 @@ import {
   PIXEL_EDITOR_SET_PALETTE,
   PIXEL_EDITOR_CHANGE_IMAGE,
   PIXEL_EDITOR_SET_ACTIVE_FRAME,
+  PIXEL_EDITOR_SET_IMAGE_NAME,
 } from '../actions'
 import { RGB, emptyPixel } from '../utils/color'
 
@@ -103,6 +104,7 @@ const pixelEditor = (state = null, action) => {
     color: RGB(255, 255, 255),
     palette: DEFAULT_PALETTE,
     frameDelay: 400,
+    imageName: "newImage",
   }
 
   switch (action.type) {
@@ -110,6 +112,12 @@ const pixelEditor = (state = null, action) => {
       return {
         ...state,
         tool: action.tool
+      }
+
+    case PIXEL_EDITOR_SET_IMAGE_NAME:
+      return {
+        ...state,
+        imageName: action.name
       }
 
     case PIXEL_EDITOR_SET_COLOR:

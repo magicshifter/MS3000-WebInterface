@@ -52,8 +52,8 @@ export default class FrameList extends Component {
     }
 
     controls.push(
-      <li className={"pure-menu-item ToolsMenuTooltip FrameListFrame"} onClick={this.onClickAddFrame} >
-        Add Frame
+      <li className={"pure-menu-item ToolsMenuTooltip"} >
+        <button className="pure-button" onClick={this.onClickAddFrame}>+ Add Frame</button>
       </li>
     )
 

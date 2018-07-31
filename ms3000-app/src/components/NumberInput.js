@@ -1,13 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import AutoInterface from './AutoInterface'
-import RGBControl from './RGBControl'
-import EnumControl from  './EnumControl'
-
-import protobuf from 'protobufjs'
-
-
 
 export default class NumberInput extends Component {
   static propTypes = {
