@@ -6,6 +6,7 @@ import protobufs from '../utils/protoBufLoader'
 
 import AutoInterface from '../components/AutoInterface'
 import PixelEditor from './PixelEditor'
+import Navigation from './Navigation'
 
 import './App.css';
 import logo from '../logo.svg';
@@ -14,7 +15,8 @@ import logo from '../logo.svg';
 class App extends Component {
   static propTypes = {
     isFetching: PropTypes.bool.isRequired,
-    shifterState : PropTypes.object,
+    shifterState :PropTypes.object,
+    location: PropTypes.string.isRequired,
   }
 
   // TODO: this must go to shadow state!
@@ -57,30 +59,49 @@ class App extends Component {
   }
 
   render() {
-    const { isFetching, shifterState } = this.props
+    const { isFetching, shifterState, location } = this.props
 
     //console.log("render", isFetching, shifterState )
 
-    return (
-      <div>
+    const controls = []
 
-        <div>
-          { !isFetching ?
-          <button onClick={this.handleRefreshClick}>
-            Refresh
-          </button>
-            : <p><img src={logo} className="App-logo" alt="logo" /></p>
-          }
-          <button onClick={this.handleTestDataClick}>
-            Get TestData
-          </button>
-          fast sync: <input type="checkbox" />
-        </div>
-        <pre> {JSON.stringify(shifterState, null, 2) }</pre>
-        <AutoInterface type={protobufs.MS3KG}
+    switch (location) {
+      case "mode-Image":
+        controls.push(<PixelEditor />)
+        break;
+
+      case "config":
+        controls.push(
+          <div>
+            <div>
+              { !isFetching ?
+                <button onClick={this.handleRefreshClick}>
+                  Refresh
+                </button>
+                : <p><img src={logo} className="App-logo" alt="logo" /></p>
+              }
+              <button onClick={this.handleTestDataClick}>
+                Get TestData
+              </button>
+              fast sync: <input type="checkbox" />
+            </div>
+            <pre> {JSON.stringify(shifterState, null, 2) }</pre>
+            <AutoInterface type={protobufs.MS3KG}
                        onChange={this.onChangeAutoInterface}
                        value={shifterState} />
-        <PixelEditor />
+          </div>)
+        break;
+
+      default:
+        controls.push(<div>MS3000 Error 404 Unknown location: {location}</div>)
+    }
+
+
+    return (
+      <div>
+        <Navigation/>
+        {controls}
+
 
 
       </div>
@@ -90,10 +111,12 @@ class App extends Component {
 
 const mapStateToProps = state => {
   const { isFetching, shifterState } = state.ms3000
+  const { location } = state.navigation
 
   return {
     isFetching,
     shifterState,
+    location
   }
 }
 
