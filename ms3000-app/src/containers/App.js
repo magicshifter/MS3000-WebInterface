@@ -66,6 +66,10 @@ class App extends Component {
     const controls = []
 
     switch (location) {
+      case "wifi":
+        controls.push(<div>TODO: implement configure the WLAN settings</div>)
+        break;
+
       case "mode-Image":
         controls.push(<PixelEditor />)
         break;

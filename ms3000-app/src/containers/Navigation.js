@@ -16,6 +16,7 @@ const navStructure = [
   // TODO: generate from modes
   { name: "mode-Image" },
   { name: "mode-Light" },
+  { name: "mode-MIDI" },
   { name: "help" },
 ]
 
