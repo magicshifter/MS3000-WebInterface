@@ -19,8 +19,6 @@ export function getProtocolBuffersPromise() {
       xxx.root = root
 
 
-      window.myR = root
-
       console.log("stage2", xxx)
 
       resolve();
