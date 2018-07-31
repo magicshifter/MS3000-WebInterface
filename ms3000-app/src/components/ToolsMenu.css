@@ -51,7 +51,7 @@
 
 /*!* Position the tooltip *!*/
     /*position: absolute;*/
-    /*z-index: 1;*/
+    /*z-index: 10000;*/
     /*top: 100%;*/
     /*left: 50%;*/
     /*margin-left: -60px;*/

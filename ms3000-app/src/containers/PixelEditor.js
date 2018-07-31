@@ -141,7 +141,7 @@ class PixelEditor extends Component {
 
     return (
       <div>
-        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable">
+        <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
           <ul className="pure-menu-list">
             <ToolsMenu structure={toolbarStructure} tool={tool} onChange={this.onClickTool}/>
           </ul>
@@ -173,18 +173,18 @@ class PixelEditor extends Component {
             </li>
           </ul>
         </div>
-        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable">
+        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
           <ul className="pure-menu-list">
             <FrameList frames={frames} width={width} height={height} activeFrame={frameIdx}
                        onChange={this.onChangeFrameIdx} onChangeFrames={this.onChangeFrames}/>
           </ul>
         </div>
-        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable">
+        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
           <ul className="pure-menu-list">
             <ColorPalette palette={palette} onChange={this.onChangePalette} activeColor={color}/>
           </ul>
         </div>
-        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable">
+        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{paddingTop: "0px"}}>
           <ul className="pure-menu-list">
             <PixelCanvas width={width} height={height} tool={tool} color={color} pixel={pixel} scale={25} onChange={this.onChangePixel}/>
           </ul>
