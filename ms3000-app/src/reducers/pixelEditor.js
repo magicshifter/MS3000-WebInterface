@@ -1,4 +1,4 @@
-import { List }  from 'immutable'
+import undoable, { distinctState } from 'redux-undo'
 import {
   PIXEL_EDITOR_CHANGE_TOOL,
   PIXEL_EDITOR_CHANGE_PIXEL,
@@ -9,7 +9,7 @@ import {
   PIXEL_EDITOR_SET_ACTIVE_FRAME,
   PIXEL_EDITOR_SET_IMAGE_NAME,
 } from '../actions'
-import { RGB, emptyPixel } from '../utils/color'
+import { RGB, emptyPixel, equRGB } from '../utils/color'
 
 
 const DEFAULT_WIDTH = 16
@@ -42,17 +42,30 @@ function getIndex(state, x, y) {
 function applyPixelChanges(state, action) {
   const { changes, frame } = action
   const { frames } = state
+
   var pixel = frames[frame]
-  const newFrames = frames.slice()
+  var hasChanged = false
+
 
   for (var i = 0; i < changes.length; i++) {
     const c = changes[i]
-    pixel = pixel.set(getIndex(state, c.x, c.y), c.color)
+
+    const idx = getIndex(state, c.x, c.y)
+    const existing = pixel.get(idx)
+
+    if (!equRGB(existing, c.color)) {
+      pixel = pixel.set(idx, c.color)
+      hasChanged = true
+    }
   }
 
-  newFrames[frame] = pixel
-
-  return newFrames
+  if (hasChanged) {
+    const newFrames = frames.slice()
+    newFrames[frame] = pixel
+    return newFrames
+  }
+  // nothing changed
+  return frames
 }
 
 function resizeFrames(state, w, h) {
@@ -138,10 +151,18 @@ const pixelEditor = (state = null, action) => {
 
 
     case PIXEL_EDITOR_CHANGE_PIXEL:
-      return {
-        ...state,
-        frames: applyPixelChanges(state, action),
-        resizeFrames: null,
+
+      const newFrames = applyPixelChanges(state, action)
+
+      if (newFrames !== state.frames) {
+        return {
+          ...state,
+          frames: applyPixelChanges(state, action),
+          resizeFrames: null,
+        }
+      }
+      else {
+        return state
       }
 
     case PIXEL_EDITOR_CHANGE_SIZE:
@@ -172,4 +193,14 @@ const pixelEditor = (state = null, action) => {
   }
 }
 
-export default pixelEditor
+
+const undoablePixelEditor = undoable(pixelEditor, {
+  limit: 200,
+  filter: distinctState(),
+  // undoType: 'PIXEL_EDITOR_UNDO',
+  // redoType: 'PIXEL_EDITOR_REDO',
+})
+
+
+export default undoablePixelEditor
+//export default pixelEditor

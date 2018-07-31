@@ -9,6 +9,8 @@ import {
   pixelEditorSetActiveFrame,
   pixelEditorSetImageName,
 } from '../actions'
+import { ActionCreators } from 'redux-undo';
+
 import PixelCanvas from '../components/PixelCanvas'
 import ToolsMenu from '../components/ToolsMenu'
 import ColorPalette from '../components/ColorPalette'
@@ -61,6 +63,33 @@ class PixelEditor extends Component {
     frames: PropTypes.array.isRequired,
     palette: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired,
+    enableUndo: PropTypes.bool,
+    enableRedo: PropTypes.bool,
+  }
+
+  shortcutsKeyDown = (e) => {
+    console.log("shortcutsKeyDown", e.keyCode)
+
+    if (e.ctrlKey) {
+      // Z
+      if (e.keyCode == 90) {
+        const { dispatch } = this.props
+        dispatch(ActionCreators.undo())
+      }
+      // Y
+      else if (e.keyCode == 89) {
+        const { dispatch } = this.props
+        dispatch(ActionCreators.redo())
+      }
+    }
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.shortcutsKeyDown, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.shortcutsKeyDown, false);
   }
 
   onChangePixel = (pixelChanges) => {
@@ -142,8 +171,18 @@ class PixelEditor extends Component {
     evt.target.value = null
   };
 
+  onClickUndo = () => {
+    const { dispatch } = this.props
+    dispatch(ActionCreators.undo())
+  }
+
+  onClickRedo = () => {
+    const { dispatch } = this.props
+    dispatch(ActionCreators.redo())
+  }
+
   render() {
-    const { width, height, tool, color, frames, frameIdx, palette, imageName } = this.props
+    const { width, height, tool, color, frames, frameIdx, palette, imageName, enableRedo, enableUndo } = this.props
     const pixel = frames[frameIdx]
 
     return (
@@ -181,6 +220,18 @@ class PixelEditor extends Component {
                 </label>
               </button>
             </li>
+
+            {enableUndo ?
+              <li className="pure-menu-item">
+                <button className="pure-button" onClick={this.onClickUndo}>undo</button>
+              </li>
+              : null}
+
+            {enableRedo ?
+              <li className="pure-menu-item">
+                <button className="pure-button" onClick={this.onClickRedo}>redo</button>
+              </li>
+              : null}
           </ul>
         </div>
         <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
@@ -211,10 +262,13 @@ class PixelEditor extends Component {
 }
 
 const mapStateToProps = state => {
-  const { width, height, color, tool, frames, palette, frameIdx, imageName } = state.pixelEditor
+  const { width, height, color, tool, frames, palette, frameIdx, imageName } = state.pixelEditor.present
+  const { past, future } = state.pixelEditor
 
   return {
-    width, height, color, tool, frames, palette, frameIdx, imageName
+    width, height, color, tool, frames, palette, frameIdx, imageName,
+    enableUndo: past.length > 0,
+    enableRedo: future.length > 0
   }
 }
 
