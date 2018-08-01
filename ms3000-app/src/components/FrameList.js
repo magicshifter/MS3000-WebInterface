@@ -3,13 +3,11 @@ import PropTypes from "prop-types";
 import PixelPreview from './PixelPreview'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFireExtinguisher, faTrash, faClone, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
-
+import { faTrash, faClone, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
 
 import {emptyPixel} from '../utils/color'
 
 import './FrameList.css'
-
 
 const PREVIEW_SCALE = 3
 
@@ -19,15 +17,6 @@ function DummyPreview({scale, width, height}) {
     <div style={{height: " " + (scale * height) + "px", width: " " + (PREVIEW_SCALE * width) + "px"}} />
   )
 }
-
-// function DummyPreview({scale, width, height}) {
-//   return (
-//     <canvas height={scale * height} width={scale * width} />
-//   )
-// }
-
-
-
 
 function findDataInParents(target, trys = 5) {
   let parsed
@@ -110,8 +99,8 @@ export default class FrameList extends Component {
 
       controls.push(
         <li className={"pure-menu-item FrameListSpacer"}
-            onDrop={this.handleColorDrop}
-            onDragOver={this.handleColorDragOver}
+            onDrop={this.handleDropFrame}
+            onDragOver={this.handleDragOverFrame}
             ref={"s" + i}
             data-idx={i} data-spacer={1}
             style={{display:"none"}}
@@ -123,9 +112,9 @@ export default class FrameList extends Component {
         <li className={"pure-menu-item ToolsMenuTooltip " + className} data-frame={i} data-idx={i} ref={"i" + i}
             onClick={this.onClickFrame}
             draggable
-            onDragStart={this.handleColorDragStart}
-            onDragEnd={this.handleColorDragEnd}
-            onDragOver={this.handleColorDragOver}
+            onDragStart={this.handleDragStartFrame}
+            onDragEnd={this.handleDragEndFrame}
+            onDragOver={this.handleDragOverFrame}
 
         >
 
@@ -158,8 +147,8 @@ export default class FrameList extends Component {
           ref={"s" + fN}
           data-idx={fN} data-spacer={1}
           style={{display:"none"}}
-          onDrop={this.handleColorDrop}
-          onDragOver={this.handleColorDragOver}
+          onDrop={this.handleDropFrame}
+          onDragOver={this.handleDragOverFrame}
       >
         <DummyPreview width={width} height={height} scale={PREVIEW_SCALE} />
       </li>)
@@ -177,7 +166,7 @@ export default class FrameList extends Component {
   }
 
 
-  handleColorDragStart = (evt) => {
+  handleDragStartFrame = (evt) => {
     const { idx } = findDataInParents(evt.target)
 
     if (!isNaN(idx)) {
@@ -186,31 +175,23 @@ export default class FrameList extends Component {
       this.dndLastIdx = idx
       this.dndLastSource = evt.target
       this.dndOriginalSpacer = this.refs["s" + idx]
-      // console.log("DRagstart", this.dndLastSource.style.display)
-      // console.warn("DRAGSGTRT", this.dndLastSource.style.position)
 
-      this.dndLastSource.style.opacity = 0.3
+      //this.dndLastSource.style.opacity = 0.3
       this.dndLastSource.style.maxWidth = 10
 
-      //this.dndHAck = this.dndLastSource.style.position
-      //this.dndLastSource.style.position = "absolute"
-      //this.dndLastSource.style.transform = "translateX(-10px)"
-      console.log("kjhkj", this.dndLastSource.style.display)
-
+      // not used atm
       evt.dataTransfer.setData("idx", idx);
       evt.dataTransfer.effectAllowed = 'move';
-      //this.refs.deleteColor.style.display = "inline-block";
     }
     console.log("drag start", idx);
   }
 
-  handleColorDragOver = (evt) => {
+  handleDragOverFrame = (evt) => {
     evt.dataTransfer.dropEffect = 'move';
 
     if (this.dndOneShot) {
       this.dndLastSource.style.display = 'none'
       this.dndOriginalSpacer.style.display = ''
-      //this.dndLastSpacer = this.dndOriginalSpacer
     }
 
     const { idx, isSpace } = findDataInParents(evt.target)
@@ -229,41 +210,16 @@ export default class FrameList extends Component {
         }
       }
 
-      // if (idx !== this.dndSourceIdx) {
-      //   if (idx < this.dndSourceIdx) {
-      //     targetIdx = idx
-      //   }
-      //   else {
-      //     targetIdx = idx + 1
-      //   }
-      //
-      //   const l = this.dndLastIdx
-      //   const s = this.dndSourceIdx
-      //
-      //   // special case wehn we go from one side to the other
-      //   if ((l === s - 1 && targetIdx === s + 2) || (l === s + 1 && targetIdx === s - 2)) {
-      //     console.log("special draggin", l, targetIdx, s)
-      //     targetIdx = s
-      //   }
-      //   else {
-      //     console.log("draggin", l, targetIdx, s)
-      //   }
-      // }
-      // else {
-      //   targetIdx = idx
-      // }
       this.dndLastSpacer = this.refs["s" + targetIdx]
       this.dndLastSpacer.style.display = ''
-
       this.dndLastIdx = targetIdx
-
       this.dndOneShot = false
 
       evt.preventDefault();
     }
   }
 
-  handleColorDragEnd = (evt) =>
+  handleDragEndFrame = (evt) =>
   {
     console.log("Drag end")
 
@@ -273,7 +229,7 @@ export default class FrameList extends Component {
     }
 
     if (this.dndLastSource) {
-      this.dndLastSource.style.opacity = 1
+      //this.dndLastSource.style.opacity = 1
       this.dndLastSource.style.display = ''
       this.dndLastSource.style.transform = ''
       this.dndLastSource = null
@@ -282,16 +238,9 @@ export default class FrameList extends Component {
     this.dndSourceIdx = null
   }
 
-  allowDrop = (evt) => {
-    evt.preventDefault();
-    console.log("allowDrop")
-  }
-
-  handleColorDrop = (evt) => {
+  handleDropFrame = (evt) => {
     const { idx, isSpace } = findDataInParents(evt.target)
     const sourceIdx = this.dndSourceIdx
-
-    console.log("DROPPIN", idx);
 
     if (isSpace && !isNaN(idx) && sourceIdx !== idx) {
       const {frames, activeFrame, onChange} = this.props
@@ -306,50 +255,12 @@ export default class FrameList extends Component {
       }
       newFrames.splice(dropIdx, 0, f);
 
-      var newIdx = activeFrame === sourceIdx ? dropIdx: activeFrame
+      var newIdx = activeFrame === sourceIdx ? dropIdx :
+        ((dropIdx <= activeFrame) && (sourceIdx > activeFrame)) ? activeFrame + 1 :
+          ((dropIdx >= activeFrame) && (sourceIdx < activeFrame)) ? activeFrame - 1 : activeFrame
 
       onChange(newIdx, newFrames)
     }
-    // var target = evt.target;
-    //
-    // var trys = 5;
-    // while (trys && target && isNaN(parseInt(target.dataset["idx"]))) {
-    //   target = target.parentNode;
-    //   trys--;
-    // }
-    //
-    // var idx = parseInt(target.dataset["idx"]);
-    // if (!isNaN(idx)) {
-    //   var sourceIdx = parseInt(evt.dataTransfer.getData("idx"));
-    //   if (!isNaN(sourceIdx)) {
-    //     if (idx == -1) {
-    //       var newPalette = EC.ECPalette.cloneColorsArray(this.state.palette);
-    //       newPalette.splice(sourceIdx, 1);
-    //
-    //       this.setState({palette: newPalette, selectedIdx: undefined});
-    //       this.refs.deleteColor.style.display = "none";
-    //     }
-    //     else {
-    //       if (sourceIdx == idx || sourceIdx == idx - 1)
-    //         return;
-    //
-    //       var color = this.state.palette[sourceIdx];
-    //
-    //       var newPalette = EC.ECPalette.cloneColorsArray(this.state.palette);
-    //       if (idx < sourceIdx) {
-    //         newPalette.splice(sourceIdx, 1);
-    //         newPalette.splice(idx, 0, color);
-    //       }
-    //       else {
-    //         newPalette.splice(idx, 0, color);
-    //         newPalette.splice(sourceIdx, 1);
-    //       }
-    //
-    //       this.setState({palette: newPalette, selectedIdx: idx});
-    //       this.refs.deleteColor.style.display = "none";
-    //     }
-    //   }
-    // }
   }
 }
 

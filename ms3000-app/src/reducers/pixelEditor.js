@@ -112,11 +112,11 @@ const pixelEditor = (state = null, action) => {
     width: DEFAULT_WIDTH,
     height: DEFAULT_HEIGHT,
     frameIdx: 0,
-    frames: [emptyPixel(DEFAULT_WIDTH, DEFAULT_HEIGHT), emptyPixel(DEFAULT_WIDTH, DEFAULT_HEIGHT), emptyPixel(DEFAULT_WIDTH, DEFAULT_HEIGHT)],
-    tool: "erase",
+    frames: [emptyPixel(DEFAULT_WIDTH, DEFAULT_HEIGHT)],
+    tool: "draw",
     color: RGB(255, 255, 255),
     palette: DEFAULT_PALETTE,
-    frameDelay: 400,
+    frameDelay: 500,
     imageName: "newImage",
   }
 
