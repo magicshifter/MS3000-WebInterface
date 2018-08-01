@@ -89,10 +89,13 @@ class App extends Component {
               </button>
               fast sync: <input type="checkbox" />
             </div>
-            <pre> {JSON.stringify(shifterState, null, 2) }</pre>
+
             <AutoInterface type={protobufs.MS3KG}
-                       onChange={this.onChangeAutoInterface}
-                       value={shifterState} />
+                           onChange={this.onChangeAutoInterface}
+                           value={shifterState} />
+
+            <pre> {JSON.stringify(shifterState, null, 2) }</pre>
+
           </div>)
         break;
 

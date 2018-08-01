@@ -34,7 +34,7 @@ export default class AutoControl extends Component {
 
     switch (field.type) {
       case 'string':
-        controls.push(<input key="str" type='text' value={value || ""} onChange={(evt) => {
+        controls.push(<input id={ field.name } key="str" type='text' value={value || ""} onChange={(evt) => {
           //console.log("text chnage", evt)
           onChange(evt.target.value, field)
         }}/>)
@@ -49,6 +49,7 @@ export default class AutoControl extends Component {
           controls.push(<EnumControl key="enu" field={field} value={value} onChange={onChange} /> )
         }
         else if (isType) {
+          controls.push(<legend key="l">{field.name}</legend>)
           controls.push(<AutoInterface key="rec" type={lookup} value={value} onChange={this.onChangeRecursive} />)
         }
         else {

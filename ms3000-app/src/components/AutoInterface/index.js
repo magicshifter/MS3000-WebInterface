@@ -37,13 +37,27 @@ export default class AutoInterface extends Component {
     for (var k in type.fields) {
       const f = type.fields[k]
       //console.log(f, value)
-      controls.push(<div key={k}>{f.name}:&nbsp;<AutoControl field={f} value={this.getFromValue(f)} onChange={this.onChangeControl}/></div>)
+      controls.push(
+        <div key={k} className="pure-control-group">
+          <label htmlFor={f.name}>{f.name}:&nbsp;</label>
+          <AutoControl field={f} value={this.getFromValue(f)} onChange={this.onChangeControl}/>
+        </div>
+      )
     }
 
     return (
-      <div>
-        { controls }
-      </div>
+      <form className="pure-form pure-form-aligned">
+        <fieldset>
+
+            { controls }
+
+        </fieldset>
+      </form>
+
+
+
+
+
     )
   }
 }
