@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { isInteger, isString } from '../utils/types'
 
 
 export default class StringInput extends Component {
   static propTypes = {
-    value: PropTypes.number.isRequired,
+    value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     max: PropTypes.number,
   }
@@ -21,7 +22,6 @@ export default class StringInput extends Component {
 
   render() {
     const { value, min, max } = this.props
-
     return (
       <input type='text' value={value} onChange={this.onChangeText} />
     )

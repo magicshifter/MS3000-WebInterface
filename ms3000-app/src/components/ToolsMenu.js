@@ -6,7 +6,7 @@ import './ToolsMenu.css'
 
 export default class ToolsMenu extends Component {
   static propTypes = {
-    structure: PropTypes.object.isRequired,
+    structure: PropTypes.array.isRequired,
     tool: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     size: PropTypes.string,
@@ -31,9 +31,9 @@ export default class ToolsMenu extends Component {
       const className = elem.name === tool ? "ToolsMenuSelectedTool" : "ToolsMenuTool"
 
       controls.push(
-        <li className={"pure-menu-item ToolsMenuTooltip " + className} data-tool={elem.name} onClick={this.onClickTool} >
+        <li key={i} className={"pure-menu-item ToolsMenuTooltip " + className} data-tool={elem.name} onClick={this.onClickTool} >
           <span className="ToolsMenuTooltipText">{elem.label || elem.name}</span>
-          <FontAwesomeIcon icon={elem.icon} size="2x"/>
+          <FontAwesomeIcon icon={elem.icon} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
         </li>
       )
     }

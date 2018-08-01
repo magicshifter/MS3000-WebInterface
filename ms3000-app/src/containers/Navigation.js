@@ -44,7 +44,7 @@ class Navigation extends Component {
       const nav = structure[i]
 
       controls.push(
-        <li className="pure-menu-item">
+        <li key={i} className="pure-menu-item">
           <a href="#" onClick={this.onClickNav} data-name={nav.name} className="pure-menu-link"
              style={{backgroundColor: nav.name === location ? "blue" : null }}>
             {nav.name}

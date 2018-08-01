@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from "prop-types";
-import { hexFromRGB, equRGB, createRGBFromHex } from '../utils/color'
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { hexFromRGB, createRGBFromHex } from '../utils/color'
 
 import './ColorChooser.css'
 
@@ -25,7 +23,7 @@ export default class ColorChooser extends Component {
   }
 
   onChangeColor = (evt) => {
-    const { color, onChange} = this.props
+    const { onChange} = this.props
     const hex = evt.target.value
     const rgb = createRGBFromHex(hex)
     onChange(rgb)

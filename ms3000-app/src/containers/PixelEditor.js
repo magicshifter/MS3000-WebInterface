@@ -62,7 +62,6 @@ class PixelEditor extends Component {
     color: PropTypes.object,
     frames: PropTypes.array.isRequired,
     palette: PropTypes.array.isRequired,
-    onChange: PropTypes.func.isRequired,
     enableUndo: PropTypes.bool,
     enableRedo: PropTypes.bool,
   }
@@ -200,14 +199,14 @@ class PixelEditor extends Component {
               width: <NumberInput value={width} min={1} max={64} onChange={this.onChangeWidth} />
             </li>
             <li className="pure-menu-item">
-              name: <StringInput value={imageName} max={64} onChange={this.onChangeName} />
+              name: <StringInput value={imageName} max={32} onChange={this.onChangeName} />
             </li>
             <li className="pure-menu-item">
               <button className="pure-button" onClick={this.onExportImage}>save</button>
             </li>
             <li className="pure-menu-item">
               <button className="pure-button" onClick={this.uploadClickHAck}>
-                <label for="ImportImage"><div>import</div>
+                <label htmlFor="ImportImage"><div>import</div>
                   <input
                     ref="fileUpload"
                     id="ImportImage"
@@ -248,7 +247,11 @@ class PixelEditor extends Component {
         </div>
         <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{paddingTop: "0px"}}>
           <ul className="pure-menu-list">
-            <PixelCanvas width={width} height={height} tool={tool} color={color} pixel={pixel} scale={25} onChange={this.onChangePixel}/>
+            {pixel ?
+              <PixelCanvas width={width} height={height} tool={tool} color={color} pixel={pixel} scale={25}
+                           onChange={this.onChangePixel}/>
+              : <span>No Frames :( Are you happy now?!?</span>
+            }
           </ul>
         </div>
       </div>

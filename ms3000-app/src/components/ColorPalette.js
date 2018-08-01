@@ -51,7 +51,7 @@ export default class ColorPalette extends Component {
       const elem = palette[i]
 
       controls.push(
-        <li className="pure-menu-item"><ColorButton color={elem} activeColor={activeColor} onClick={this.onClickPalette}/></li>
+        <li key={i} className="pure-menu-item"><ColorButton color={elem} activeColor={activeColor} onClick={this.onClickPalette}/></li>
       )
     }
 

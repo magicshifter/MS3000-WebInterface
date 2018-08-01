@@ -21,7 +21,7 @@ function DummyPreview({scale, width, height}) {
 function findDataInParents(target, trys = 5) {
   let parsed
 
-  while (trys && target && isNaN(parsed = parseInt(target.dataset["idx"]))) {
+  while (trys && target && isNaN(parsed = parseInt(target.dataset["idx"], 10))) {
     target = target.parentNode;
     trys--;
   }
@@ -41,7 +41,7 @@ export default class FrameList extends Component {
   onClickFrame = (evt) => {
     const {onChange} = this.props
     //console.log("clicked tool", evt)
-    const frameNr = parseInt(evt.currentTarget.dataset["frame"] || "0")
+    const frameNr = parseInt(evt.currentTarget.dataset["frame"] || "0", 10)
     //console.log("clicked tool", frameNr)
     onChange(frameNr)
   }
@@ -58,7 +58,7 @@ export default class FrameList extends Component {
     evt.stopPropagation();
 
     const {onChange, frames} = this.props
-    const frameNr = parseInt(evt.currentTarget.dataset["frame"] || "0")
+    const frameNr = parseInt(evt.currentTarget.dataset["frame"] || "0", 10)
 
     const newFrames = frames.slice(0)
     newFrames.splice(frameNr, 0, frames[frameNr])
@@ -72,7 +72,7 @@ export default class FrameList extends Component {
 
     const {onChange, activeFrame, frames} = this.props
     //console.log("clicked tool", evt)
-    const frameNr = parseInt(evt.currentTarget.dataset["frame"] || "0")
+    const frameNr = parseInt(evt.currentTarget.dataset["frame"] || "0", 10)
 
     const newFrames = frames.slice(0)
     newFrames.splice(frameNr, 1);
@@ -84,21 +84,17 @@ export default class FrameList extends Component {
   }
 
   render() {
-    const controls = []
-
     const {frames, width, height, activeFrame} = this.props
-
     const fN = frames.length
 
-    console.log("render framelist", frames)
-
+    const controls = []
     for (let i = 0; i < fN; i++) {
       const elem = frames[i]
 
       const className = activeFrame === i ? "FrameListActiveFrame" : "FrameListFrame"
 
       controls.push(
-        <li className={"pure-menu-item FrameListSpacer"}
+        <li key={'s'+i} className={"pure-menu-item FrameListSpacer"}
             onDrop={this.handleDropFrame}
             onDragOver={this.handleDragOverFrame}
             ref={"s" + i}
@@ -109,18 +105,14 @@ export default class FrameList extends Component {
         </li>)
 
       controls.push(
-        <li className={"pure-menu-item ToolsMenuTooltip " + className} data-frame={i} data-idx={i} ref={"i" + i}
+        <li key={'f'+i} className={"pure-menu-item ToolsMenuTooltip " + className} data-frame={i} data-idx={i} ref={"i" + i}
             onClick={this.onClickFrame}
             draggable
             onDragStart={this.handleDragStartFrame}
             onDragEnd={this.handleDragEndFrame}
             onDragOver={this.handleDragOverFrame}
-
         >
-
-          <span className="FrameListDrag" data-frame={i} data-idx={i}
-
-          >
+          <span className="FrameListDrag" data-frame={i} data-idx={i}>
             <FontAwesomeIcon color="white" icon={faArrowsAlt}/>
           </span>
 
@@ -134,16 +126,14 @@ export default class FrameList extends Component {
 
           <PixelPreview data-frameNr={i} scale={PREVIEW_SCALE} width={width} height={height}
                         pixel={elem}
-
           />
         </li>
       )
-
-      //style={{width: '4em',  display:"none", backgroundColor:'red'}}
     }
 
     controls.push(
-      <li className={"pure-menu-item FrameListSpacer"}
+      <li key={'s'+ fN}
+          className={"pure-menu-item FrameListSpacer"}
           ref={"s" + fN}
           data-idx={fN} data-spacer={1}
           style={{display:"none"}}
@@ -154,13 +144,10 @@ export default class FrameList extends Component {
       </li>)
 
     controls.push(
-      <li className={"pure-menu-item ToolsMenuTooltip"}>
+      <li key="add" className={"pure-menu-item ToolsMenuTooltip"}>
         <button className="pure-button" onClick={this.onClickAddFrame}>+ Add Frame</button>
       </li>
     )
-
-
-    console.log("render framelist", frames)
 
     return controls
   }
@@ -196,7 +183,7 @@ export default class FrameList extends Component {
 
     const { idx, isSpace } = findDataInParents(evt.target)
 
-    console.log("drag over", idx, evt.target);
+    //console.log("drag over", idx, evt.target);
 
     if (!isNaN(idx)) {
       if (this.dndLastSpacer) {
@@ -221,20 +208,21 @@ export default class FrameList extends Component {
 
   handleDragEndFrame = (evt) =>
   {
-    console.log("Drag end")
-
+    //console.log("Drag end")
     if (this.dndLastSpacer) {
       this.dndLastSpacer.style.display = 'none'
       this.dndLastSpacer = null
     }
-
+    if (this.dndOriginalSpacer) {
+      this.dndOriginalSpacer.style.display = 'none'
+      this.dndOriginalSpacer = null
+    }
     if (this.dndLastSource) {
       //this.dndLastSource.style.opacity = 1
       this.dndLastSource.style.display = ''
       this.dndLastSource.style.transform = ''
       this.dndLastSource = null
     }
-
     this.dndSourceIdx = null
   }
 

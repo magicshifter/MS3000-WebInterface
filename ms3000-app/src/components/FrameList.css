@@ -1,17 +1,41 @@
 .FrameListActiveFrame {
     border: solid 0.2em yellow;
+    border-radius: 3px;
     /*box-shadow: inset 0 0 15px gold; */
-    background-color: lightgray;
     padding: 0.4em;
+    margin: 0.1em;
+
+    background-color: darkgray;
+    background-image:
+            linear-gradient(45deg, #ccc 25%, transparent 25%),
+            linear-gradient(135deg, #ccc 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #ccc 75%),
+            linear-gradient(135deg, transparent 75%, #ccc 75%);
+    background-size:16px 16px; /* Must be a square */
+    background-position:0 0, 8px 0, 8px -8px, 0px 8px; /* Must be half of one side of the square */
 }
 
 .FrameListFrame {
-    padding: 0.6em;
-    background-color: gray;
-}
+    border: solid 0.2em gray;
+    border-radius: 3px;
+    padding: 0.4em;
+
+    margin: 0.1em;
+
+    background-color: darkgray;
+    background-image:
+            linear-gradient(45deg, #ccc 25%, transparent 25%),
+            linear-gradient(135deg, #ccc 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #ccc 75%),
+            linear-gradient(135deg, transparent 75%, #ccc 75%);
+    background-size:16px 16px; /* Must be a square */
+    background-position:0 0, 8px 0, 8px -8px, 0px 8px; /* Must be half of one side of the square */
+    /*background-size:25px 25px; !* Must be a square *!*/
+    /*background-position:0 0, 12.5px 0, 12.5px -12.5px, 0px 12.5px; !* Must be half of one side of the square *!*/
+    }
 
 .FrameListFrame:hover {
-    background-color: lightgray;
+    border: solid 0.2em lightgrey;
 }
 
 .FrameListFrame:hover .FrameListDrag,
@@ -54,6 +78,6 @@
 .FrameListSpacer {
     border: dashed 0.2em yellow;
     /*box-shadow: inset 0 0 15px gold; */
-    background-color: gray;
+    /*background-color: gray;*/
     padding: 0.4em;
 }

@@ -67,16 +67,16 @@ class App extends Component {
 
     switch (location) {
       case "wifi":
-        controls.push(<div>TODO: implement configure the WLAN settings</div>)
+        controls.push(<div key="wifi">TODO: implement configure the WLAN settings</div>)
         break;
 
       case "mode-Image":
-        controls.push(<PixelEditor />)
+        controls.push(<PixelEditor key="mImage" />)
         break;
 
       case "config":
         controls.push(
-          <div>
+          <div key="config">
             <div>
               { !isFetching ?
                 <button onClick={this.handleRefreshClick}>
@@ -97,17 +97,13 @@ class App extends Component {
         break;
 
       default:
-        controls.push(<div>MS3000 Error 404 Unknown location: {location}</div>)
+        controls.push(<div key={"uknw"}>MS3000 Error 404 Unknown location: {location}</div>)
     }
-
 
     return (
       <div>
         <Navigation/>
         {controls}
-
-
-
       </div>
     )
   }
