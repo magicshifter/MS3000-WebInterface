@@ -20,6 +20,13 @@ export default class PixelPreview extends Component {
     this.drawPixel()
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.pixel !== nextProps.pixel) {
+      return true;
+    }
+    return false;
+  }
+
   drawPixel = () => {
     var index = 0
 

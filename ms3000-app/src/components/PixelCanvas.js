@@ -98,7 +98,7 @@ export default class PixelCanvas extends Component {
 
   useDrawTool = (evt) => {
     const { onChange, color } = this.props
-    var p = this.getPos(evt)
+    const p = this.getPos(evt)
     p.color = color
     onChange([p], { usedColor: color })
   }
@@ -110,7 +110,7 @@ export default class PixelCanvas extends Component {
     onChange([p], { usedColor: color })
   }
 
-  useToole = (evt) => {
+  useTool = (evt) => {
     const { tool } = this.props
     switch (tool) {
       case "draw":
@@ -118,7 +118,7 @@ export default class PixelCanvas extends Component {
         break;
 
       case "fill":
-        this.useDrawTool(evt)
+        this.useFillTool(evt)
         break;
 
       default:
@@ -128,18 +128,13 @@ export default class PixelCanvas extends Component {
   }
 
   onMouseDownCanvas = (evt) => {
-    const { onChange, color } = this.props
-    var p = this.getPos(evt)
-    p.color = color
-    onChange([p])
+    this.useTool(evt)
   }
 
   onMouseMoveCanvas = (evt) => {
     var p = this.getPos(evt)
     if (evt.buttons) {
-      const {onChange, color} = this.props
-      p.color = color
-      onChange([p])
+      this.useTool(evt)
     }
     else {
       this.drawPixel()
@@ -147,6 +142,7 @@ export default class PixelCanvas extends Component {
     }
   }
 
+  // clearing tool preview
   onMouseLeaveCanvas = (evt) => {
     this.drawPixel()
   }
