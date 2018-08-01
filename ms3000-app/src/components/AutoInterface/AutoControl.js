@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import AutoInterface from './AutoInterface'
+import AutoInterface from './index'
 import RGBControl from './RGBControl'
-import EnumControl from  './EnumControl'
+import EnumControl from './EnumControl'
 
 import protobuf from 'protobufjs'
 

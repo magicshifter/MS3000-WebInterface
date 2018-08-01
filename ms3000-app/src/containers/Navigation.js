@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { navigationSetLocation } from '../actions'
 import protobufs from '../utils/protoBufLoader'
 
-import AutoInterface from '../components/AutoInterface'
+import AutoInterface from '../components/AutoInterface/index'
 import PixelEditor from './PixelEditor'
 
 import './App.css';
