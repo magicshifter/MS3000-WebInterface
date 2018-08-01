@@ -11,7 +11,7 @@ import {emptyPixel} from '../utils/color'
 import './FrameList.css'
 
 
-const PREVIEW_SCALE = 4
+const PREVIEW_SCALE = 3
 
 
 function DummyPreview({scale, width, height}) {
@@ -109,7 +109,13 @@ export default class FrameList extends Component {
       const className = activeFrame === i ? "FrameListActiveFrame" : "FrameListFrame"
 
       controls.push(
-        <li className={"pure-menu-item FrameListSpacer"} ref={"s" + i} data-idx={i} data-spacer={1} style={{display:"none"}}>
+        <li className={"pure-menu-item FrameListSpacer"}
+            onDrop={this.handleColorDrop}
+            onDragOver={this.handleColorDragOver}
+            ref={"s" + i}
+            data-idx={i} data-spacer={1}
+            style={{display:"none"}}
+        >
           <DummyPreview width={width} height={height} scale={PREVIEW_SCALE} />
         </li>)
 
@@ -120,7 +126,7 @@ export default class FrameList extends Component {
             onDragStart={this.handleColorDragStart}
             onDragEnd={this.handleColorDragEnd}
             onDragOver={this.handleColorDragOver}
-            onDrop={this.handleColorDrop}
+
         >
 
           <span className="FrameListDrag" data-frame={i} data-idx={i}
@@ -148,7 +154,13 @@ export default class FrameList extends Component {
     }
 
     controls.push(
-      <li className={"pure-menu-item FrameListSpacer"} ref={"s" + fN} data-idx={fN} data-spacer={1} style={{display:"none"}}>
+      <li className={"pure-menu-item FrameListSpacer"}
+          ref={"s" + fN}
+          data-idx={fN} data-spacer={1}
+          style={{display:"none"}}
+          onDrop={this.handleColorDrop}
+          onDragOver={this.handleColorDragOver}
+      >
         <DummyPreview width={width} height={height} scale={PREVIEW_SCALE} />
       </li>)
 
@@ -196,7 +208,6 @@ export default class FrameList extends Component {
     evt.dataTransfer.dropEffect = 'move';
 
     if (this.dndOneShot) {
-
       this.dndLastSource.style.display = 'none'
       this.dndOriginalSpacer.style.display = ''
       //this.dndLastSpacer = this.dndOriginalSpacer
@@ -204,7 +215,7 @@ export default class FrameList extends Component {
 
     const { idx, isSpace } = findDataInParents(evt.target)
 
-    //console.log("drag over", idx, evt.target);
+    console.log("drag over", idx, evt.target);
 
     if (!isNaN(idx)) {
       if (this.dndLastSpacer) {
@@ -271,7 +282,34 @@ export default class FrameList extends Component {
     this.dndSourceIdx = null
   }
 
+  allowDrop = (evt) => {
+    evt.preventDefault();
+    console.log("allowDrop")
+  }
+
   handleColorDrop = (evt) => {
+    const { idx, isSpace } = findDataInParents(evt.target)
+    const sourceIdx = this.dndSourceIdx
+
+    console.log("DROPPIN", idx);
+
+    if (isSpace && !isNaN(idx) && sourceIdx !== idx) {
+      const {frames, activeFrame, onChange} = this.props
+
+      const f = frames[sourceIdx]
+      const newFrames = frames.slice(0)
+      newFrames.splice(sourceIdx, 1);
+
+      var dropIdx = idx
+      if (idx > sourceIdx) {
+        dropIdx--
+      }
+      newFrames.splice(dropIdx, 0, f);
+
+      var newIdx = activeFrame === sourceIdx ? dropIdx: activeFrame
+
+      onChange(newIdx, newFrames)
+    }
     // var target = evt.target;
     //
     // var trys = 5;
