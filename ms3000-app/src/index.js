@@ -33,7 +33,7 @@ const store = createStore(
   applyMiddleware(...middleware)
 )
 
-// after createStore 
+// after createStore
 sagaMiddleware.run(rootSaga)
 
 
