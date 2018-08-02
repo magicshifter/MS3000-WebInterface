@@ -1,1 +1,56 @@
-../../../MS3000.proto
+// A very simple protocol definition, consisting of only
+// one message.
+
+syntax = "proto2";
+
+message RGB {
+    required int32 R = 1 [default = 0];
+    required int32 G = 2 [default = 0];
+    required int32 B = 3 [default = 0];
+}
+
+
+message AP_INFO {
+    required string networkName = 1;
+    required string password = 2;
+}
+
+// MS3000 Global object
+message MS3KG {
+    required string networkName = 1 [ default = "MS3000"];
+    required Modes modes = 2;
+
+    message Modes {
+        required string current = 1;
+        required Light light = 2;
+
+        // MODE: magivPOV
+        message MagicPOV {
+            required string name = 1 [ default = "magic"];
+
+            message User {
+                required string image = 2 [ default = "ourlogo"];
+            }
+
+        }
+
+        // MODE: Light
+        message Light {
+            required string name = 1 [ default = "light"];
+
+            enum LightMode {
+                RAINBOW = 0;
+                NORMAL = 1;
+                SCANNER_RGB = 2;
+                SCANNER_BW = 3;
+            }
+            required LightMode subMode = 2;
+            required RGB color = 3;
+        }
+
+        message Arpi {
+            required string name = 1 [default = "arpi"];
+        }
+    }
+}
+

@@ -10,18 +10,18 @@ var xxx = {};
 export function getProtocolBuffersPromise() {
   var promise = new Promise(function(resolve, reject) {
     protobuf.load(process.env.PUBLIC_URL + "MS3000.proto", function (err, root) {
-      if (err)
+      if (err) {
         reject(Error(err));
+      }
+      else {
+        // Obtain a message type
+        xxx.MS3KG = root.lookupType("MS3KG");
+        xxx.Light = root.lookupType("Light");
+        xxx.root = root
 
-      // Obtain a message type
-      xxx.MS3KG = root.lookupType("MS3KG");
-      xxx.Light = root.lookupType("Light");
-      xxx.root = root
-
-
-      console.log("stage2", xxx)
-
-      resolve();
+        console.log("stage2", xxx)
+        resolve();
+      }
     })
   });
 
