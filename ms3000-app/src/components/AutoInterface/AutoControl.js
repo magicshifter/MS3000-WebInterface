@@ -32,6 +32,9 @@ export default class AutoControl extends Component {
     const controls = []
     //console.log("Render AutoCntrl", field, lookup)
 
+
+
+    var noLabel = false
     switch (field.type) {
       case 'string':
         controls.push(<input id={ field.name } key="str" type='text' value={value || ""} onChange={(evt) => {
@@ -41,21 +44,28 @@ export default class AutoControl extends Component {
         break;
 
       case 'RGB':
-        controls.push(<RGBControl key="rgb" field={field} value={value} onChange={onChange}/>)
+        controls.push(<RGBControl id={ field.name } key="rgb" field={field} value={value} onChange={onChange}/>)
         break;
 
       default:
         if (isEnum) {
-          controls.push(<EnumControl key="enu" field={field} value={value} onChange={onChange} /> )
+          controls.push(<EnumControl id={ field.name } key="enu" field={field} value={value} onChange={onChange} /> )
         }
         else if (isType) {
-          controls.push(<legend key="l">{field.name}</legend>)
-          controls.push(<AutoInterface key="rec" type={lookup} value={value} onChange={this.onChangeRecursive} />)
+          noLabel = true
+          //controls.push(<legend key="leg">{field.name}</legend>)
+          controls.push(
+            <div style={{paddingLeft:"20px"}}>
+              <AutoInterface key="rec" legend={field.name} skipInputTag={true} type={lookup} value={value} onChange={this.onChangeRecursive} />
+            </div>)
         }
         else {
           controls.push(<span key="u">!!! {field.name} has unknown type {field.type}</span>)
         }
         break;
+    }
+    if (!noLabel) {
+      controls.unshift(<label id="lbl" htmlFor={field.name}>{field.name}:&nbsp;</label>)
     }
 
     return (

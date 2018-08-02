@@ -92,7 +92,10 @@ class App extends Component {
 
             <AutoInterface type={protobufs.MS3KG}
                            onChange={this.onChangeAutoInterface}
-                           value={shifterState} />
+                           value={shifterState}
+                           legend="MS3000 State"
+
+            />
 
             <pre> {JSON.stringify(shifterState, null, 2) }</pre>
 

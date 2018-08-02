@@ -26,7 +26,7 @@ export default class EnumControl extends Component {
   }
 
   render() {
-    const { field } = this.props
+    const { field, id } = this.props
     const value = this.getValue()
 
     const root = field.root
@@ -44,7 +44,7 @@ export default class EnumControl extends Component {
     }
 
     return (
-      <select value={value} onChange={this.onChangeSelect}>
+      <select id={ id } value={value} onChange={this.onChangeSelect}>
         {controls}
       </select>
     )

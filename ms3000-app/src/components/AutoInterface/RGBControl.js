@@ -55,18 +55,19 @@ export default class RGBControl extends Component {
   }
 
   getValue = () => {
-    let { value } = this.props
+    let { value,} = this.props
     value = value || {R: 0, G: 0, B: 0}
     return value
   }
 
   render() {
+    let { id } = this.props
     const value = this.getValue()
     const color = Color.rgb(value.R, value.G, value.B)
 
     return (
       <span>
-        <input ref="RGBA" type="color" value={color.hex()} onChange={this.onChangeRGBA} />
+        <input ref="RGBA" id={id} type="color" value={color.hex()} onChange={this.onChangeRGBA} />
         R <input ref="R" type="number" min="0" max="255" value={value.R} onChange={this.onChangeR}/>
         G <input ref="G" type="number" min="0" max="255" value={value.G} onChange={this.onChangeG}/>
         B <input ref="B" type="number" min="0" max="255" value={value.B} onChange={this.onChangeB}/>
