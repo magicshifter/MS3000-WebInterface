@@ -1,7 +1,7 @@
 import { NAVIGATION_SET_LOCATION } from '../actions'
 
 
-const navigation = (state = {location: "config"}, action) => {
+const navigation = (state = {location: "wifi"}, action) => {
   switch (action.type) {
     case NAVIGATION_SET_LOCATION:
       return {

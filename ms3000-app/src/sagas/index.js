@@ -2,6 +2,9 @@ import { delay } from 'redux-saga'
 import { call, put, takeEvery } from 'redux-saga/effects'
 
 
+import socketTestSaga from './sockettest'
+
+
 // TODO use for real cool async transfer and socket
 
 export function* helloSaga() {
@@ -21,6 +24,7 @@ export function* watchIncrementAsync() {
 export default function* rootSaga() {
   yield [
     helloSaga(),
-    watchIncrementAsync()
+    watchIncrementAsync(),
+    socketTestSaga()
   ]
 }

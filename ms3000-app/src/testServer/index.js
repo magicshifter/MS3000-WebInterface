@@ -51,6 +51,6 @@ io.on('message', (ctx, { text }) => {
   io.broadcast('messages.new', { message });
 });
 
-app.listen(3000, () => {
+app.listen(8123, () => {
   console.log('[server] ready');
 });
