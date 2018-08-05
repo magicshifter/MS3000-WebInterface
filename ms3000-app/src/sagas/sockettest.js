@@ -14,6 +14,24 @@ function connect() {
   });
 }
 
+function subscribeMS3000(socket) {
+  return eventChannel(emit => {
+    socket.on('state.login', ({ username }) => {
+      emit(addUser({ username }));
+    });
+    socket.on('users.logout', ({ username }) => {
+      emit(removeUser({ username }));
+    });
+    socket.on('messages.new', ({ message }) => {
+      emit(newMessage({ message }));
+    });
+    socket.on('disconnect', e => {
+      // TODO: handle
+    });
+    return () => {};
+  });
+}
+
 function subscribe(socket) {
   return eventChannel(emit => {
     socket.on('users.login', ({ username }) => {

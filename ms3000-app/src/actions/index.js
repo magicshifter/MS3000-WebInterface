@@ -71,6 +71,8 @@ export const pixelEditorChangePixelList = (changes, frame) => ({
   changes
 })
 
+
+
 export const requestShifterState = () => ({
   type: REQUEST_SHIFTER_STATE
 })

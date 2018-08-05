@@ -7,6 +7,7 @@ import protobufs from '../utils/protoBufLoader'
 import AutoInterface from '../components/AutoInterface/index'
 import PixelEditor from './PixelEditor'
 import Navigation from './Navigation'
+import SocketCmdCenter from './SocketCmdCenter'
 
 import './App.css';
 import logo from '../logo.svg';
@@ -71,17 +72,7 @@ class App extends Component {
 
     switch (location) {
       case "wifi":
-        controls.push(<div key="wifi">TODO: implement configure the WLAN settings
-          <button onClick={() => {
-            console.log("clicked socket login button")
-            this.props.dispatch(socketActions.login({username: "wizard23"}))
-
-          }}>login</button>
-
-
-
-
-        </div>)
+        controls.push(<SocketCmdCenter />)
         break;
 
       case "mode-Image":

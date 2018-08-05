@@ -1,10 +1,53 @@
 import Koa from 'koa';
 import IO from 'koa-socket';
 
+import immutableObjectPath from 'object-path-immutable'
+import protobufs from "../utils/protoBufLoader";
+
 const app = new Koa();
 const io = new IO();
 
 io.attach(app);
+
+
+
+let shifterState = {
+  modes: {
+    current: "Sockets work",
+    light: {
+      name: "Am Anfang war das Licht",
+      subMode: protobufs.MS3KG.Modes.Light.LightMode.NORMAL,
+      color: {
+        R: 100, G: 200, B: 300
+      }
+    }
+  },
+}
+
+io.on('getState', ctx => {
+  console.log('[MS3K] getState')
+  io.broadcast('ms3ks.complete', { shifterState });
+})
+
+io.on('setState', (ctx, { newState }) => {
+  console.log('[MS3K] setState', newState)
+  shifterState = newState
+})
+
+io.on('setSubState', (ctx, { path, newState }) => {
+  shifterState = immutableObjectPath.set(obj, path)
+  console.log('[MS3K] setSubState', path, newState, shifterState)
+})
+
+io.on('getSubState', (ctx, { path }) => {
+  console.log('[MS3K] getSubState', path)
+  shifterState = immutableObjectPath.set(obj, path)
+})
+
+
+
+
+
 
 io.on('connection', ctx => {
   console.log('[server] connected');
