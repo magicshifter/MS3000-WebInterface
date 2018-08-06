@@ -27,6 +27,14 @@ class SocketCmdCenter extends Component {
     this.props.dispatch(socketActions.logout());
   }
 
+  onClickSendMessage = e => {
+    const value = this.refs.message.value;
+    console.log('message', value);
+    if (value && value.length > 0) {
+      this.props.dispatch(socketActions.sendMessage({ text: value }));
+    }
+  }
+
   render() {
     const { messages, users, username } = this.props
 
@@ -41,8 +49,8 @@ class SocketCmdCenter extends Component {
             <div>logged in as {username}</div>
             <button onClick={this.onClickLogout}>logout</button>
 
-            <input ref="username" type='text' placeholder="chat message" />
-            <button onClick={this.onClickLogin}>login</button>
+            <input ref="message" type='text' placeholder="chat message" />
+            <button onClick={this.onClickSendMessage}>login</button>
           </span>
           :
           <span>
