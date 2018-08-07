@@ -32,11 +32,11 @@ export default class ToolSizes extends Component {
       const className = elem === value ? "ToolsMenuSelectedTool" : "ToolsMenuTool"
 
       controls.push(
-        <li key={i} style={{"text-align": "center", "align-items": "center", alignContent: "center", alignment: "center"}} className={"pure-menu-item ToolsMenuTooltip " + className} data-size={elem} onClick={this.onClick} >
+        <li key={i} style={{"textAlign": "center", "alignItems": "center", alignContent: "center", alignment: "center"}} className={"pure-menu-item ToolsMenuTooltip " + className} data-size={elem} onClick={this.onClick} >
           <span className="ToolsMenuTooltipText">{elem}px</span>
-          <div style={{"text-align": "center", "align-items": "center", alignContent: "center", alignment: "center",
+          <div style={{"textAlign": "center", "alignItems": "center", alignContent: "center", alignment: "center",
             width: "30px", height: "30px", backgroundColor: "blue"}}>
-           <div style={{"text-align": "center", "align-items": "center", alignContent: "center", alignment: "center",
+           <div style={{"textAlign": "center", "alignItems": "center", alignContent: "center", alignment: "center",
              width: "" + (elem * 5) + "px", height: "" + (elem * 5) + "px", backgroundColor: "green"}}>{elem}</div>
           </div>
         </li>

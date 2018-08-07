@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from "prop-types";
 import { hexFromRGB, shadeRGB, equRGB } from "../../utils/color"
-
+import floodFill from "n-dimensional-flood-fill"
 
 
 
@@ -12,7 +12,6 @@ function toolSL(size) {
 function toolSR(size) {
   return Math.ceil(size/2)
 }
-
 
 function getMousePos(canvas, evt) {
   var rect = canvas.getBoundingClientRect();
@@ -72,10 +71,8 @@ export default class PixelCanvas extends Component {
     }
   }
 
-  drawTool = (X, Y) => {
-    const { color, scale, toolSize, width, height } = this.props
-    const ctx = this.canvasContext
-
+  forToolArea = (X, Y, fn) => {
+    const { color, scale, toolSize} = this.props
     for (var xx = toolSL(toolSize); xx < toolSR(toolSize); xx++) {
       for (var yy = toolSL(toolSize); yy < toolSR(toolSize); yy++) {
         const x = X + xx
@@ -85,12 +82,26 @@ export default class PixelCanvas extends Component {
         if (!rgb)
           continue
 
-        if (!equRGB(rgb, color)) {
-          const shaded = shadeRGB(rgb)
-          ctx.fillStyle = hexFromRGB(shaded);
-          ctx.fillRect(x * scale, y * scale, scale - 1, scale - 1);
-        }
+        fn(x, y, rgb)
       }
+    }
+  }
+
+  drawTool = (x, y) => {
+    const { color, tool } = this.props
+    if (tool === 'draw' || tool === 'erase')
+      this.forToolArea(x, y, this.drawToolFn)
+    else
+      this.drawToolFn(x, y, this.getPixel(x,y))
+  }
+
+  drawToolFn = (x, y, rgb) => {
+    const { color, scale } = this.props
+    const ctx = this.canvasContext
+    if (!equRGB(rgb, color)) {
+      const shaded = shadeRGB(rgb)
+      ctx.fillStyle = hexFromRGB(shaded);
+      ctx.fillRect(x * scale, y * scale, scale - 1, scale - 1);
     }
   }
 
@@ -147,8 +158,16 @@ export default class PixelCanvas extends Component {
   useFillTool = (evt) => {
     const { onChange, color } = this.props
     var p = this.getPos(evt)
-    p.color = color
-    onChange([p], { usedColor: color })
+
+    const area = this.floodFill(p.x, p.y)
+
+    const changes = []
+    for (var i = 0; i < area.length; i++) {
+      const pos = area[i]
+      const change = { x: pos[0], y: pos[1], color }
+      changes.push(change)
+    }
+    onChange(changes, { usedColor: color })
   }
 
   useTool = (evt) => {
@@ -202,5 +221,35 @@ export default class PixelCanvas extends Component {
               onMouseLeave={this.onMouseLeaveCanvas}
               style={{border: "0px solid #FFFFFF"}}/>
     )
+  }
+
+
+  // Floodfill
+  floodFill = (x, y) => {
+    const { width, height } = this.props
+
+    const colorToFlood = this.getPixel(x, y)
+
+
+    // Define our getter for accessing the data structure.
+    const ctx = this
+    const getter = function (x, y) {
+      if (x >= 0 && x < width && y >= 0 && y < height) {
+        const c = ctx.getPixel(x, y)
+        return equRGB(c, colorToFlood) ? 1 : 0
+      }
+      else
+        return false
+    }
+
+    // Flood fill over the data structure.
+    const result = floodFill({
+      getter: getter,
+      seed: [x, y]
+    });
+
+    console.log(result.flooded, result)
+
+    return result.flooded
   }
 }

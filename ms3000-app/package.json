@@ -11,6 +11,7 @@
     "dis-gui": "^2.1.0",
     "file-saver": "^1.3.8",
     "immutable": "^3.8.2",
+    "n-dimensional-flood-fill": "^1.0.0",
     "object-path": "^0.11.4",
     "object-path-immutable": "^3.0.0",
     "prop-types": "^15.6.2",
