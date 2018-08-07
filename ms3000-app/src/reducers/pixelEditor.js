@@ -8,6 +8,7 @@ import {
   PIXEL_EDITOR_CHANGE_IMAGE,
   PIXEL_EDITOR_SET_ACTIVE_FRAME,
   PIXEL_EDITOR_SET_IMAGE_NAME,
+  PIXEL_EDITOR_CHANGE_TOOL_SIZE,
 } from '../actions'
 import { RGB, emptyPixel, equRGB } from '../utils/color'
 
@@ -114,6 +115,7 @@ const pixelEditor = (state = null, action) => {
     frameIdx: 0,
     frames: [emptyPixel(DEFAULT_WIDTH, DEFAULT_HEIGHT)],
     tool: "draw",
+    toolSize: 1,
     color: RGB(255, 255, 255),
     palette: DEFAULT_PALETTE,
     frameDelay: 500,
@@ -125,6 +127,12 @@ const pixelEditor = (state = null, action) => {
       return {
         ...state,
         tool: action.tool
+      }
+
+    case PIXEL_EDITOR_CHANGE_TOOL_SIZE:
+      return {
+        ...state,
+        toolSize: action.toolSize
       }
 
     case PIXEL_EDITOR_SET_IMAGE_NAME:

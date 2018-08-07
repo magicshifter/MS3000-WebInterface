@@ -5,7 +5,7 @@ import PixelPreview from './PixelPreview'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faClone, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
 
-import {emptyPixel} from '../utils/color'
+import {emptyPixel} from '../../utils/color'
 
 import './FrameList.css'
 

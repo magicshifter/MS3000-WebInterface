@@ -1,10 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from "prop-types";
-import { hexFromRGB, shadeRGB, equRGB } from "../utils/color"
+import { hexFromRGB, shadeRGB, equRGB } from "../../utils/color"
 
 
 
 
+function toolSL(size) {
+  return -Math.floor(size/2)
+}
+
+function toolSR(size) {
+  return Math.ceil(size/2)
+}
 
 
 function getMousePos(canvas, evt) {
@@ -20,6 +27,7 @@ export default class PixelCanvas extends Component {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     tool: PropTypes.string.isRequired,
+    toolSize: PropTypes.number.isRequired,
     color: PropTypes.object.isRequired,
     pixel: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -28,10 +36,6 @@ export default class PixelCanvas extends Component {
 
   constructor(props) {
     super(props)
-
-    this.state = {
-      hover: {x:-100, y:-100}
-    }
   }
 
   componentDidMount() {
@@ -43,8 +47,13 @@ export default class PixelCanvas extends Component {
   }
 
   getPixel = (x, y) => {
-    const idx = y * this.props.width + x
-    const v =  this.props.pixel.get(idx)
+    const { pixel, width, height } = this.props
+
+    if (x < 0 || x >= width || y < 0 || y >= height)
+      return null
+
+    const idx = y * width + x
+    const v =  pixel.get(idx)
     return v
   }
 
@@ -56,24 +65,32 @@ export default class PixelCanvas extends Component {
 
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
-
         ctx.fillStyle= hexFromRGB(pixel.get(index));
         ctx.fillRect(x*scale,y*scale,scale-1,scale-1);
-
         index++;
       }
     }
   }
 
-  drawTool = (x, y) => {
-    const { pixel, width, height, color, scale } = this.props
+  drawTool = (X, Y) => {
+    const { color, scale, toolSize, width, height } = this.props
     const ctx = this.canvasContext
 
-    const rgb = this.getPixel(x,y)
-    if (!equRGB(rgb, color)) {
-      const shaded = shadeRGB(rgb)
-      ctx.fillStyle = hexFromRGB(shaded);
-      ctx.fillRect(x * scale, y * scale, scale - 1, scale - 1);
+    for (var xx = toolSL(toolSize); xx < toolSR(toolSize); xx++) {
+      for (var yy = toolSL(toolSize); yy < toolSR(toolSize); yy++) {
+        const x = X + xx
+        const y = Y + yy
+
+        const rgb = this.getPixel(x,y)
+        if (!rgb)
+          continue
+
+        if (!equRGB(rgb, color)) {
+          const shaded = shadeRGB(rgb)
+          ctx.fillStyle = hexFromRGB(shaded);
+          ctx.fillRect(x * scale, y * scale, scale - 1, scale - 1);
+        }
+      }
     }
   }
 
@@ -97,10 +114,34 @@ export default class PixelCanvas extends Component {
   }
 
   useDrawTool = (evt) => {
-    const { onChange, color } = this.props
+    const { onChange, color, toolSize, width, height } = this.props
     const p = this.getPos(evt)
-    p.color = color
-    onChange([p], { usedColor: color })
+
+    console.log("pixeling")
+
+    const changes = []
+    if (toolSize <= 1) {
+      p.color = color
+      changes.push(p)
+    }
+    else {
+      const X = p.x
+      const Y = p.y
+      for (var xx = toolSL(toolSize); xx < toolSR(toolSize); xx++) {
+        for (var yy = toolSL(toolSize); yy < toolSR(toolSize); yy++) {
+          const x = X + xx
+          const y = Y + yy
+
+          if (x < 0 || x >= width || y < 0 || y >= height)
+            continue
+
+          const change = {x, y, color}
+          changes.push(change)
+        }
+      }
+    }
+
+    onChange(changes, { usedColor: color })
   }
 
   useFillTool = (evt) => {
