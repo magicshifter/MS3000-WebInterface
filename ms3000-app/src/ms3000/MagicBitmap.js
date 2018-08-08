@@ -2,14 +2,109 @@ import { List }  from 'immutable'
 import UPNG from 'upng-js'
 import { RGB } from '../utils/color'
 
-export default class Image {
-  constructor(width, height, frames) {
+function calcBufferSize(bitPerPixel, w, h) {
+  if (bitPerPixel === 24) {
+    return w * h * 3;
+  }
+  if (bitPerPixel === 8) {
+    return w * h;
+  }
+  else if (bitPerPixel === 1) {
+    if ((w * h) % 8) {
+      window.alert('CalcBufferSize: Ugly 1bit BufferSize: ' + (w * h / 8));
+      return Math.ceil(w * h / 8);
+    }
+    return w * h / 8;
+  }
+  else {
+    window.alert('CalcBufferSize: Unknown bitPerPixel Value: ' + bitPerPixel);
+  }
+}
+
+export default class MagicBitmap {
+  static TYPES = {
+    'bitmap': 0xBA,
+    'font': 0xF0,
+    'bitmap2': 0xB2 // V2 with delay for each frame
+  };
+
+  constructor(type, bitPerPixel, width, height, frames, delayOrFirstCharOrDelayArray) {
+    if (!MagicBitmap.isValidType(type)) {
+      const txt = "unknown type for MagicBitmap: " + type
+      alert(txt)
+      throw new Error(txt)
+    }
+    this.type = type
+    this.bitPerPixel = bitPerPixel
     this.width = width
     this.height = height
     this.frames = frames
+    this.delayOrFirstCharOrDelayArray = delayOrFirstCharOrDelayArray
   }
 
-  toPNG(frameDelay = 1000) {
+  static isValidType = (type) => {
+    const ts = MagicBitmap.TYPES
+    const kk = Object.keys(ts)
+
+    for (var i=0; i < kk.length; i++) {
+      const k = kk[i]
+      const t = ts[k]
+
+      if (t === type) {
+        return true
+      }
+    }
+    return false
+  }
+
+  getBlob =
+    () => {
+      const {type, bitPerPixel, width, height, frames, delayOrFirstCharOrDelayArray} = this;
+
+      if (type !== 'bitmap' && type !== 'font' && type !== 'bitmap2')
+
+      const headerSize = 16;
+      const v2BlockSize = type === 'bitmap2' ?
+
+      const fileSize = this.CalcBufferSize(bitPerPixel, width, height) + headerSize;
+      const frames = 1;
+      const firstChar = 0;
+
+      const fileData = new Uint8Array(fileSize);
+
+      // write header
+      fileData[0] = 0x23;
+      fileData[1] = (fileSize & 0xFF0000) >> 16;
+      fileData[2] = (fileSize & 0xFF00) >> 8;
+      fileData[3] = (fileSize & 0xFF) >> 0;
+
+      fileData[4] = bitPerPixel;
+      fileData[5] = (frames - 1); // 0 for static images larger for animations and fonts
+      fileData[6] = width;
+      fileData[7] = height;
+
+      fileData[8] = subType === 'font' ? 0xF0 : subType === 'bitmap' ? 0xBA : 0x00;
+      fileData[9] = firstChar; // >= 1 for fonts/ 0 for animations
+      fileData[10] = (delayMs & 0xFF00) >> 8; // 0 for fonts
+      fileData[11] = (delayMs & 0xFF) >> 0;
+
+      for (let x = 0; x < width; x++) {
+        for (let y = 0; y < height; y++) {
+          const idx = x + (y * totalWidth);
+          const pixel = pixels[idx];
+          const fileDataIdx = headerSize + 3 * (y + x * height);
+
+          fileData[fileDataIdx + 0] = pixel.color.r;
+          fileData[fileDataIdx + 1] = pixel.color.g;
+          fileData[fileDataIdx + 2] = pixel.color.b;
+        }
+      }
+
+      const blob = new window.Blob([fileData]);
+      return blob;
+    };
+
+  toBlob(frameDelay = 1000) {
     const { width, height, frames } = this
 
     const fS = frames.length
@@ -40,7 +135,7 @@ export default class Image {
     return UPNG.encode(buffers, width, height, 0, delays)
   }
 
-  static fromPNG(arrayBuffer) {
+  static fromArrayBuffer(arrayBuffer) {
     var png = UPNG.decode(arrayBuffer);
 
     const sizeX = png.width
@@ -84,7 +179,7 @@ export default class Image {
   }
 
   static fromMagicBitmap(arrayBuffer) {
-   throw "Not implemented yet"
+    throw "Not implemented yet"
   }
 
   static toMagicBitmap() {
