@@ -10,6 +10,7 @@ export const PIXEL_EDITOR_ADD_TO_PALETTE = "PIXEL_EDITOR_ADD_TO_PALETTE"
 
 export const PIXEL_EDITOR_CHANGE_SIZE = "PIXEL_EDITOR_CHANGE_SIZE"
 export const PIXEL_EDITOR_CHANGE_IMAGE = "PIXEL_EDITOR_CHANGE_IMAGE"
+export const PIXEL_EDITOR_RESET_IMAGE = "PIXEL_EDITOR_RESET_IMAGE"
 export const PIXEL_EDITOR_CHANGE_PIXEL = "CHANGE_PIXEL"
 export const PIXEL_EDITOR_CHANGE_TOOL = "CHANGE_TOOL"
 export const PIXEL_EDITOR_CHANGE_TOOL_SIZE = "CHANGE_TOOL_SIZE"
@@ -17,11 +18,22 @@ export const PIXEL_EDITOR_SET_COLOR = "PIXEL_EDITOR_SET_COLOR"
 export const PIXEL_EDITOR_SET_ACTIVE_FRAME = "PIXEL_EDITOR_SET_ACTIVE_FRAME"
 export const PIXEL_EDITOR_SET_IMAGE_NAME = "PIXEL_EDITOR_SET_IMAGE_NAME"
 
+export const PIXEL_EDITOR_FILES_VISIBLE = "PIXEL_EDITOR_FILES_VISIBLE"
+
 
 export const NAVIGATION_SET_LOCATION = 'NAVIGATION_SET_LOCATION'
+
+
+
+
 export const navigationSetLocation = (location) => ({
   type: NAVIGATION_SET_LOCATION,
   location
+})
+
+export const pixelEditorFilesVisible = (filesVisible) => ({
+  type: PIXEL_EDITOR_FILES_VISIBLE,
+  filesVisible
 })
 
 export const pixelEditorSetTool = (tool) => ({
@@ -73,6 +85,10 @@ export const pixelEditorChangeImage = (image, activeFrame = 0) => ({
   type: PIXEL_EDITOR_CHANGE_IMAGE,
   image,
   activeFrame
+})
+
+export const pixelEditorResetImage = () => ({
+  type: PIXEL_EDITOR_RESET_IMAGE
 })
 
 export const pixelEditorChangePixel = (x, y, color, frame) => ({

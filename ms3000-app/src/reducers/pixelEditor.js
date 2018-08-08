@@ -7,9 +7,11 @@ import {
   PIXEL_EDITOR_SET_PALETTE,
   PIXEL_EDITOR_ADD_TO_PALETTE,
   PIXEL_EDITOR_CHANGE_IMAGE,
+  PIXEL_EDITOR_RESET_IMAGE,
   PIXEL_EDITOR_SET_ACTIVE_FRAME,
   PIXEL_EDITOR_SET_IMAGE_NAME,
   PIXEL_EDITOR_CHANGE_TOOL_SIZE,
+  PIXEL_EDITOR_FILES_VISIBLE,
 } from '../actions'
 import { RGB, emptyPixel, equRGB, paletteFromImage } from '../utils/color'
 
@@ -92,10 +94,6 @@ function resizeFrames(state, w, h) {
 function resizePixel(oW, oH, oldPix, width, height) {
   var pixel =  emptyPixel(width, height)
 
-  // var oW = state.width
-  // var oH = state.height
-  // var oldPix = state.pixel
-
   for (var y = 0; y < Math.min(height, oH); y++) {
     for (var x = 0; x < Math.min(width, oW); x++) {
       const oldIdx = oW * y + x
@@ -122,9 +120,16 @@ const pixelEditor = (state = null, action) => {
     imagePalette: [],
     frameDelay: 500,
     imageName: "newImage",
+    filesVisible: true,
   }
 
   switch (action.type) {
+    case PIXEL_EDITOR_FILES_VISIBLE:
+      return {
+        ...state,
+        filesVisible: action.filesVisible
+      }
+
     case PIXEL_EDITOR_CHANGE_TOOL:
       return {
         ...state,
@@ -166,6 +171,18 @@ const pixelEditor = (state = null, action) => {
         height: action.image.height,
         imagePalette: paletteFromImage(action.image.frames),
         resizeFrames: null,
+      }
+
+    case PIXEL_EDITOR_RESET_IMAGE:
+      return {
+        ...state,
+        width: DEFAULT_WIDTH,
+        height: DEFAULT_HEIGHT,
+        frameIdx: 0,
+        frames: [emptyPixel(DEFAULT_WIDTH, DEFAULT_HEIGHT)],
+        palette: DEFAULT_PALETTE,
+        imagePalette: [],
+        imageName: "newImage",
       }
 
     case PIXEL_EDITOR_CHANGE_PIXEL:

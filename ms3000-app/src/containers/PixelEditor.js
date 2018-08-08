@@ -6,6 +6,7 @@ import {
   pixelEditorSetColor,
   pixelEditorChangeSize,
   pixelEditorChangeImage,
+  pixelEditorResetImage,
   pixelEditorSetActiveFrame,
   pixelEditorSetImageName,
   pixelEditorSetToolSize,
@@ -29,7 +30,7 @@ import { saveAs } from 'file-saver'
 import { connect } from "react-redux";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper, faSave, faFolderOpen, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper, faSave, faFolderOpen, faUpload, faRecycle, faForward, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 
 import './PixelEditor.css'
@@ -170,7 +171,6 @@ class PixelEditor extends Component {
       reader.onload = (evt) => {
         var arrayBuffer = evt.target.result;
         const i = Image.fromPNG(arrayBuffer)
-
         if (!i) {
           return
         }
@@ -183,6 +183,11 @@ class PixelEditor extends Component {
     }
     evt.target.value = null
   };
+
+  onClickNew = () => {
+    const { dispatch } = this.props
+    dispatch(pixelEditorResetImage())
+  }
 
   onClickUndo = () => {
     const { dispatch } = this.props
@@ -202,6 +207,12 @@ class PixelEditor extends Component {
       <div>
         <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
           <ul className="pure-menu-list">
+            <li className="pure-menu-item ToolsMenuTooltip">
+              <span className="ToolsMenuTooltipText">Reset</span>
+              <button className="pure-button" onClick={this.onClickNew}>
+                <FontAwesomeIcon icon={faRecycle} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+              </button>
+            </li>
             <li className="pure-menu-item">
               name: <StringInput value={imageName} max={32} onChange={this.onChangeName} />
             </li>
@@ -232,16 +243,28 @@ class PixelEditor extends Component {
                 </label>
               </button>
             </li>
+            <li className="pure-menu-item ToolsMenuTooltip">
+              <span className="ToolsMenuTooltipText" style={{width: "260px"}}>upload to MagicShifter</span>
+              <button className="pure-button" onClick={this.onUploadToShifter}>
+                <FontAwesomeIcon icon={faUpload} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+              </button>
+            </li>
 
             {enableUndo ?
-              <li className="pure-menu-item">
-                <button className="pure-button" onClick={this.onClickUndo}>undo</button>
+              <li className="pure-menu-item ToolsMenuTooltip">
+                <span className="ToolsMenuTooltipText">undo</span>
+                <button className="pure-button" onClick={this.onClickUndo}>
+                  <FontAwesomeIcon icon={faArrowLeft} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                </button>
               </li>
               : null}
 
             {enableRedo ?
-              <li className="pure-menu-item">
-                <button className="pure-button" onClick={this.onClickRedo}>redo</button>
+              <li className="pure-menu-item ToolsMenuTooltip">
+                <span className="ToolsMenuTooltipText">redo</span>
+                <button className="pure-button" onClick={this.onClickRedo}>
+                  <FontAwesomeIcon icon={faArrowRight} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                </button>
               </li>
               : null}
           </ul>

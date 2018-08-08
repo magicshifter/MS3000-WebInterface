@@ -9,14 +9,9 @@ import PixelEditor from './PixelEditor'
 import Navigation from './Navigation'
 import SocketCmdCenter from './SocketCmdCenter'
 
-//import FileSidebar from './FileSidebar'
+import Sidebar from '../components/Sidebar'
 
 import './App.css';
-import logo from '../logo.svg';
-
-
-import * as socketActions from '../actions/socket'
-import * as dg from 'dis-gui';
 
 
 class App extends Component {
@@ -26,43 +21,9 @@ class App extends Component {
     location: PropTypes.string.isRequired,
   }
 
-  // TODO: this must go to shadow state!
-  onChangeLightState = (newLightState) => {
-    const { shifterState, dispatch } = this.props
-    const newS = Object.assign({}, shifterState,
-      { modes: Object.assign({}, shifterState ? shifterState.modes : null, {light: newLightState})})
-    dispatch(receiveShifterState(newS))
-  }
-
-  onChangeAutoInterface = (newState, theType) => {
+  onChangeFilesSidebar = (newState, theType) => {
     const { dispatch } = this.props
     dispatch(receiveShifterState(newState))
-  }
-
-  handleRefreshClick = e => {
-    e.preventDefault()
-
-    const { dispatch } = this.props
-    dispatch(fetchShifterState())
-  }
-
-  handleTestDataClick = e => {
-    e.preventDefault()
-    const { dispatch } = this.props
-    var r = Math.floor(Math.random()*256)
-    var g = Math.floor(Math.random()*256)
-    var b = Math.floor(Math.random()*256)
-    dispatch(receiveShifterState({
-      modes: {
-        light: {
-          name: Math.random() < 0.4 ? "The Light" : Math.random() < 0.4 ? "Licht" : "MagicLight",
-          color: {
-            R: r, G: g, B: b
-          },
-          subMode: 2
-        }
-      }
-    }))
   }
 
   render() {
