@@ -26,12 +26,11 @@ import FrameList from '../components/PixelEditor/FrameList'
 import Image from '../ms3000/Image'
 
 import { saveAs } from 'file-saver'
+import { connect } from "react-redux";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper, faSave, faFolderOpen, faUpload } from '@fortawesome/free-solid-svg-icons'
 
-
-import {connect} from "react-redux";
-
-import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper } from '@fortawesome/free-solid-svg-icons'
 
 import './PixelEditor.css'
 
@@ -209,12 +208,17 @@ class PixelEditor extends Component {
             <li className="pure-menu-item">
               width: <NumberInput value={width} min={1} max={64} onChange={this.onChangeWidth} />
             </li>
-            <li className="pure-menu-item">
-              <button className="pure-button" onClick={this.onExportImage}>save</button>
+            <li className="pure-menu-item ToolsMenuTooltip">
+              <span className="ToolsMenuTooltipText" style={{width: "120px"}}>save as PNG</span>
+                <button className="pure-button" onClick={this.onExportImage}>
+                  <FontAwesomeIcon icon={faSave} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                </button>
             </li>
-            <li className="pure-menu-item">
+            <li className="pure-menu-item ToolsMenuTooltip">
+              <span className="ToolsMenuTooltipText" style={{width: "240px"}}>open PNG or MagicBitmap</span>
               <button className="pure-button" onClick={this.uploadClickHAck}>
-                <label htmlFor="ImportImage"><div>import</div>
+                <label htmlFor="ImportImage">
+                  <FontAwesomeIcon icon={faFolderOpen} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
                   <input
                     ref="fileUpload"
                     id="ImportImage"
