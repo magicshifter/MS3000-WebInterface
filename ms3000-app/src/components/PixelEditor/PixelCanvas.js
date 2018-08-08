@@ -30,6 +30,7 @@ export default class PixelCanvas extends Component {
     color: PropTypes.object.isRequired,
     pixel: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
+    onPick: PropTypes.func.isRequired,
     scale: PropTypes.number.isRequired,
   }
 
@@ -128,7 +129,7 @@ export default class PixelCanvas extends Component {
     const { onChange, color, toolSize, width, height } = this.props
     const p = this.getPos(evt)
 
-    console.log("pixeling")
+    //console.log("pixeling")
 
     const changes = []
     if (toolSize <= 1) {
@@ -170,6 +171,16 @@ export default class PixelCanvas extends Component {
     onChange(changes, { usedColor: color })
   }
 
+  usePickTool = (evt) => {
+    const { onPick } = this.props
+    var p = this.getPos(evt)
+
+    const color = this.getPixel(p.x, p.y)
+
+    onPick(color)
+  }
+
+
   useTool = (evt) => {
     const { tool } = this.props
     switch (tool) {
@@ -180,6 +191,10 @@ export default class PixelCanvas extends Component {
       case "fill":
         this.useFillTool(evt)
         break;
+
+      case 'pick':
+        this.usePickTool(evt)
+        break
 
       default:
         console.log("unknown tool", tool);
@@ -248,7 +263,7 @@ export default class PixelCanvas extends Component {
       seed: [x, y]
     });
 
-    console.log(result.flooded, result)
+    //console.log(result.flooded, result)
 
     return result.flooded
   }

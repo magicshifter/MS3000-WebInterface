@@ -4,7 +4,10 @@ import pb from '../utils/protoBufLoader'
 export const REQUEST_SHIFTER_STATE = 'REQUEST_SHIFTER_STATE'
 export const RECEIVE_SHIFTER_STATE = 'RECEIVE_SHIFTER_STATE'
 
+
 export const PIXEL_EDITOR_SET_PALETTE = "PIXEL_EDITOR_SET_PALETTE"
+export const PIXEL_EDITOR_ADD_TO_PALETTE = "PIXEL_EDITOR_ADD_TO_PALETTE"
+
 export const PIXEL_EDITOR_CHANGE_SIZE = "PIXEL_EDITOR_CHANGE_SIZE"
 export const PIXEL_EDITOR_CHANGE_IMAGE = "PIXEL_EDITOR_CHANGE_IMAGE"
 export const PIXEL_EDITOR_CHANGE_PIXEL = "CHANGE_PIXEL"
@@ -36,10 +39,17 @@ export const pixelEditorSetImageName = (name) => ({
   name
 })
 
+
 export const pixelEditorSetPalette = (palette) => ({
   type: PIXEL_EDITOR_SET_PALETTE,
   palette
 })
+
+export const pixelEditorAddToPalette = (color) => ({
+  type: PIXEL_EDITOR_ADD_TO_PALETTE,
+  color
+})
+
 
 export const pixelEditorSetColor = (color) => ({
   type: PIXEL_EDITOR_SET_COLOR,

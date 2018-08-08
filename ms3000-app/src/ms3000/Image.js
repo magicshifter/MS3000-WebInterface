@@ -45,12 +45,18 @@ export default class Image {
 
     const sizeX = png.width
     const sizeY = png.height
-    if (sizeY !== 16) {
-      alert("PNG must be 16 pixel high. the given one is " + sizeY)
+    // if (sizeY !== 16) {
+    //   alert("PNG must be 16 pixel high. the given one is " + sizeY)
+    //   return
+    // }
+
+    if (sizeY > 1000 || sizeX > 1000) {
+      alert("PNG is largert than 1000px no thanx! " + sizeX + "/" + sizeY)
       return
     }
 
-    const frames = []
+
+      const frames = []
     const pngRGBAs = UPNG.toRGBA8(png)
     for (var i = 0; i < pngRGBAs.length; i++) {
       const pngRGBA = new Uint8Array(pngRGBAs[i])

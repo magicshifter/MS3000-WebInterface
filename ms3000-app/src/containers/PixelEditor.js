@@ -8,7 +8,9 @@ import {
   pixelEditorChangeImage,
   pixelEditorSetActiveFrame,
   pixelEditorSetImageName,
-  pixelEditorSetToolSize
+  pixelEditorSetToolSize,
+  pixelEditorSetPalette,
+  pixelEditorAddToPalette
 } from '../actions'
 import { ActionCreators } from 'redux-undo';
 
@@ -48,7 +50,7 @@ const toolbarStructure = [
     icon: faEraser,
   },
   {
-    name: 'pickColor',
+    name: 'pick',
     icon: faEyeDropper,
   },
 ]
@@ -70,17 +72,20 @@ class PixelEditor extends Component {
     enableRedo: PropTypes.bool,
   }
 
-  shortcutsKeyDown = (e) => {
-    console.log("shortcutsKeyDown", e.keyCode)
+  shortcutsKeyDown = (evt) => {
+    //console.log("shortcutsKeyDown", evt.keyCodee)
 
-    if (e.ctrlKey) {
+    // ctrl for linux, win, meta for mac
+    if (evt.ctrlKey || evt.metaKey) {
       // Z
-      if (e.keyCode == 90) {
+      if (evt.keyCode === 90) {
+        evt.preventDefault()
         const { dispatch } = this.props
         dispatch(ActionCreators.undo())
       }
       // Y
-      else if (e.keyCode == 89) {
+      else if (evt.keyCode === 89) {
+        evt.preventDefault()
         const { dispatch } = this.props
         dispatch(ActionCreators.redo())
       }
@@ -100,9 +105,14 @@ class PixelEditor extends Component {
     dispatch(pixelEditorChangePixelList(pixelChanges, frameIdx))
   }
 
+  onChangePick = (color) => {
+    const { dispatch } = this.props
+    dispatch(pixelEditorAddToPalette(color))
+  }
+
   onChangePalette = (color) => {
     const { dispatch } = this.props
-    console.log("color selected in App from Palette", color)
+    //console.log("color selected in App from Palette", color)
     dispatch(pixelEditorSetColor(color))
   }
 
@@ -119,11 +129,11 @@ class PixelEditor extends Component {
   onChangeFrames = (newFrameIdx, newFrames) => {
     const { dispatch, width, height } = this.props
     if (newFrames) {
-      console.log("onChangeFrames newFrames")
+      //console.log("onChangeFrames newFrames")
       dispatch(pixelEditorChangeImage(new Image(width, height, newFrames), newFrameIdx))
     }
     else {
-      console.log("onChangeFrames only idx")
+      //console.log("onChangeFrames only idx")
       dispatch(pixelEditorSetActiveFrame(newFrameIdx))
     }
   }
@@ -155,7 +165,7 @@ class PixelEditor extends Component {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
-      console.log(file)
+      //console.log(file)
       let pName = file.name;
       var reader = new FileReader();
       reader.onload = (evt) => {
@@ -186,27 +196,18 @@ class PixelEditor extends Component {
   }
 
   render() {
-    const { width, height, tool, toolSize, color, frames, frameIdx, palette, imageName, enableRedo, enableUndo } = this.props
+    const { width, height, tool, toolSize, color, frames, frameIdx, palette, imagePalette, imageName, enableRedo, enableUndo } = this.props
     const pixel = frames[frameIdx]
 
     return (
       <div>
         <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
           <ul className="pure-menu-list">
-            <ToolsMenu structure={toolbarStructure} tool={tool} onChange={this.onClickTool}/>
-          </ul>
-          <ul className="pure-menu-list">
-            <ToolSizes sizes={toolSizes} value={toolSize} onChange={this.onClickToolSize}/>
-          </ul>
-          <ul className="pure-menu-list">
             <li className="pure-menu-item">
-              <ColorChooser color={color} onChange={this.onChangePalette}/>
+              name: <StringInput value={imageName} max={32} onChange={this.onChangeName} />
             </li>
             <li className="pure-menu-item">
               width: <NumberInput value={width} min={1} max={64} onChange={this.onChangeWidth} />
-            </li>
-            <li className="pure-menu-item">
-              name: <StringInput value={imageName} max={32} onChange={this.onChangeName} />
             </li>
             <li className="pure-menu-item">
               <button className="pure-button" onClick={this.onExportImage}>save</button>
@@ -241,6 +242,17 @@ class PixelEditor extends Component {
               : null}
           </ul>
         </div>
+        <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
+          <ul className="pure-menu-list">
+            <li className="pure-menu-item">
+              <ColorChooser color={color} onChange={this.onChangePalette}/>
+            </li>
+            <ToolsMenu structure={toolbarStructure} tool={tool} onChange={this.onClickTool}/>
+          </ul>
+          <ul className="pure-menu-list">
+            <ToolSizes sizes={toolSizes} value={toolSize} onChange={this.onClickToolSize}/>
+          </ul>
+        </div>
         <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
           <ul className="pure-menu-list">
             <FrameList frames={frames} width={width} height={height} activeFrame={frameIdx}
@@ -252,11 +264,16 @@ class PixelEditor extends Component {
             <ColorPalette palette={palette} onChange={this.onChangePalette} activeColor={color}/>
           </ul>
         </div>
+        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
+          <ul className="pure-menu-list">
+            <ColorPalette palette={imagePalette} onChange={this.onChangePalette} activeColor={color}/>
+          </ul>
+        </div>
         <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{paddingTop: "0px"}}>
           <ul className="pure-menu-list">
             {pixel ?
               <PixelCanvas width={width} height={height} tool={tool} toolSize={toolSize} color={color} pixel={pixel} scale={25}
-                           onChange={this.onChangePixel}/>
+                           onChange={this.onChangePixel} onPick={this.onChangePick}/>
               : <span>No Frames :( Are you happy now?!?</span>
             }
           </ul>
@@ -266,24 +283,24 @@ class PixelEditor extends Component {
   }
 
   onClickTool = (newTool) => {
-    console.log("PixelEditor tool menu changed", newTool)
+    //console.log("PixelEditor tool menu changed", newTool)
     const { dispatch } = this.props
     dispatch(pixelEditorSetTool(newTool))
   }
 
   onClickToolSize = (newToolSize) => {
-    console.log("PixelEditor tool size changed", newToolSize)
+    //console.log("PixelEditor tool size changed", newToolSize)
     const { dispatch } = this.props
     dispatch(pixelEditorSetToolSize(newToolSize))
   }
 }
 
 const mapStateToProps = state => {
-  const { width, height, color, tool, toolSize, frames, palette, frameIdx, imageName } = state.pixelEditor.present
+  const { width, height, color, tool, toolSize, frames, palette, imagePalette, frameIdx, imageName } = state.pixelEditor.present
   const { past, future } = state.pixelEditor
 
   return {
-    width, height, color, tool, toolSize, frames, palette, frameIdx, imageName,
+    width, height, color, tool, toolSize, frames, palette, imagePalette, frameIdx, imageName,
     enableUndo: past.length > 0,
     enableRedo: future.length > 0
   }

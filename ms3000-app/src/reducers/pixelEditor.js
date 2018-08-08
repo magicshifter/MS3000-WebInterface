@@ -5,12 +5,13 @@ import {
   PIXEL_EDITOR_SET_COLOR,
   PIXEL_EDITOR_CHANGE_SIZE,
   PIXEL_EDITOR_SET_PALETTE,
+  PIXEL_EDITOR_ADD_TO_PALETTE,
   PIXEL_EDITOR_CHANGE_IMAGE,
   PIXEL_EDITOR_SET_ACTIVE_FRAME,
   PIXEL_EDITOR_SET_IMAGE_NAME,
   PIXEL_EDITOR_CHANGE_TOOL_SIZE,
 } from '../actions'
-import { RGB, emptyPixel, equRGB } from '../utils/color'
+import { RGB, emptyPixel, equRGB, paletteFromImage } from '../utils/color'
 
 
 const DEFAULT_WIDTH = 16
@@ -118,6 +119,7 @@ const pixelEditor = (state = null, action) => {
     toolSize: 1,
     color: RGB(255, 255, 255),
     palette: DEFAULT_PALETTE,
+    imagePalette: [],
     frameDelay: 500,
     imageName: "newImage",
   }
@@ -148,20 +150,21 @@ const pixelEditor = (state = null, action) => {
       }
 
     case PIXEL_EDITOR_SET_ACTIVE_FRAME:
-      console.log("PIXEL_EDITOR_SET_ACTIVE_FRAME", action)
+      //console.log("PIXEL_EDITOR_SET_ACTIVE_FRAME", action)
       return {
         ...state,
         frameIdx: action.activeFrame
       }
 
     case PIXEL_EDITOR_CHANGE_IMAGE:
-      console.log("PIXEL_EDITOR_CHANGE_IMAGE", action)
+      //console.log("PIXEL_EDITOR_CHANGE_IMAGE", action)
       return {
         ...state,
         frameIdx: action.activeFrame,
         frames: action.image.frames,
         width: action.image.width,
         height: action.image.height,
+        imagePalette: paletteFromImage(action.image.frames),
         resizeFrames: null,
       }
 
@@ -194,6 +197,13 @@ const pixelEditor = (state = null, action) => {
       return {
         ...state,
         palette: action.palette
+      }
+
+    case PIXEL_EDITOR_ADD_TO_PALETTE:
+      //console.log("add palette", action)
+      return {
+        ...state,
+        palette: [...state.palette, action.color]
       }
 
     default:

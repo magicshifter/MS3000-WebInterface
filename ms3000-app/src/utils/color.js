@@ -42,13 +42,18 @@ export function avg(rgb) {
 }
 
 
-export function paletteFromImage(pixel) {
+export function paletteFromImage(frames) {
   const colors = {}
 
-  for (var i = 0; i < pixel.size; i++) {
-    var c = pixel.get(i)
-    var hex = hexFromRGB(c)
-    colors[hex] = true
+  console.log("paletteFromImag")
+
+  for (var fNr = 0; fNr < frames.length; fNr++) {
+    const pixel = frames[fNr]
+    for (var i = 0; i < pixel.size; i++) {
+      var c = pixel.get(i)
+      var hex = hexFromRGB(c)
+      colors[hex] = true
+    }
   }
 
   const keys = Object.keys(colors).sort((a, b) => {
