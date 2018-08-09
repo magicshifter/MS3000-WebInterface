@@ -1,7 +1,7 @@
 import { SIDEBAR_FILES_VISIBLE } from '../actions'
 
 
-const sidebar = (state = {filesVisible: false}, action) => {
+const sidebar = (state = {filesVisible: true}, action) => {
   switch (action.type) {
     case SIDEBAR_FILES_VISIBLE:
       return {

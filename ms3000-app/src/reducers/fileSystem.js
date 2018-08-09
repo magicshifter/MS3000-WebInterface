@@ -1,7 +1,13 @@
 import {  } from '../actions'
 
 const DEFAULT_STATE = {
-  files: ["index.html", "hello.txt", "mario.magicBitmap", "flower.magicBitmap", "oneup.magicBitmap"]
+  files: [
+    {name: "index.html", size: 1232},
+    {name: "hello.txt", size: 122},
+    {name: "mario.magicBitmap", size: 1032},
+    {name: "flower.magicBitmap", size: 1232},
+    {name: "oneup.magicBitmap", size: 1232},
+  ]
 }
 
 const fileSystem = (state = DEFAULT_STATE, action) => {
