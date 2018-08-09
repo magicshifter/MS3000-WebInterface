@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { defaultParseInt }  from '../../utils/types'
+import { defaultParseInt }  from '../utils/types'
 
 
 export default class Sidebar extends Component {
@@ -26,10 +26,16 @@ export default class Sidebar extends Component {
 
     const { enlarged } = this.props
 
+    const s = {
+      float: "left",
+      position: "absolute",
+      border: "3px solid green"
+    }
+
     if (enlarged) {
       return (
-        <div style={{float: "left", position: "absolute"}}>
-          {this.children}
+        <div style={s}>
+          {this.props.children}
           ;jalfkjdslkfjdslkfjlksd
           dsg'sdaglksjalg
           sdag;
@@ -41,7 +47,7 @@ export default class Sidebar extends Component {
     }
     else {
       return (
-        <div style={{float: "left", position: "absolute"}}>
+        <div style={s}>
           Click to show Files
         </div>
       )

@@ -30,7 +30,15 @@ import { saveAs } from 'file-saver'
 import { connect } from "react-redux";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper, faSave, faFolderOpen, faUpload, faRecycle, faForward, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper, faSave, faFolderOpen, faUpload, faRecycle,  faTint, faUndo, faRedo,
+
+  faCogs, faCloudDownloadAlt, faCloudUploadAlt,
+  faFile, // for new?
+  faPlusSquare, // add frame
+  faSyncAlt, // als spinner
+  faWifi,
+
+} from '@fortawesome/free-solid-svg-icons'
 
 
 import './PixelEditor.css'
@@ -43,7 +51,7 @@ const toolbarStructure = [
   },
   {
     name: 'fill',
-    icon: faPaintBrush,
+    icon: faTint,
   },
   {
     name: 'erase',
@@ -208,9 +216,9 @@ class PixelEditor extends Component {
         <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
           <ul className="pure-menu-list">
             <li className="pure-menu-item ToolsMenuTooltip">
-              <span className="ToolsMenuTooltipText">Reset</span>
+              <span className="ToolsMenuTooltipText" style={{width: "120px"}}>new Image</span>
               <button className="pure-button" onClick={this.onClickNew}>
-                <FontAwesomeIcon icon={faRecycle} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                <FontAwesomeIcon icon={faFile} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
               </button>
             </li>
             <li className="pure-menu-item">
@@ -254,7 +262,7 @@ class PixelEditor extends Component {
               <li className="pure-menu-item ToolsMenuTooltip">
                 <span className="ToolsMenuTooltipText">undo</span>
                 <button className="pure-button" onClick={this.onClickUndo}>
-                  <FontAwesomeIcon icon={faArrowLeft} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                  <FontAwesomeIcon icon={faUndo} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
                 </button>
               </li>
               : null}
@@ -263,7 +271,7 @@ class PixelEditor extends Component {
               <li className="pure-menu-item ToolsMenuTooltip">
                 <span className="ToolsMenuTooltipText">redo</span>
                 <button className="pure-button" onClick={this.onClickRedo}>
-                  <FontAwesomeIcon icon={faArrowRight} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                  <FontAwesomeIcon icon={faRedo} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
                 </button>
               </li>
               : null}

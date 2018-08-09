@@ -9,7 +9,9 @@ import PixelEditor from './PixelEditor'
 import Navigation from './Navigation'
 import SocketCmdCenter from './SocketCmdCenter'
 
-//import FileSidebar from './FileSidebar'
+import IconTest from '../components/IconTest'
+
+import FilesSidebar from './FilesSidebar'
 
 import './App.css';
 import logo from '../logo.svg';
@@ -79,7 +81,7 @@ class App extends Component {
 
       case "mode-Image":
         controls.push(<PixelEditor key="mImage" />)
-
+        controls.push(<FilesSidebar />)
         break;
 
       case "config":
@@ -108,6 +110,10 @@ class App extends Component {
             <pre> {JSON.stringify(shifterState, null, 2) }</pre>
 
           </div>)
+        break;
+
+      case "help":
+        controls.push(<IconTest />)
         break;
 
       default:
