@@ -203,10 +203,12 @@ export default class PixelCanvas extends Component {
   }
 
   onMouseDownCanvas = (evt) => {
+    evt.preventDefault()
     this.useTool(evt)
   }
 
   onMouseMoveCanvas = (evt) => {
+    evt.preventDefault()
     var p = this.getPos(evt)
     if (evt.buttons) {
       this.useTool(evt)
@@ -219,6 +221,7 @@ export default class PixelCanvas extends Component {
 
   // clearing tool preview
   onMouseLeaveCanvas = (evt) => {
+    evt.preventDefault()
     this.drawPixel()
   }
 
@@ -234,7 +237,7 @@ export default class PixelCanvas extends Component {
               onMouseDown={this.onMouseDownCanvas}
               onMouseMove={this.onMouseMoveCanvas}
               onMouseLeave={this.onMouseLeaveCanvas}
-              style={{border: "0px solid #FFFFFF"}}/>
+              style={{border: "0px solid #FFFFFF", userSelect: "none"}}/>
     )
   }
 

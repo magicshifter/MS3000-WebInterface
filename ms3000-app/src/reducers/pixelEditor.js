@@ -11,7 +11,6 @@ import {
   PIXEL_EDITOR_SET_ACTIVE_FRAME,
   PIXEL_EDITOR_SET_IMAGE_NAME,
   PIXEL_EDITOR_CHANGE_TOOL_SIZE,
-  PIXEL_EDITOR_FILES_VISIBLE,
 } from '../actions'
 import { RGB, emptyPixel, equRGB, paletteFromImage } from '../utils/color'
 
@@ -118,18 +117,11 @@ const pixelEditor = (state = null, action) => {
     color: RGB(255, 255, 255),
     palette: DEFAULT_PALETTE,
     imagePalette: [],
-    frameDelay: 500,
+    frameDelay: 500, // TODO: individual!!!
     imageName: "newImage",
-    filesVisible: true,
   }
 
   switch (action.type) {
-    case PIXEL_EDITOR_FILES_VISIBLE:
-      return {
-        ...state,
-        filesVisible: action.filesVisible
-      }
-
     case PIXEL_EDITOR_CHANGE_TOOL:
       return {
         ...state,

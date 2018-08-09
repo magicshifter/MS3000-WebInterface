@@ -222,10 +222,12 @@ class PixelEditor extends Component {
               </button>
             </li>
             <li className="pure-menu-item">
-              name: <StringInput value={imageName} max={32} onChange={this.onChangeName} />
+              &nbsp;
+              <StringInput value={imageName} max={32} onChange={this.onChangeName} placeholder="image name"/>
             </li>
             <li className="pure-menu-item">
-              width: <NumberInput value={width} min={1} max={64} onChange={this.onChangeWidth} />
+              &nbsp;
+              <NumberInput value={width} min={1} max={64} onChange={this.onChangeWidth} />&nbsp;px&nbsp;
             </li>
             <li className="pure-menu-item ToolsMenuTooltip">
               <span className="ToolsMenuTooltipText" style={{width: "120px"}}>save as PNG</span>

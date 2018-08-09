@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { fetchShifterState, receiveShifterState } from '../actions'
+import { sidebarFilesVisible } from '../actions'
 
 
 import Sidebar from '../components/Sidebar'
@@ -11,38 +11,30 @@ import './App.css';
 
 class FilesSidebar extends Component {
   static propTypes = {
-    isFetching: PropTypes.bool.isRequired,
-    shifterState :PropTypes.object,
-    location: PropTypes.string.isRequired,
+    filesVisible: PropTypes.bool.isRequired,
   }
 
-  onChangeFilesSidebar = (newState, theType) => {
-    const { dispatch } = this.props
-    dispatch(receiveShifterState(newState))
+  onChangeFilesSidebar = (newState) => {
+    const { dispatch, filesVisible } = this.props
+    dispatch(sidebarFilesVisible(newState))
   }
 
   render() {
-    const { isFetching, shifterState, location } = this.props
-
-    //console.log("render", isFetching, shifterState )
-
+    const { filesVisible } = this.props
 
     return (
-      <Sidebar enlarged={true} onChange={this.onChangeFilesSidebar}>
-       <p>Je mapelle Philipp</p>
+      <Sidebar enlarged={filesVisible} onChange={this.onChangeFilesSidebar} closedChildren={<div>Click to<br/>show Files</div>}>
+        <p>Hier kommen dann die Files<br/>die am Shifter lagern<br/>hello world!</p>
       </Sidebar>
     )
   }
 }
 
 const mapStateToProps = state => {
-  const { isFetching, shifterState } = state.ms3000
-  const { location } = state.navigation
+  const { filesVisible } = state.sidebar
 
   return {
-    isFetching,
-    shifterState,
-    location
+    filesVisible,
   }
 }
 

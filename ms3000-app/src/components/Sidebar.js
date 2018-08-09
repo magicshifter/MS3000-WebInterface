@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from "prop-types";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import IconButton from './inputs/IconButton'
+import { faPlus, faMinus} from '@fortawesome/free-solid-svg-icons'
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { defaultParseInt }  from '../utils/types'
 
@@ -8,47 +11,40 @@ import { defaultParseInt }  from '../utils/types'
 export default class Sidebar extends Component {
   static propTypes = {
     enlarged: PropTypes.bool.isRequired,
-    //children: PropTypes.any.isRequired,
+    closedChildren: PropTypes.any,
+    children: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
   }
 
   onClick = (evt) => {
-    const { onChange } = this.props
-    const tool = defaultParseInt(evt.currentTarget.dataset["size"], 1)
-
-    console.log("clicked ToolSizes", tool, evt.currentTarget)
-    onChange(tool)
+    const { onChange, enlarged } = this.props
+    onChange(!enlarged)
   }
 
 
   render() {
-    const controls = []
-
-    const { enlarged } = this.props
+    const { children, closedChildren, enlarged } = this.props
 
     const s = {
-      float: "left",
-      position: "absolute",
-      border: "3px solid green"
+      border: "3px solid green",
+      backgroundColor: 'white',
+
+      position: "absolute", top: 0, right: 0, "zIndex": 100
     }
 
     if (enlarged) {
       return (
         <div style={s}>
-          {this.props.children}
-          ;jalfkjdslkfjdslkfjlksd
-          dsg'sdaglksjalg
-          sdag;
-          dfs;hg<br/>
-          afd;h
-          fdlh;kljafldkfjdlsajfds
+          <IconButton icon={faMinus} tooltip='hide' onClick={this.onClick}/>
+          {children}
         </div>
       )
     }
     else {
       return (
         <div style={s}>
-          Click to show Files
+          <IconButton icon={faPlus} tooltip='enlarge' onClick={this.onClick}/>
+          {closedChildren}
         </div>
       )
     }

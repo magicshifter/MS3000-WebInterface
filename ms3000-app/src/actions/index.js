@@ -18,11 +18,9 @@ export const PIXEL_EDITOR_SET_COLOR = "PIXEL_EDITOR_SET_COLOR"
 export const PIXEL_EDITOR_SET_ACTIVE_FRAME = "PIXEL_EDITOR_SET_ACTIVE_FRAME"
 export const PIXEL_EDITOR_SET_IMAGE_NAME = "PIXEL_EDITOR_SET_IMAGE_NAME"
 
-export const PIXEL_EDITOR_FILES_VISIBLE = "PIXEL_EDITOR_FILES_VISIBLE"
-
-
 export const NAVIGATION_SET_LOCATION = 'NAVIGATION_SET_LOCATION'
 
+export const SIDEBAR_FILES_VISIBLE = "SIDEBAR_FILES_VISIBLE"
 
 
 
@@ -31,8 +29,8 @@ export const navigationSetLocation = (location) => ({
   location
 })
 
-export const pixelEditorFilesVisible = (filesVisible) => ({
-  type: PIXEL_EDITOR_FILES_VISIBLE,
+export const sidebarFilesVisible = (filesVisible) => ({
+  type: SIDEBAR_FILES_VISIBLE,
   filesVisible
 })
 

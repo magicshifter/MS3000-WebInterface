@@ -4,7 +4,8 @@ import fileSystem from './fileSystem'
 import pixelEditor from './pixelEditor'
 import navigation from './navigation'
 import sockets from './sockets'
+import sidebar from './sidebar'
 
 export default combineReducers({
-  ms3000, fileSystem, sockets, pixelEditor, navigation
+  ms3000, fileSystem, sidebar, sockets, pixelEditor, navigation
 })

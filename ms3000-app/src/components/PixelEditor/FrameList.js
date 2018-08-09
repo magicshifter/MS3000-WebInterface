@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from "prop-types";
 import PixelPreview from './PixelPreview'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faClone, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
+import IconButton from '../inputs/IconButton'
 
-import {emptyPixel} from '../../utils/color'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash, faClone, faArrowsAlt, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
+
+import { emptyPixel } from '../../utils/color'
 
 import './FrameList.css'
 
@@ -105,7 +107,7 @@ export default class FrameList extends Component {
         </li>)
 
       controls.push(
-        <li key={'f'+i} className={"pure-menu-item ToolsMenuTooltip " + className} data-frame={i} data-idx={i} ref={"i" + i}
+        <li key={'f'+i} className={"pure-menu-item " + className} data-frame={i} data-idx={i} ref={"i" + i}
             onClick={this.onClickFrame}
             draggable
             onDragStart={this.handleDragStartFrame}
@@ -144,9 +146,7 @@ export default class FrameList extends Component {
       </li>)
 
     controls.push(
-      <li key="add" className={"pure-menu-item ToolsMenuTooltip"}>
-        <button className="pure-button" onClick={this.onClickAddFrame}>+ Add Frame</button>
-      </li>
+      <IconButton key="add" icon={faPlusSquare} tooltip={"Add Frame"} onClick={this.onClickAddFrame}/>
     )
 
     return controls

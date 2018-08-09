@@ -7,6 +7,7 @@ export default class StringInput extends Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
+    placeholder: PropTypes.string,
     max: PropTypes.number,
   }
 
@@ -21,9 +22,10 @@ export default class StringInput extends Component {
   }
 
   render() {
-    const { value, min, max } = this.props
+    const { value, placeholder } = this.props
     return (
-      <input type='text' value={value} onChange={this.onChangeText} />
+      <input type='text' value={value} onChange={this.onChangeText}
+             placeholder={placeholder} aria-placeholder={placeholder} />
     )
   }
 }
