@@ -2,7 +2,7 @@
 export const fetch =
   ({ url, method = 'GET', json = false }) =>
     new Promise((resolve, reject) => {
-      const requestStart = new Date().getTime();
+      //const requestStart = new Date().getTime();
 
       const req = new window.XMLHttpRequest();
 

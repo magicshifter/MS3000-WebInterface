@@ -15,7 +15,9 @@ class App extends Component {
   }
 
   render() {
-
+    var r = Math.floor(Math.random()*256)
+    var g = Math.floor(Math.random()*256)
+    var b = Math.floor(Math.random()*256)
 
     var testObj = {
       modes: {
@@ -24,7 +26,7 @@ class App extends Component {
           name: "light evil hacked",
           subMode: protobufs.MS3KG.Modes.Light.LightMode.SCANNER_RGB,
           color: {
-            R: 0, G: 255, B: 255
+            R: r, G: g, B: b
           }
         }
       },
@@ -33,7 +35,7 @@ class App extends Component {
     var check = protobufs.MS3KG.verify(testObj);
 
     var bufferU8 = protobufs.MS3KG.encode(testObj).finish()
-    var decoder = new TextDecoder('utf8');
+    //var decoder = new TextDecoder('utf8');
 
     var funkyStr = String.fromCharCode.apply(null, bufferU8)
 
