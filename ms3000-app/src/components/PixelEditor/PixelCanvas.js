@@ -34,6 +34,9 @@ export default class PixelCanvas extends Component {
     scale: PropTypes.number.isRequired,
   }
 
+
+
+
   constructor(props) {
     super(props)
   }
@@ -233,11 +236,13 @@ export default class PixelCanvas extends Component {
     const ch = height * scale
 
     return (
-      <canvas ref="canvas" width={cw} height={ch}
-              onMouseDown={this.onMouseDownCanvas}
-              onMouseMove={this.onMouseMoveCanvas}
-              onMouseLeave={this.onMouseLeaveCanvas}
-              style={{border: "0px solid #FFFFFF", userSelect: "none"}}/>
+      <div style={{width: '100%', flex: "1 1 auto", backgroundColor:'green'}} className="pure-menu pure-menu-horizontal pure-menu-scrollable">
+        <canvas ref="canvas" width={cw} height={ch}
+                onMouseDown={this.onMouseDownCanvas}
+                onMouseMove={this.onMouseMoveCanvas}
+                onMouseLeave={this.onMouseLeaveCanvas}
+                style={{border: "0px solid #FFFFFF", userSelect: "none"}}/>
+      </div>
     )
   }
 

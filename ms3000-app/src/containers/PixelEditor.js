@@ -186,6 +186,9 @@ class PixelEditor extends Component {
         const { dispatch } = this.props
         dispatch(pixelEditorChangeImage(i))
 
+
+        dispatch(pixelEditorSetImageName(pName))
+
       }
       reader.readAsArrayBuffer(file) // start async operation
     }
@@ -212,109 +215,107 @@ class PixelEditor extends Component {
     const pixel = frames[frameIdx]
 
     return (
-      <div>
-        <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
-          <ul className="pure-menu-list">
-            <li className="pure-menu-item ToolsMenuTooltip">
-              <span className="ToolsMenuTooltipText" style={{width: "120px"}}>new Image</span>
-              <button className="pure-button" onClick={this.onClickNew}>
-                <FontAwesomeIcon icon={faFile} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
-              </button>
-            </li>
-            <li className="pure-menu-item">
-              &nbsp;
-              <StringInput value={imageName} max={32} onChange={this.onChangeName} placeholder="image name"/>
-            </li>
-            <li className="pure-menu-item">
-              &nbsp;
-              <NumberInput value={width} min={1} max={64} onChange={this.onChangeWidth} />&nbsp;px&nbsp;
-            </li>
-            <li className="pure-menu-item ToolsMenuTooltip">
-              <span className="ToolsMenuTooltipText" style={{width: "120px"}}>save as PNG</span>
-                <button className="pure-button" onClick={this.onExportImage}>
-                  <FontAwesomeIcon icon={faSave} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
-                </button>
-            </li>
-            <li className="pure-menu-item ToolsMenuTooltip">
-              <span className="ToolsMenuTooltipText" style={{width: "240px"}}>open PNG or MagicBitmap</span>
-              <button className="pure-button" onClick={this.uploadClickHAck}>
-                <label htmlFor="ImportImage">
-                  <FontAwesomeIcon icon={faFolderOpen} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
-                  <input
-                    ref="fileUpload"
-                    id="ImportImage"
-                    style={{display:"none"}}
-                    multiple
-                    type="file"
-                    name="file"
-                    accept=".png,.magicBitmap"
-                    onChange={this.onImportImage}
-                  />
-                </label>
-              </button>
-            </li>
-            <li className="pure-menu-item ToolsMenuTooltip">
-              <span className="ToolsMenuTooltipText" style={{width: "260px"}}>upload to MagicShifter</span>
-              <button className="pure-button" onClick={this.onUploadToShifter}>
-                <FontAwesomeIcon icon={faUpload} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
-              </button>
-            </li>
-
-            {enableUndo ?
+      <div style={{display: 'flex', flexFlow: 'column', flex: '1 1 auto'}}>
+        <div style={{flex: '0 1 auto'}}>
+          <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
+            <ul className="pure-menu-list">
               <li className="pure-menu-item ToolsMenuTooltip">
-                <span className="ToolsMenuTooltipText">undo</span>
-                <button className="pure-button" onClick={this.onClickUndo}>
-                  <FontAwesomeIcon icon={faUndo} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                <span className="ToolsMenuTooltipText" style={{width: "120px"}}>new Image</span>
+                <button className="pure-button" onClick={this.onClickNew}>
+                  <FontAwesomeIcon icon={faFile} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
                 </button>
               </li>
-              : null}
-
-            {enableRedo ?
+              <li className="pure-menu-item">
+                &nbsp;
+                <StringInput value={imageName} max={32} onChange={this.onChangeName} placeholder="image name"/>
+              </li>
+              <li className="pure-menu-item">
+                &nbsp;
+                <NumberInput value={width} min={1} max={64} onChange={this.onChangeWidth} />&nbsp;px&nbsp;
+              </li>
               <li className="pure-menu-item ToolsMenuTooltip">
-                <span className="ToolsMenuTooltipText">redo</span>
-                <button className="pure-button" onClick={this.onClickRedo}>
-                  <FontAwesomeIcon icon={faRedo} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                <span className="ToolsMenuTooltipText" style={{width: "120px"}}>save as PNG</span>
+                  <button className="pure-button" onClick={this.onExportImage}>
+                    <FontAwesomeIcon icon={faSave} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                  </button>
+              </li>
+              <li className="pure-menu-item ToolsMenuTooltip">
+                <span className="ToolsMenuTooltipText" style={{width: "240px"}}>open PNG or MagicBitmap</span>
+                <button className="pure-button" onClick={this.uploadClickHAck}>
+                  <label htmlFor="ImportImage">
+                    <FontAwesomeIcon icon={faFolderOpen} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                    <input
+                      ref="fileUpload"
+                      id="ImportImage"
+                      style={{display:"none"}}
+                      multiple
+                      type="file"
+                      name="file"
+                      accept=".png,.magicBitmap"
+                      onChange={this.onImportImage}
+                    />
+                  </label>
                 </button>
               </li>
-              : null}
-          </ul>
+              <li className="pure-menu-item ToolsMenuTooltip">
+                <span className="ToolsMenuTooltipText" style={{width: "260px"}}>upload to MagicShifter</span>
+                <button className="pure-button" onClick={this.onUploadToShifter}>
+                  <FontAwesomeIcon icon={faUpload} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                </button>
+              </li>
+
+              {enableUndo ?
+                <li className="pure-menu-item ToolsMenuTooltip">
+                  <span className="ToolsMenuTooltipText">undo</span>
+                  <button className="pure-button" onClick={this.onClickUndo}>
+                    <FontAwesomeIcon icon={faUndo} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                  </button>
+                </li>
+                : null}
+
+              {enableRedo ?
+                <li className="pure-menu-item ToolsMenuTooltip">
+                  <span className="ToolsMenuTooltipText">redo</span>
+                  <button className="pure-button" onClick={this.onClickRedo}>
+                    <FontAwesomeIcon icon={faRedo} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                  </button>
+                </li>
+                : null}
+            </ul>
+          </div>
+          <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
+            <ul className="pure-menu-list">
+              <li className="pure-menu-item">
+                <ColorChooser color={color} onChange={this.onChangePalette}/>
+              </li>
+              <ToolsMenu structure={toolbarStructure} tool={tool} onChange={this.onClickTool}/>
+            </ul>
+            <ul className="pure-menu-list">
+              <ToolSizes sizes={toolSizes} value={toolSize} onChange={this.onClickToolSize}/>
+            </ul>
+          </div>
+          <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
+            <ul className="pure-menu-list">
+              <FrameList frames={frames} width={width} height={height} activeFrame={frameIdx}
+                         onChange={this.onChangeFrames} />
+            </ul>
+          </div>
+          <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
+            <ul className="pure-menu-list">
+              <ColorPalette palette={palette} onChange={this.onChangePalette} activeColor={color}/>
+            </ul>
+          </div>
+          <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
+            <ul className="pure-menu-list">
+              <ColorPalette palette={imagePalette} onChange={this.onChangePalette} activeColor={color}/>
+            </ul>
+          </div>
         </div>
-        <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
-          <ul className="pure-menu-list">
-            <li className="pure-menu-item">
-              <ColorChooser color={color} onChange={this.onChangePalette}/>
-            </li>
-            <ToolsMenu structure={toolbarStructure} tool={tool} onChange={this.onClickTool}/>
-          </ul>
-          <ul className="pure-menu-list">
-            <ToolSizes sizes={toolSizes} value={toolSize} onChange={this.onClickToolSize}/>
-          </ul>
-        </div>
-        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
-          <ul className="pure-menu-list">
-            <FrameList frames={frames} width={width} height={height} activeFrame={frameIdx}
-                       onChange={this.onChangeFrames} />
-          </ul>
-        </div>
-        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
-          <ul className="pure-menu-list">
-            <ColorPalette palette={palette} onChange={this.onChangePalette} activeColor={color}/>
-          </ul>
-        </div>
-        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
-          <ul className="pure-menu-list">
-            <ColorPalette palette={imagePalette} onChange={this.onChangePalette} activeColor={color}/>
-          </ul>
-        </div>
-        <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{paddingTop: "0px"}}>
-          <ul className="pure-menu-list">
-            {pixel ?
-              <PixelCanvas width={width} height={height} tool={tool} toolSize={toolSize} color={color} pixel={pixel} scale={25}
-                           onChange={this.onChangePixel} onPick={this.onChangePick}/>
-              : <span>No Frames :( Are you happy now?!?</span>
-            }
-          </ul>
-        </div>
+        {pixel ?
+          <PixelCanvas width={width} height={height} tool={tool} toolSize={toolSize} color={color} pixel={pixel} scale={25}
+                       onChange={this.onChangePixel} onPick={this.onChangePick}/>
+          : <span>No Frames :( Are you happy now?!?</span>
+        }
       </div>
     )
   }

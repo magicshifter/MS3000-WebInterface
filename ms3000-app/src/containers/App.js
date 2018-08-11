@@ -76,12 +76,12 @@ class App extends Component {
 
     switch (location) {
       case "wifi":
-        controls.push(<SocketCmdCenter />)
+        controls.push(<SocketCmdCenter key='soc'/>)
         break;
 
       case "mode-Image":
+        controls.push(<FilesSidebar key='fS'/>)
         controls.push(<PixelEditor key="mImage" />)
-        controls.push(<FilesSidebar />)
         break;
 
       case "config":
@@ -113,15 +113,15 @@ class App extends Component {
         break;
 
       case "help":
-        controls.push(<IconTest />)
+        controls.push(<IconTest key='icontest' />)
         break;
 
       default:
-        controls.push(<div key={"uknw"}>MS3000 Error 404 Unknown location: {location}</div>)
+        controls.push(<div key="uknw">MS3000 Error 404 Unknown location: {location}</div>)
     }
 
     return (
-      <div>
+      <div style={{width: '100%', height:'100%', display: 'flex', flexFlow: 'column'}}>
         <Navigation/>
         {controls}
       </div>

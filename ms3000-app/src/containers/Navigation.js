@@ -53,7 +53,7 @@ class Navigation extends Component {
     }
 
     return (
-      <div className="pure-menu pure-menu-horizontal" style={{padding: "0px"}}>
+      <div className="pure-menu pure-menu-horizontal" style={{padding: "0px", flex: '0 1 auto'}}>
         <ul className="pure-menu-list">
           {controls}
         </ul>

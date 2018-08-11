@@ -42,6 +42,13 @@ export default class ColorPalette extends Component {
     onChange(color)
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.palette !== nextProps.palette || this.props.activeColor !== nextProps.activeColor) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     const controls = []
 
@@ -55,6 +62,6 @@ export default class ColorPalette extends Component {
       )
     }
 
-    return controls
+    return <span>{controls}</span>
   }
 }
