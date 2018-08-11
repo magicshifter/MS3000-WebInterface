@@ -26,14 +26,14 @@
     "redux-saga": "^0.16.0",
     "redux-thunk": "^2.3.0",
     "redux-undo": "^0.6.1",
-    "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1",
     "upng-js": "^2.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "koa": "^2.5.2",
-    "koa-socket": "^4.4.0"
+    "koa-socket": "^4.4.0",
+    "socket.io": "^2.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
