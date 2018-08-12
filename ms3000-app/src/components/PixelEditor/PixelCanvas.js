@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { hexFromRGB, shadeRGB, equRGB } from "../../utils/color"
 import floodFill from "n-dimensional-flood-fill"
 
+//import { ResizeSensor } from 'css-element-queries'
+
 
 
 function toolSL(size) {
@@ -112,22 +114,46 @@ export default class PixelCanvas extends Component {
     }
   }
 
+  onResize = () => {
+    const {div} = this.refs
+    let dW = div.clientWidth;
+    let dH = div.clientHeight;
 
+    console.log("resize". dW, dH)
 
+    this.canvas.width = dW
+    this.canvas.height = dH
+
+    const { width, height } = this.props
+
+    const sW = Math.floor(dW/width)
+    const sH = Math.floor(dH/height)
+    const scale = Math.min(sW, sH)
+    this.scale = scale
+
+    this.drawPixel()
+  }
 
   componentDidMount() {
     var c = this.refs.canvas
     this.canvas = c
 
-    this.setupTouch(c)
-
     var ctx = c.getContext("2d");
     this.canvasContext = ctx
 
-    this.drawPixel()
+    this.setupTouch(c)
+
+    //this.resizeSensor = new ResizeSensor(c, this.refs.div);
+    window.addEventListener("resize", this.onResize, false);
+    this.onResize();
+
+    //this.drawPixel()
   }
 
   componentWillUnmount() {
+    //this.resizeSensor.detach(this.canvas)
+    window.removeEventListener("resize", this.onResize, false);
+
     var c = this.canvas
     this.disposeTouch(c)
     this.canvas = null
@@ -147,8 +173,11 @@ export default class PixelCanvas extends Component {
   drawPixel = () => {
     var index = 0
 
-    const { pixel, width, height, scale } = this.props
+    const { pixel, width, height } = this.props
     const ctx = this.canvasContext
+
+    const { scale } = this
+
 
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
@@ -160,7 +189,9 @@ export default class PixelCanvas extends Component {
   }
 
   forToolArea = (X, Y, fn) => {
-    const { color, scale, toolSize} = this.props
+    const { toolSize} = this.props
+
+
     for (var xx = toolSL(toolSize); xx < toolSR(toolSize); xx++) {
       for (var yy = toolSL(toolSize); yy < toolSR(toolSize); yy++) {
         const x = X + xx
@@ -184,7 +215,10 @@ export default class PixelCanvas extends Component {
   }
 
   drawToolFn = (x, y, rgb) => {
-    const { color, scale } = this.props
+    const { color } = this.props
+
+    const { scale } = this
+
     const ctx = this.canvasContext
     if (!equRGB(rgb, color)) {
       const shaded = shadeRGB(rgb)
@@ -194,11 +228,14 @@ export default class PixelCanvas extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    this.drawPixel()
+    this.onResize();
+    //this.drawPixel()
   }
 
   getPos = (evt) => {
-    let { width, height, scale } = this.props
+    let { width, height } = this.props
+    const { scale } = this
+
     var p = getMousePos(this.refs.canvas, evt)
 
     var px = Math.floor(p.x / scale)
@@ -313,15 +350,17 @@ export default class PixelCanvas extends Component {
   }
 
   render() {
-    let { width, height, scale } = this.props
+    let { width, height } = this.props
 
 
-    const cw = width * scale
-    const ch = height * scale
+
+    // const cw = width * scale
+    // const ch = height * scale
 
     return (
-      <div style={{width: '100%', flex: "1 1 auto", backgroundColor:'green'}} className="pure-menu pure-menu-horizontal pure-menu-scrollable">
-        <canvas ref="canvas" width={cw} height={ch}
+      <div ref='div' style={{width: '100%', flex: "1 1 auto", backgroundColor:'gray'}}
+           className="pure-menu pure-menu-horizontal pure-menu-scrollable">
+        <canvas ref="canvas"
                 onMouseDown={this.onMouseDownCanvas}
                 onMouseMove={this.onMouseMoveCanvas}
                 onMouseLeave={this.onMouseLeaveCanvas}

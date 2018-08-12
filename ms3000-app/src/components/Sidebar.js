@@ -26,12 +26,14 @@ export default class Sidebar extends Component {
 
 
   render() {
-    const { children, enlarged, icon, tooltip, float, top, bottom, left, right } = this.props
+    const { children, enlarged, icon, tooltip, float, top, bottom, left, right, width } = this.props
 
     console.log("rnder side", this.props)
 
     const s = {
       border: "3px solid ivory",
+      backgroundColor: 'black',
+      width,
       //float, "zIndex": 100, width: '400px'
       position: "absolute", top, right, bottom, left, "zIndex": 100
     }

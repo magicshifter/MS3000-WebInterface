@@ -25,6 +25,7 @@ import StringInput from '../components/inputs/StringInput'
 import NumberInput from '../components/inputs/NumberInput'
 import FrameList from '../components/PixelEditor/FrameList'
 import Collapsable from '../components/Collapsable'
+import Sidebar from '../components/Sidebar'
 
 import Image from '../ms3000/Image'
 
@@ -33,7 +34,7 @@ import { connect } from "react-redux";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper, faSave, faFolderOpen, faUpload, faRecycle,  faTint, faUndo, faRedo, faPalette,
-
+  faArrowsAlt,
   faCogs, faCloudDownloadAlt, faCloudUploadAlt,
   faFile, // for new?
   faPlusSquare, // add frame
@@ -59,6 +60,10 @@ const toolbarStructure = [
   {
     name: 'erase',
     icon: faEraser,
+  },
+  {
+    name: 'move',
+    icon: faArrowsAlt,
   },
   {
     name: 'pick',
@@ -225,7 +230,7 @@ class PixelEditor extends Component {
     return (
       <div style={{display: 'flex', flexFlow: 'column', flex: '1 1 auto'}}>
         <Collapsable enlarged={toolsVisible} onChange={this.onChangeToolsSidebar} icon={faPalette} tooltip='Draw Tools'
-          float="right">
+          float="right" top={"3em"} left='1em' width='95%'>
           <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
             <ul className="pure-menu-list">
               <li className="pure-menu-item ToolsMenuTooltip">
