@@ -21,6 +21,7 @@ export const PIXEL_EDITOR_SET_IMAGE_NAME = "PIXEL_EDITOR_SET_IMAGE_NAME"
 export const NAVIGATION_SET_LOCATION = 'NAVIGATION_SET_LOCATION'
 
 export const SIDEBAR_FILES_VISIBLE = "SIDEBAR_FILES_VISIBLE"
+export const SIDEBAR_TOOLS_VISIBLE = "SIDEBAR_TOOLS_VISIBLE"
 
 
 
@@ -32,6 +33,11 @@ export const navigationSetLocation = (location) => ({
 export const sidebarFilesVisible = (filesVisible) => ({
   type: SIDEBAR_FILES_VISIBLE,
   filesVisible
+})
+
+export const sidebarToolsVisible = (toolsVisible) => ({
+  type: SIDEBAR_TOOLS_VISIBLE,
+  toolsVisible
 })
 
 export const pixelEditorSetTool = (tool) => ({

@@ -8,7 +8,7 @@ import { faPlus, faMinus} from '@fortawesome/free-solid-svg-icons'
 import { defaultParseInt }  from '../utils/types'
 
 
-export default class Sidebar extends Component {
+export default class Collapsable extends Component {
   static propTypes = {
     enlarged: PropTypes.bool.isRequired,
     closedChildren: PropTypes.any,
@@ -32,14 +32,14 @@ export default class Sidebar extends Component {
 
     const s = {
       border: "3px solid ivory",
-      //float, "zIndex": 100, width: '400px'
-      position: "absolute", top, right, bottom, left, "zIndex": 100
+      float
+      //position: "absolute", top, right, bottom, left, "zIndex": 100
     }
 
     return (
       <div style={s}>
 
-            <IconButton icon={icon} tooltip={tooltip} onClick={this.onClick}/>
+        <IconButton icon={icon} tooltip={tooltip} onClick={this.onClick}/>
 
         {enlarged ? children : null}
       </div>

@@ -7,6 +7,11 @@ import { sidebarFilesVisible } from '../actions'
 import Sidebar from '../components/Sidebar'
 import SelectableList from '../components/inputs/SelectableList'
 
+import { faFolder
+
+} from '@fortawesome/free-solid-svg-icons'
+
+
 import './App.css';
 
 
@@ -24,7 +29,8 @@ class FilesSidebar extends Component {
     const { filesVisible, files } = this.props
 
     return (
-      <Sidebar enlarged={filesVisible} onChange={this.onChangeFilesSidebar} closedChildren={<div>Click to<br/>show Files</div>}>
+      <Sidebar enlarged={filesVisible} onChange={this.onChangeFilesSidebar} icon={faFolder} tooltip='MS3000 Filesystem'
+        right={0} top={0} >
         <p>Hier kommen dann die Files<br/>die am Shifter lagern<br/>hello world!</p>
         <SelectableList listItems={files} fieldId='name' fieldText='name' lines={20}
                         select={this.selectFile} doubleClick={this.doubleClickFile}  />

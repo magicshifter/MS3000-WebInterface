@@ -17,6 +17,11 @@ input {
     color: white;
 }
 
+button {
+    background-color: #129FEA;
+    color: white;
+}
+
 #root {
     width: 100%;
     height: 100%;

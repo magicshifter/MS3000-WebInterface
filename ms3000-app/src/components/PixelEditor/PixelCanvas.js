@@ -21,6 +21,11 @@ function getMousePos(canvas, evt) {
   };
 }
 
+
+function copyTouch(touch) {
+  return { identifier: touch.identifier, pageX: touch.pageX, pageY: touch.pageY, force: touch.force, radiusX: touch.radiusX };
+}
+
 export default class PixelCanvas extends Component {
   static propTypes = {
     width: PropTypes.number.isRequired,
@@ -41,12 +46,91 @@ export default class PixelCanvas extends Component {
     super(props)
   }
 
+
+
+
+
+  setupTouch = (el) => {
+    this.touches = {};
+
+    el.addEventListener("touchstart",   this.handleTouchStart, false);
+    el.addEventListener("touchend",     this.handleTouchEnd, false);
+    el.addEventListener("touchcancel",  this.handleTouchCancel, false);
+    el.addEventListener("touchmove",    this.handleTouchMove, false);
+  }
+
+  disposeTouch = (el) => {
+    this.touches = {};
+
+
+    el.removeEventListener("touchstart",  this.handleTouchStart, false);
+    el.removeEventListener("touchend",    this.handleTouchEnd, false);
+    el.removeEventListener("touchcancel", this.handleTouchCancel, false);
+    el.removeEventListener("touchmove",   this.handleTouchMove, false);
+  }
+
+  handleTouchStart = (evt) => {
+    //this.ensureFullscreen()
+
+    evt.preventDefault();
+    const touches = evt.changedTouches;
+
+    for (let i = 0; i < touches.length; i++) {
+      const touch = touches[i];
+      //console.log("touchstart: ", i, touch);
+      this.touches[touch.identifier] = copyTouch(touch);
+    }
+  }
+
+  handleTouchMove = (evt) => {
+    evt.preventDefault();
+    const touches = evt.changedTouches;
+
+    for (let i = 0; i < touches.length; i++) {
+      const touch = touches[i];
+      this.touches[touch.identifier] = copyTouch(touch)
+    }
+  }
+
+  handleTouchEnd = (evt) => {
+    evt.preventDefault();
+    const touches = evt.changedTouches;
+
+    for (var i = 0; i < touches.length; i++) {
+      const touch = touches[i];
+      delete this.touches[touch.identifier]
+    }
+  }
+
+  handleTouchCancel = (evt) => {
+    evt.preventDefault();
+    const touches = evt.changedTouches;
+
+    for (var i = 0; i < touches.length; i++) {
+      const touch = touches[i];
+      delete this.touches[touch.identifier]
+    }
+  }
+
+
+
+
   componentDidMount() {
     var c = this.refs.canvas
+    this.canvas = c
+
+    this.setupTouch(c)
+
     var ctx = c.getContext("2d");
     this.canvasContext = ctx
 
     this.drawPixel()
+  }
+
+  componentWillUnmount() {
+    var c = this.canvas
+    this.disposeTouch(c)
+    this.canvas = null
   }
 
   getPixel = (x, y) => {

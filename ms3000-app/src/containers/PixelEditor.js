@@ -11,7 +11,8 @@ import {
   pixelEditorSetImageName,
   pixelEditorSetToolSize,
   pixelEditorSetPalette,
-  pixelEditorAddToPalette
+  pixelEditorAddToPalette,
+  sidebarToolsVisible, sidebarFilesVisible
 } from '../actions'
 import { ActionCreators } from 'redux-undo';
 
@@ -23,6 +24,7 @@ import ColorChooser from '../components/PixelEditor/ColorChooser'
 import StringInput from '../components/inputs/StringInput'
 import NumberInput from '../components/inputs/NumberInput'
 import FrameList from '../components/PixelEditor/FrameList'
+import Collapsable from '../components/Collapsable'
 
 import Image from '../ms3000/Image'
 
@@ -30,7 +32,7 @@ import { saveAs } from 'file-saver'
 import { connect } from "react-redux";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper, faSave, faFolderOpen, faUpload, faRecycle,  faTint, faUndo, faRedo,
+import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper, faSave, faFolderOpen, faUpload, faRecycle,  faTint, faUndo, faRedo, faPalette,
 
   faCogs, faCloudDownloadAlt, faCloudUploadAlt,
   faFile, // for new?
@@ -42,6 +44,7 @@ import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper, faSave, faFolderOpen
 
 
 import './PixelEditor.css'
+import {faFolder} from "@fortawesome/free-solid-svg-icons/index";
 
 
 const toolbarStructure = [
@@ -210,13 +213,19 @@ class PixelEditor extends Component {
     dispatch(ActionCreators.redo())
   }
 
+  onChangeToolsSidebar = (newState) => {
+    const { dispatch } = this.props
+    dispatch(sidebarToolsVisible(newState))
+  }
+
   render() {
-    const { width, height, tool, toolSize, color, frames, frameIdx, palette, imagePalette, imageName, enableRedo, enableUndo } = this.props
+    const { width, height, tool, toolSize, color, frames, frameIdx, palette, imagePalette, imageName, enableRedo, enableUndo, toolsVisible } = this.props
     const pixel = frames[frameIdx]
 
     return (
       <div style={{display: 'flex', flexFlow: 'column', flex: '1 1 auto'}}>
-        <div style={{flex: '0 1 auto'}}>
+        <Collapsable enlarged={toolsVisible} onChange={this.onChangeToolsSidebar} icon={faPalette} tooltip='Draw Tools'
+          float="right">
           <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
             <ul className="pure-menu-list">
               <li className="pure-menu-item ToolsMenuTooltip">
@@ -310,7 +319,7 @@ class PixelEditor extends Component {
               <ColorPalette palette={imagePalette} onChange={this.onChangePalette} activeColor={color}/>
             </ul>
           </div>
-        </div>
+        </Collapsable>
         {pixel ?
           <PixelCanvas width={width} height={height} tool={tool} toolSize={toolSize} color={color} pixel={pixel} scale={25}
                        onChange={this.onChangePixel} onPick={this.onChangePick}/>
@@ -336,9 +345,11 @@ class PixelEditor extends Component {
 const mapStateToProps = state => {
   const { width, height, color, tool, toolSize, frames, palette, imagePalette, frameIdx, imageName } = state.pixelEditor.present
   const { past, future } = state.pixelEditor
+  const { toolsVisible } = state.sidebar
 
   return {
     width, height, color, tool, toolSize, frames, palette, imagePalette, frameIdx, imageName,
+    toolsVisible,
     enableUndo: past.length > 0,
     enableRedo: future.length > 0
   }
