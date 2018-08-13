@@ -249,9 +249,12 @@ export default class PixelCanvas extends Component {
 
     return {x: px, y: py}
   }
+  
 
-  useDrawTool = (evt) => {
-    const { onChange, color, toolSize, width, height } = this.props
+  static black = { r:0, g: 0, b: 0 }
+
+  useDrawToolInternal = (evt, color) => {
+    const { onChange, toolSize, width, height } = this.props
     const p = this.getPos(evt)
 
     //console.log("pixeling")
@@ -323,10 +326,14 @@ export default class PixelCanvas extends Component {
 
 
   useTool = (evt, type) => {
-    const { tool } = this.props
+    const { tool, color } = this.props
     switch (tool) {
       case "draw":
-        this.useDrawTool(evt)
+        this.useDrawToolInternal(evt, color)
+        break;
+
+      case "erase":
+        this.useDrawToolInternal(evt, PixelCanvas.black)
         break;
 
       case "fill":
