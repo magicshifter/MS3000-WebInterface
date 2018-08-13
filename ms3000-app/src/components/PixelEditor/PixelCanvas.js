@@ -191,8 +191,6 @@ export default class PixelCanvas extends Component {
 
   forToolArea = (X, Y, fn) => {
     const { toolSize} = this.props
-
-
     for (var xx = toolSL(toolSize); xx < toolSR(toolSize); xx++) {
       for (var yy = toolSL(toolSize); yy < toolSR(toolSize); yy++) {
         const x = X + xx
@@ -207,15 +205,16 @@ export default class PixelCanvas extends Component {
     }
   }
 
-  drawTool = (x, y) => {
+  drawTheTool = (x, y) => {
     const { color, tool } = this.props
     if (tool === 'draw' || tool === 'erase')
-      this.forToolArea(x, y, this.drawToolFn)
-    else
-      this.drawToolFn(x, y, this.getPixel(x,y))
+      this.forToolArea(x, y, this.drawTheToolFn)
+    else {
+      this.drawTheToolFnAlways(x, y, this.getPixel(x, y))
+    }
   }
 
-  drawToolFn = (x, y, rgb) => {
+  drawTheToolFn = (x, y, rgb) => {
     const { color } = this.props
 
     const { scale } = this
@@ -226,6 +225,15 @@ export default class PixelCanvas extends Component {
       ctx.fillStyle = hexFromRGB(shaded);
       ctx.fillRect(x * scale, y * scale, scale - 1, scale - 1);
     }
+  }
+
+  drawTheToolFnAlways = (x, y, rgb) => {
+    const { scale } = this
+
+    const ctx = this.canvasContext
+    const shaded = shadeRGB(rgb)
+    ctx.fillStyle = hexFromRGB(shaded);
+    ctx.fillRect(x * scale, y * scale, scale - 1, scale - 1);
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -249,7 +257,7 @@ export default class PixelCanvas extends Component {
 
     return {x: px, y: py}
   }
-  
+
 
   static black = { r:0, g: 0, b: 0 }
 
@@ -265,20 +273,10 @@ export default class PixelCanvas extends Component {
       changes.push(p)
     }
     else {
-      const X = p.x
-      const Y = p.y
-      for (var xx = toolSL(toolSize); xx < toolSR(toolSize); xx++) {
-        for (var yy = toolSL(toolSize); yy < toolSR(toolSize); yy++) {
-          const x = X + xx
-          const y = Y + yy
-
-          if (x < 0 || x >= width || y < 0 || y >= height)
-            continue
-
-          const change = {x, y, color}
-          changes.push(change)
-        }
-      }
+      this.forToolArea(p.x, p.y, (x, y) => {
+        const change = {x, y, color}
+        changes.push(change)
+      })
     }
 
     onChange(changes, { usedColor: color })
@@ -367,7 +365,7 @@ export default class PixelCanvas extends Component {
     }
     else {
       this.drawPixel()
-      this.drawTool(p.x, p.y)
+      this.drawTheTool(p.x, p.y)
     }
   }
 
@@ -397,13 +395,11 @@ export default class PixelCanvas extends Component {
     )
   }
 
-
   // Floodfill
   floodFill = (x, y) => {
     const { width, height } = this.props
 
     const colorToFlood = this.getPixel(x, y)
-
 
     // Define our getter for accessing the data structure.
     const ctx = this
@@ -421,9 +417,6 @@ export default class PixelCanvas extends Component {
       getter: getter,
       seed: [x, y]
     });
-
-    //console.log(result.flooded, result)
-
     return result.flooded
   }
 }
