@@ -134,6 +134,36 @@ function stringToArray(bufferString) {
 }
 
 
+export const postShifterState = () => (dispatch, getState) => {
+  const state = getState()
+
+  console.log("postShifterStaet", state)
+
+  const testObj = state.ms3000.shifterState
+  var check = pb.MS3KG.verify(testObj);
+
+  var bufferU8 = pb.MS3KG.encode(testObj).finish()
+  //var decoder = new TextDecoder('utf8');
+
+  var funkyStr = String.fromCharCode.apply(null, bufferU8)
+
+  var b64encoded = btoa(funkyStr);
+
+  //b64encoded = "abc"
+
+  fetch({method: "post", url: 'http://192.168.4.1/protobuf?myArg=' + b64encoded})
+
+  console.log(check, bufferU8)
+
+  var message = (check == null ? "success :)" : check);
+
+  //message = "hello"
+
+
+}
+
+
+
 export const fetchShifterState = () => (dispatch, getState) => {
   console.log("fetchShifterState")
     dispatch(requestShifterState())
@@ -148,18 +178,20 @@ export const fetchShifterState = () => (dispatch, getState) => {
     var decoded = atob(data.response)
 
 
-
     console.log("b64 decoded", decoded)
 
     var u8a = stringToArray(decoded);
 
     console.log("u8", u8a)
 
-    const shifterState = pb.MS3KG.decode(u8a);
-
-    console.log("shifterState decoded", shifterState)
-
-    dispatch(receiveShifterState(shifterState))
+    try {
+      const shifterState = pb.MS3KG.decode(u8a);
+      console.log("shifterState decoded", shifterState)
+      dispatch(receiveShifterState(shifterState))
+    }
+    catch (ex) {
+      console.error("shifterstate fetch decode error", ex)
+    }
   })
 
 

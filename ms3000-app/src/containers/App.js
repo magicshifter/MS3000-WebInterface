@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { fetchShifterState, receiveShifterState } from '../actions'
+import {fetchShifterState, postShifterState, receiveShifterState} from '../actions'
 import protobufs from '../utils/protoBufLoader'
 
 import AutoInterface from '../components/AutoInterface/index'
@@ -46,6 +46,12 @@ class App extends Component {
 
     const { dispatch } = this.props
     dispatch(fetchShifterState())
+  }
+
+  handlePostClick = e => {
+    e.preventDefault()
+    const { dispatch } = this.props
+    dispatch(postShifterState())
   }
 
   handleTestDataClick = e => {
@@ -96,6 +102,9 @@ class App extends Component {
               }
               <button onClick={this.handleTestDataClick}>
                 Get TestData
+              </button>
+              <button onClick={this.handlePostClick}>
+                Post
               </button>
               fast sync: <input type="checkbox" />
             </div>
