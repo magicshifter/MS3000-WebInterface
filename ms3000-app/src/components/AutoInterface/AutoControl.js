@@ -5,6 +5,8 @@ import AutoInterface from './index'
 import RGBControl from './RGBControl'
 import EnumControl from './EnumControl'
 
+import { defaultParseInt } from '../../utils/types'
+
 import protobuf from 'protobufjs'
 
 
@@ -42,6 +44,16 @@ export default class AutoControl extends Component {
           onChange(evt.target.value, field)
         }}/>)
         break;
+
+      case 'int32':
+        controls.push(<input id={ field.name } key="str" type='text' value={value || ""} onChange={(evt) => {
+          const v = defaultParseInt(evt.target.value)
+          //console.log("text chnage", evt)
+
+          onChange(v, field)
+        }}/>)
+        break;
+
 
       case 'RGB':
         controls.push(<RGBControl id={ field.name } key="rgb" field={field} value={value} onChange={onChange}/>)

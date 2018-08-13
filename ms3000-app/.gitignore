@@ -22,3 +22,6 @@ yarn-error.log*
 
 # npm
 package-lock.json
+
+public/MS3000.proto
+
