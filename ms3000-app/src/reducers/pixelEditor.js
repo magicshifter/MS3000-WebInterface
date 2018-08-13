@@ -11,6 +11,7 @@ import {
   PIXEL_EDITOR_SET_ACTIVE_FRAME,
   PIXEL_EDITOR_SET_IMAGE_NAME,
   PIXEL_EDITOR_CHANGE_TOOL_SIZE,
+  PIXEL_EDITOR_SCROLL_PIXEL,
 } from '../actions'
 import { RGB, emptyPixel, equRGB, paletteFromImage } from '../utils/color'
 
@@ -69,6 +70,35 @@ function applyPixelChanges(state, action) {
   }
   // nothing changed
   return frames
+}
+
+function scrollPixel(state, action) {
+  const { width, height, frames } = state
+  const { frame, dir } = action
+
+  if (dir.x === 0 && dir.y === 0) {
+    return frames
+  }
+
+  const pixel = frames[frame]
+  let newPixel = emptyPixel(width, height)
+
+  for (var x = 0; x < width; x++) {
+    for (var y = 0; y < height; y++) {
+      const sIdx = x + y * width
+
+      const xx = (x + dir.x + width) % width
+      const yy = (y + dir.y + height) % height
+
+      const dIdx = xx + yy * width
+
+      const rgb = pixel.get(sIdx)
+      newPixel = newPixel.set(dIdx, rgb)
+    }
+  }
+  const newFrames = frames.slice()
+  newFrames[frame] = newPixel
+  return newFrames
 }
 
 function resizeFrames(state, w, h) {
@@ -179,11 +209,23 @@ const pixelEditor = (state = null, action) => {
 
     case PIXEL_EDITOR_CHANGE_PIXEL:
       const newFrames = applyPixelChanges(state, action)
-
       if (newFrames !== state.frames) {
         return {
           ...state,
-          frames: applyPixelChanges(state, action),
+          frames: newFrames,
+          resizeFrames: null,
+        }
+      }
+      else {
+        return state
+      }
+
+    case PIXEL_EDITOR_SCROLL_PIXEL:
+      const newFrames2 = scrollPixel(state, action)
+      if (newFrames2 !== state.frames) {
+        return {
+          ...state,
+          frames: newFrames2,
           resizeFrames: null,
         }
       }

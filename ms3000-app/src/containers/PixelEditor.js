@@ -12,7 +12,7 @@ import {
   pixelEditorSetToolSize,
   pixelEditorSetPalette,
   pixelEditorAddToPalette,
-  sidebarToolsVisible, sidebarFilesVisible
+  sidebarToolsVisible, sidebarFilesVisible, pixelEditorScrollPixel
 } from '../actions'
 import { ActionCreators } from 'redux-undo';
 
@@ -62,7 +62,7 @@ const toolbarStructure = [
     icon: faEraser,
   },
   {
-    name: 'move',
+    name: 'scroll',
     icon: faArrowsAlt,
   },
   {
@@ -124,6 +124,11 @@ class PixelEditor extends Component {
   onChangePick = (color) => {
     const { dispatch } = this.props
     dispatch(pixelEditorAddToPalette(color))
+  }
+
+  onChangeScroll = (dir) => {
+    const { dispatch, frameIdx } = this.props
+    dispatch(pixelEditorScrollPixel(dir.x, dir.y, frameIdx))
   }
 
   onChangePalette = (color) => {
@@ -327,7 +332,7 @@ class PixelEditor extends Component {
         </Collapsable>
         {pixel ?
           <PixelCanvas width={width} height={height} tool={tool} toolSize={toolSize} color={color} pixel={pixel} scale={25}
-                       onChange={this.onChangePixel} onPick={this.onChangePick}/>
+                       onChange={this.onChangePixel} onPick={this.onChangePick} onScroll={this.onChangeScroll} />
           : <span>No Frames :( Are you happy now?!?</span>
         }
       </div>

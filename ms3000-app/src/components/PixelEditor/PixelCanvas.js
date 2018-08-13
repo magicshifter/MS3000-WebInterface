@@ -38,6 +38,7 @@ export default class PixelCanvas extends Component {
     pixel: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
     onPick: PropTypes.func.isRequired,
+    onScroll: PropTypes.func.isRequired,
     scale: PropTypes.number.isRequired,
   }
 
@@ -304,8 +305,24 @@ export default class PixelCanvas extends Component {
     onPick(color)
   }
 
+  useScrollTool = (evt, type) => {
+    const { onScroll } = this.props
+    var p = this.getPos(evt)
 
-  useTool = (evt) => {
+    if (type === 'move') {
+      const lP = this.lastScrollPos
+      const dx = p.x - lP.x
+      const dy = p.y - lP.y
+      if (dx !== 0 || dy !== 0) {
+        onScroll({x:dx, y:dy})
+      }
+    }
+
+    this.lastScrollPos = p
+  }
+
+
+  useTool = (evt, type) => {
     const { tool } = this.props
     switch (tool) {
       case "draw":
@@ -320,6 +337,10 @@ export default class PixelCanvas extends Component {
         this.usePickTool(evt)
         break
 
+      case 'scroll':
+        this.useScrollTool(evt, type)
+        break
+
       default:
         console.log("unknown tool", tool);
 
@@ -328,14 +349,14 @@ export default class PixelCanvas extends Component {
 
   onMouseDownCanvas = (evt) => {
     evt.preventDefault()
-    this.useTool(evt)
+    this.useTool(evt, 'down')
   }
 
   onMouseMoveCanvas = (evt) => {
     evt.preventDefault()
     var p = this.getPos(evt)
     if (evt.buttons) {
-      this.useTool(evt)
+      this.useTool(evt, 'move')
     }
     else {
       this.drawPixel()
