@@ -128,7 +128,7 @@ export const receiveShifterState = (shifterState) => ({
 })
 
 
-function stringToArray(bufferString) {
+export function stringToArray(bufferString) {
   let uint8Array = new TextEncoder("utf-8").encode(bufferString);
   return uint8Array;
 }
