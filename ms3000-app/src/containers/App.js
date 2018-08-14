@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {fetchShifterState, postShifterState, receiveShifterState, stringToArray} from '../actions'
+import {dumpU8, fetchShifterState, postShifterState, receiveShifterState, stringToArray} from '../actions'
 import protobufs from '../utils/protoBufLoader'
 
 import AutoInterface from '../components/AutoInterface/index'
@@ -68,6 +68,8 @@ class App extends Component {
     console.log("verified:", check, testObj)
 
     var bufferU8 = pb.MS3KG.encode(testObj).finish()
+
+    dumpU8(bufferU8)
     const decodedObj = pb.MS3KG.decode(bufferU8);
 
     console.log("after decoding:", decodedObj, bufferU8)

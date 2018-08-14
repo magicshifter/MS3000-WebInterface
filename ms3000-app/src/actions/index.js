@@ -127,10 +127,22 @@ export const receiveShifterState = (shifterState) => ({
   receivedAt: Date.now()
 })
 
-
 export function stringToArray(bufferString) {
-  let uint8Array = new TextEncoder("utf-8").encode(bufferString);
-  return uint8Array;
+  var array = new Uint8Array(new ArrayBuffer(bufferString.length));
+
+  for (var i = 0; i < bufferString.length; i++) {
+    array[i] = bufferString.charCodeAt(i);
+  }
+  return array
+}
+
+export function dumpU8(u8) {
+  return
+  console.log("DUMPu8", u8.length, u8)
+  for (var i = 0; i < u8.length; i++) {
+    console.log(u8[i].toString(16))
+  }
+
 }
 
 
@@ -143,6 +155,7 @@ export const postShifterState = () => (dispatch, getState) => {
   var check = pb.MS3KG.verify(testObj);
 
   var bufferU8 = pb.MS3KG.encode(testObj).finish()
+  dumpU8(bufferU8)
   //var decoder = new TextDecoder('utf8');
 
   var funkyStr = String.fromCharCode.apply(null, bufferU8)
@@ -182,15 +195,17 @@ export const fetchShifterState = () => (dispatch, getState) => {
 
     var u8a = stringToArray(decoded);
 
+    dumpU8(u8a)
+
     console.log("u8", u8a)
 
     try {
       const shifterState = pb.MS3KG.decode(u8a);
 
       var object = pb.MS3KG.toObject(shifterState, {
-        longs: String,
+        longs: undefined,
         enums: undefined,
-        bytes: String,
+        bytes: undefined,
         // see ConversionOptions
       });
 
