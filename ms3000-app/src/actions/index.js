@@ -186,8 +186,16 @@ export const fetchShifterState = () => (dispatch, getState) => {
 
     try {
       const shifterState = pb.MS3KG.decode(u8a);
-      console.log("shifterState decoded", shifterState)
-      dispatch(receiveShifterState(shifterState))
+
+      var object = pb.MS3KG.toObject(shifterState, {
+        longs: String,
+        enums: undefined,
+        bytes: String,
+        // see ConversionOptions
+      });
+
+      console.log("shifterState decoded", object)
+      dispatch(receiveShifterState(object))
     }
     catch (ex) {
       console.error("shifterstate fetch decode error", ex)
