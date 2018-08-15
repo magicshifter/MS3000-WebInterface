@@ -29,10 +29,10 @@ export default class MagicBitmap {
   };
 
   constructor(type, bitPerPixel, width, height, frames, delayOrFirstCharOrDelayArray) {
-    if (!MagicBitmap.isValidType(type)) {
+    if (!MagicBitmap.encodeType(type)) {
       const txt = "unknown type for MagicBitmap: " + type
       alert(txt)
-      throw new Error(txt)
+      throw txt
     }
     this.type = type
     this.bitPerPixel = bitPerPixel
@@ -40,9 +40,28 @@ export default class MagicBitmap {
     this.height = height
     this.frames = frames
     this.delayOrFirstCharOrDelayArray = delayOrFirstCharOrDelayArray
+
+
+    const framesCnt = frames.length;
+    this.framesCnt = framesCnt
+    this.headerSize = 16;
+
+    this.delayBlockSize = 0
+    this.delayBlock = null
+    if (type === 'bitmap2') {
+      const ds = delayOrFirstCharOrDelayArray
+      const n = ds.length
+      if (n !== framesCnt) {
+        throw "delays must match framesCnt!!! " + n + " " + framesCnt
+      }
+      this.delayBlockSize = n * 2
+      this.delayBlock = ds
+    }
+    this.firstChar = type === 'font' ? delayOrFirstCharOrDelayArray : 0
+    this.delayMs = type === 'bitmap' ? delayOrFirstCharOrDelayArray : 0
   }
 
-  static isValidType = (type) => {
+  static encodeType = (type) => {
     const ts = MagicBitmap.TYPES
     const kk = Object.keys(ts)
 
@@ -50,26 +69,25 @@ export default class MagicBitmap {
       const k = kk[i]
       const t = ts[k]
 
-      if (t === type) {
-        return true
+      if (k === type) {
+        return t
       }
     }
     return false
   }
 
-  getBlob =
+  toBlob =
     () => {
       const {type, bitPerPixel, width, height, frames, delayOrFirstCharOrDelayArray} = this;
+      const { framesCnt, headerSize, firstChar, delayMs, delayBlock, delayBlockSize } = this
 
-      if (type !== 'bitmap' && type !== 'font' && type !== 'bitmap2')
+      const typeByte = MagicBitmap.encodeType(type)
 
-      const headerSize = 16;
-      const v2BlockSize = type === 'bitmap2' ?
+      if (!typeByte) {
+        throw "UNKNOWN MagicBitmap type: " + type
+      }
 
-      const fileSize = this.CalcBufferSize(bitPerPixel, width, height) + headerSize;
-      const frames = 1;
-      const firstChar = 0;
-
+      const fileSize = framesCnt * this.CalcBufferSize(bitPerPixel, width, height) + headerSize + delayBlockSize
       const fileData = new Uint8Array(fileSize);
 
       // write header
@@ -79,24 +97,29 @@ export default class MagicBitmap {
       fileData[3] = (fileSize & 0xFF) >> 0;
 
       fileData[4] = bitPerPixel;
-      fileData[5] = (frames - 1); // 0 for static images larger for animations and fonts
+      fileData[5] = (framesCnt - 1); // 0 for static images larger for animations and fonts
       fileData[6] = width;
       fileData[7] = height;
 
-      fileData[8] = subType === 'font' ? 0xF0 : subType === 'bitmap' ? 0xBA : 0x00;
+      fileData[8] = typeByte
       fileData[9] = firstChar; // >= 1 for fonts/ 0 for animations
       fileData[10] = (delayMs & 0xFF00) >> 8; // 0 for fonts
       fileData[11] = (delayMs & 0xFF) >> 0;
 
-      for (let x = 0; x < width; x++) {
-        for (let y = 0; y < height; y++) {
-          const idx = x + (y * totalWidth);
-          const pixel = pixels[idx];
-          const fileDataIdx = headerSize + 3 * (y + x * height);
 
-          fileData[fileDataIdx + 0] = pixel.color.r;
-          fileData[fileDataIdx + 1] = pixel.color.g;
-          fileData[fileDataIdx + 2] = pixel.color.b;
+      for (var i = 0; i < framesCnt; i++) {
+        const pixels = frames[i]
+
+        for (let x = 0; x < width; x++) {
+          for (let y = 0; y < height; y++) {
+            const idx = x + (y * totalWidth);
+            const pixel = pixels[idx];
+            const fileDataIdx = headerSize + 3 * (width * height * i + y + x * height);
+
+            fileData[fileDataIdx + 0] = pixel.R;
+            fileData[fileDataIdx + 1] = pixel.G;
+            fileData[fileDataIdx + 2] = pixel.B;
+          }
         }
       }
 
