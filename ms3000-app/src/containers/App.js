@@ -42,6 +42,9 @@ class App extends Component {
   onChangeAutoInterface = (newState, theType) => {
     const { dispatch } = this.props
     dispatch(receiveShifterState(newState))
+
+    if (this.refs.fastSync.checked)
+      dispatch(postShifterState())
   }
 
   handleRefreshClick = e => {
@@ -160,7 +163,7 @@ class App extends Component {
               <button onClick={this.handlePostClick}>
                 Post
               </button>
-              fast sync: <input type="checkbox" />
+              fast sync: <input ref="fastSync" type="checkbox" />
             </div>
 
             <AutoInterface type={protobufs.MS3KG}
