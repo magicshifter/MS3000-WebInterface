@@ -71,17 +71,31 @@ export default class MagicBitmap {
 
     for (var i=0; i < kk.length; i++) {
       const k = kk[i]
-      const t = ts[k]
+      const code = ts[k]
 
       if (k === type) {
-        return t
+        return code
       }
     }
     return false
   }
 
-  toBlob =
-    () => {
+  static decodeType = (c) => {
+    const ts = MagicBitmap.TYPES
+    const kk = Object.keys(ts)
+
+    for (var i=0; i < kk.length; i++) {
+      const k = kk[i]
+      const code = ts[k]
+
+      if (code === c) {
+        return k
+      }
+    }
+    return false
+  }
+
+  toBlob = () => {
       const {type, bitPerPixel, width, height, frames, delayOrFirstCharOrDelayArray} = this;
       const { framesCnt, headerSize, firstChar, delayMs, delayBlock, delayBlockSize } = this
 
@@ -131,55 +145,41 @@ export default class MagicBitmap {
       return blob;
     };
 
-  toBlob(frameDelay = 1000) {
-    const { width, height, frames } = this
-
-    const fS = frames.length
-    const buffers = []
-    const delays = []
-
-    for (var i=0; i < fS; i++) {
-      const pixel = frames[i]
-
-      const rgba = new Uint8Array(width * height * 4);
-
-      for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-          const idx = y * width + x
-          const rgbaIdx = (y * width + x) * 4
-          const rgb = pixel.get(idx)
-
-          rgba[rgbaIdx + 0] = rgb.R
-          rgba[rgbaIdx + 1] = rgb.G
-          rgba[rgbaIdx + 2] = rgb.B
-          rgba[rgbaIdx + 3] = 255
-        }
-      }
-      buffers.push(rgba.buffer)
-      delays.push(frameDelay)
-    }
-
-    return UPNG.encode(buffers, width, height, 0, delays)
-  }
 
   static fromArrayBuffer(arrayBuffer) {
-    var png = UPNG.decode(arrayBuffer);
+    const fileData = new Uint8Array(arrayBuffer)
 
-    const sizeX = png.width
-    const sizeY = png.height
-    // if (sizeY !== 16) {
-    //   alert("PNG must be 16 pixel high. the given one is " + sizeY)
-    //   return
-    // }
+    if (fileData[0] !== 0x23) {
+      throw "File is not an MagicBitmap file"
+    }
+    var fileSize = fileData[1] << 16;
+    fileSize += fileData[2] << 8;
+    fileSize += fileData[3]
 
-    if (sizeY > 1000 || sizeX > 1000) {
-      alert("PNG is largert than 1000px no thanx! " + sizeX + "/" + sizeY)
-      return
+    if (fileSize !== fileData.length) {
+      throw "File is not a Magicbitmap, corrupted fileSize"
     }
 
+    const bitPerPixel = fileData[4];
+    const framesCnt = fileData[5] + 1 // 0 for static images larger for animations and fonts
+    const width = fileData[6];
+    const height = fileData[7];
 
-    const frames = []
-    const pngRGBAs = UPNG.toRGBA8(png)
+    const typeByte = fileData[8]
+
+    const type = MagicBitmap.decodeType(typeByte)
+    if (!type) {
+      throw "File is not a Magicbitmap, unknown type: " + typeByte
+    }
+    console.log("decoded as: ", type)
+
+    let delayOrFirstCharOrDelayArray =
+
+
+    const firstChar =  fileData[9]; // >= 1 for fonts/ 0 for animations
+    let delayMs = fileData[10] << 8; // 0 for fonts
+    delayMs += fileData[11]
+
     for (var i = 0; i < pngRGBAs.length; i++) {
       const pngRGBA = new Uint8Array(pngRGBAs[i])
       //console.log("working on frame", i, pngRGBA)
