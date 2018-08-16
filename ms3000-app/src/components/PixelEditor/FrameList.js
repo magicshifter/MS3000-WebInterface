@@ -7,8 +7,8 @@ import IconButton from '../inputs/IconButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faClone, faArrowsAlt, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 
-import { emptyPixel } from '../../utils/color'
 
+// TODO: is it ok to have actions here??
 import {
   pixelEditorAddNewFrame,
   pixelEditorDeleteFrame,
@@ -50,23 +50,13 @@ export default class FrameList extends Component {
 
   onClickFrame = (evt) => {
     const {onChange} = this.props
-    //console.log("clicked tool", evt)
     const frameNr = parseInt(evt.currentTarget.dataset["frame"] || "0", 10)
-
     onChange(pixelEditorSetActiveFrame(frameNr))
-
-    //console.log("clicked tool", frameNr)
-    //onChange(frameNr)
   }
 
   onClickAddFrame = (evt) => {
-    const {onChange, frames, width, height} = this.props
-
+    const {onChange } = this.props
     onChange(pixelEditorAddNewFrame())
-
-    // const newFrames = frames.slice(0)
-    // newFrames.push(emptyPixel(width, height))
-    // onChange(newFrames.length - 1, newFrames)
   }
 
   onClickDuplicateFrame = (evt) => {
@@ -74,33 +64,19 @@ export default class FrameList extends Component {
     evt.stopPropagation();
 
     const {onChange } = this.props
-    const frameNr = parseInt(evt.currentTarget.dataset["frame"] || "0", 10)
-    onChange(pixelEditorDuplicteFrame(frameNr))
-
-
-    // const newFrames = frames.slice(0)
-    // newFrames.splice(frameNr, 0, frames[frameNr])
-    //
-    // onChange(frameNr + 1, newFrames)
+    const frameNr = parseInt(evt.currentTarget.dataset["frame"], 10)
+    if (!isNaN(frameNr))
+      onChange(pixelEditorDuplicteFrame(frameNr))
   }
 
   onClickRemoveFrame = (evt) => {
     // dont let click go to select Frame!
     evt.stopPropagation();
 
-    const {onChange, activeFrame, frames} = this.props
-    //console.log("clicked tool", evt)
-    const frameNr = parseInt(evt.currentTarget.dataset["frame"] || "0", 10)
-
-    onChange(pixelEditorDeleteFrame(frameNr))
-
-    // const newFrames = frames.slice(0)
-    // newFrames.splice(frameNr, 1);
-    //
-    // var newIdx = activeFrame >= frameNr ? activeFrame - 1 : activeFrame
-    // if (newIdx < 0) newIdx = 0
-    //
-    // onChange(newIdx, newFrames)
+    const {onChange} = this.props
+    const frameNr = parseInt(evt.currentTarget.dataset["frame"], 10)
+    if (!isNaN(frameNr))
+      onChange(pixelEditorDeleteFrame(frameNr))
   }
 
   render() {
@@ -250,27 +226,6 @@ export default class FrameList extends Component {
     if (isSpace && !isNaN(idx) && sourceIdx !== idx) {
       const {onChange} = this.props
       onChange(pixelEditorMoveFrame(sourceIdx, idx))
-
-
-
-      // const {frames, activeFrame, onChange} = this.props
-      //
-      // const f = frames[sourceIdx]
-      // const newFrames = frames.slice(0)
-      // newFrames.splice(sourceIdx, 1);
-      //
-      // var dropIdx = idx
-      // if (idx > sourceIdx) {
-      //   dropIdx--
-      // }
-      // newFrames.splice(dropIdx, 0, f);
-      //
-      // var newIdx = activeFrame === sourceIdx ? dropIdx :
-      //   ((dropIdx <= activeFrame) && (sourceIdx > activeFrame)) ? activeFrame + 1 :
-      //     ((dropIdx >= activeFrame) && (sourceIdx < activeFrame)) ? activeFrame - 1 : activeFrame
-      //
-      // onChange(newIdx, newFrames)
     }
   }
 }
-

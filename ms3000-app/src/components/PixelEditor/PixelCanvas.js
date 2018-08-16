@@ -3,10 +3,6 @@ import PropTypes from "prop-types";
 import { hexFromRGB, shadeRGB, equRGB, RGB } from "../../utils/color"
 import floodFill from "n-dimensional-flood-fill"
 
-//import { ResizeSensor } from 'css-element-queries'
-
-
-
 function toolSL(size) {
   return -Math.floor(size/2)
 }
@@ -43,8 +39,6 @@ export default class PixelCanvas extends Component {
   }
 
 
-
-
   constructor(props) {
     super(props)
   }
@@ -73,8 +67,6 @@ export default class PixelCanvas extends Component {
   }
 
   handleTouchStart = (evt) => {
-    //this.ensureFullscreen()
-
     evt.preventDefault();
     const touches = evt.changedTouches;
 
@@ -144,15 +136,11 @@ export default class PixelCanvas extends Component {
 
     this.setupTouch(c)
 
-    //this.resizeSensor = new ResizeSensor(c, this.refs.div);
     window.addEventListener("resize", this.onResize, false);
     this.onResize();
-
-    //this.drawPixel()
   }
 
   componentWillUnmount() {
-    //this.resizeSensor.detach(this.canvas)
     window.removeEventListener("resize", this.onResize, false);
 
     var c = this.canvas
@@ -172,14 +160,11 @@ export default class PixelCanvas extends Component {
   }
 
   drawPixel = () => {
-    var index = 0
-
     const { pixel, width, height } = this.props
     const ctx = this.canvasContext
-
     const { scale } = this
 
-
+    var index = 0
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
         ctx.fillStyle= hexFromRGB(pixel.get(index));
@@ -195,11 +180,9 @@ export default class PixelCanvas extends Component {
       for (var yy = toolSL(toolSize); yy < toolSR(toolSize); yy++) {
         const x = X + xx
         const y = Y + yy
-
         const rgb = this.getPixel(x,y)
         if (!rgb)
           continue
-
         fn(x, y, rgb)
       }
     }
@@ -377,11 +360,6 @@ export default class PixelCanvas extends Component {
 
   render() {
     let { width, height } = this.props
-
-
-
-    // const cw = width * scale
-    // const ch = height * scale
 
     return (
       <div ref='div' style={{width: '100%', flex: "1 1 auto", backgroundColor:'gray'}}
