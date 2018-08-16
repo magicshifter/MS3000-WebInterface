@@ -78,7 +78,9 @@ export default class Image {
     const delays = []
     const pngRGBAs = UPNG.toRGBA8(png)
     for (var i = 0; i < pngRGBAs.length; i++) {
-      delays.push(png.frames[i].delay)
+      let delay = png.frames.length > i ? png.frames[i].delay : 1234
+
+      delays.push(delay)
       const pngRGBA = new Uint8Array(pngRGBAs[i])
       //console.log("working on frame", i, pngRGBA)
 

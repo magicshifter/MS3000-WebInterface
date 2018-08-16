@@ -1,6 +1,7 @@
 import { List }  from 'immutable'
 import UPNG from 'upng-js'
 import { RGB } from '../utils/color'
+import Image from "./Image";
 
 function calcBufferSize(bitPerPixel, w, h) {
   if (bitPerPixel === 24) {
@@ -39,6 +40,7 @@ export default class MagicBitmap {
     this.width = width
     this.height = height
     this.frames = frames
+
     this.delayOrFirstCharOrDelayArray = delayOrFirstCharOrDelayArray
 
 
@@ -46,6 +48,10 @@ export default class MagicBitmap {
     this.framesCnt = framesCnt
     this.headerSize = 16;
 
+    if (!delayOrFirstCharOrDelayArray || delayOrFirstCharOrDelayArray.length !== frames.length) {
+      throw "please give array for delays or TODO: implement types"
+    }
+    this.framesDelays = delayOrFirstCharOrDelayArray
     this.delayBlockSize = 0
     this.delayBlock = null
     if (type === 'bitmap2') {
@@ -61,9 +67,16 @@ export default class MagicBitmap {
     this.delayMs = type === 'bitmap' ? delayOrFirstCharOrDelayArray : 0
   }
 
+  toImage = () => {
+    const { width, height, frames, framesDelays } = this
+    return new Image(width, height,  frames,  framesDelays)
+  }
+
   static fromImage = (image) => {
 
   }
+
+
 
   static encodeType = (type) => {
     const ts = MagicBitmap.TYPES
@@ -130,7 +143,7 @@ export default class MagicBitmap {
 
         for (let x = 0; x < width; x++) {
           for (let y = 0; y < height; y++) {
-            const idx = x + (y * totalWidth);
+            const idx = x + (y * width);
             const pixel = pixels[idx];
             const fileDataIdx = headerSize + 3 * (width * height * i + y + x * height);
 
@@ -149,12 +162,15 @@ export default class MagicBitmap {
   static fromArrayBuffer(arrayBuffer) {
     const fileData = new Uint8Array(arrayBuffer)
 
+
     if (fileData[0] !== 0x23) {
       throw "File is not an MagicBitmap file"
     }
     var fileSize = fileData[1] << 16;
     fileSize += fileData[2] << 8;
     fileSize += fileData[3]
+
+    const headerSize = 16
 
     if (fileSize !== fileData.length) {
       throw "File is not a Magicbitmap, corrupted fileSize"
@@ -173,36 +189,37 @@ export default class MagicBitmap {
     }
     console.log("decoded as: ", type)
 
-    let delayOrFirstCharOrDelayArray =
-
 
     const firstChar =  fileData[9]; // >= 1 for fonts/ 0 for animations
     let delayMs = fileData[10] << 8; // 0 for fonts
     delayMs += fileData[11]
 
-    for (var i = 0; i < pngRGBAs.length; i++) {
-      const pngRGBA = new Uint8Array(pngRGBAs[i])
-      //console.log("working on frame", i, pngRGBA)
 
-      const patternData = []
+    let delayOrFirstCharOrDelayArray = type === 'font' ? firstChar : delayMs
 
-      for (let yy = 0; yy < sizeY; yy++) {
-        for (let xx = 0; xx < sizeX; xx++) {
-          const idxPng = (yy * sizeX + xx) * 4
-          const r = pngRGBA[idxPng]
-          const g = pngRGBA[idxPng + 1]
-          const b = pngRGBA[idxPng + 2]
-          //console.log("pixel png", r, g, b, idxPng)
-          const rgb = RGB(r, g, b)
-          patternData.push(rgb)
+    const frames = []
+
+    // TODO: fix delaysHACK
+    const delaysHACK = []
+    for (var i = 0; i < framesCnt; i++) {
+      const pixels = []
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const fileDataIdx = headerSize + 3 * (width * height * i + y + x * height);
+          const r = fileData[fileDataIdx + 0]
+          const g = fileData[fileDataIdx + 1]
+          const b = fileData[fileDataIdx + 2]
+          const rgb = RGB(r,g,b)
+          pixels.push(rgb)
         }
       }
 
-      frames.push(List(patternData))
+      frames.push(List(pixels))
+      delaysHACK.push(2323)
     }
 
-    console.log("decoded PNG", frames)
-    return new Image(sizeX, sizeY, frames)
+    return new MagicBitmap(type, bitPerPixel, width, height, frames, delaysHACK) //delayOrFirstCharOrDelayArray)
   }
 
   static fromMagicBitmap(arrayBuffer) {

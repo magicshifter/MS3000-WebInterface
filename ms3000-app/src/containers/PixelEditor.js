@@ -46,6 +46,7 @@ import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper, faSave, faFolderOpen
 
 import './PixelEditor.css'
 import {faFolder} from "@fortawesome/free-solid-svg-icons/index";
+import MagicBitmap from "../ms3000/MagicBitmap";
 
 
 const toolbarStructure = [
@@ -193,9 +194,19 @@ class PixelEditor extends Component {
       var reader = new FileReader();
       reader.onload = (evt) => {
         var arrayBuffer = evt.target.result;
-        const i = Image.fromPNG(arrayBuffer)
+
+        let i
+        try {
+          i = Image.fromPNG(arrayBuffer)
+        }
+        catch (e) {
+          // try magicbitmap
+          const mb = MagicBitmap.fromArrayBuffer(arrayBuffer)
+          i = mb.toImage()
+        }
+
         if (!i) {
-          return
+          throw "Cant open image, unknown fileformat of " + pName
         }
 
         const { dispatch } = this.props
@@ -272,7 +283,7 @@ class PixelEditor extends Component {
                       multiple
                       type="file"
                       name="file"
-                      accept=".png,.magicBitmap"
+                      accept=".png,.magicBitmap,.magicFont,.magicBitmap2"
                       onChange={this.onImportImage}
                     />
                   </label>
