@@ -128,10 +128,11 @@ export const pixelEditorSetFrameDelay = (targetIdx, delayMs) => ({
 
 
 
-export const pixelEditorChangeImage = (image, activeFrame = 0) => ({
+export const pixelEditorChangeImage = (image, activeFrame = 0, name=undefined) => ({
   type: PIXEL_EDITOR_CHANGE_IMAGE,
   image,
-  activeFrame
+  activeFrame,
+  name
 })
 
 export const pixelEditorResetImage = () => ({

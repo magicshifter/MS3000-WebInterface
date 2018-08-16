@@ -194,8 +194,6 @@ const pixelEditor = (state = null, action) => {
 
 
     case PIXEL_EDITOR_ADD_NEW_FRAME:
-
-
       const newDelaysANF = state.framesDelays.slice(0)
       const v = newDelaysANF.length >= 1 ? state.framesDelays[newDelaysANF.length - 1] : 1000
       newDelaysANF.push(v)
@@ -229,9 +227,6 @@ const pixelEditor = (state = null, action) => {
       }
 
     case PIXEL_EDITOR_MOVE_FRAME:
-
-
-
       var dropIdx = targetIdx
       if (dropIdx > srcIdx) {
         dropIdx--
@@ -293,6 +288,7 @@ const pixelEditor = (state = null, action) => {
         height: action.image.height,
         imagePalette: paletteFromImage(action.image.frames),
         resizeFrames: null,
+        imageName: action.name || state.imageName,
       }
 
     case PIXEL_EDITOR_RESET_IMAGE:

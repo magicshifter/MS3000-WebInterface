@@ -162,10 +162,10 @@ class PixelEditor extends Component {
   }
 
   onExportImage = () => {
-    const { width, height, frames, imageName } = this.props
+    const { width, height, frames, framesDelays, imageName } = this.props
 
     const fileName = imageName + ".png"
-    const img = new Image(width, height, frames)
+    const img = new Image(width, height, frames, framesDelays)
     const arrayBuffer = img.toPNG()
 
     //console.log("aexorting arraybuffer", arrayBuffer)
@@ -199,10 +199,10 @@ class PixelEditor extends Component {
         }
 
         const { dispatch } = this.props
-        dispatch(pixelEditorChangeImage(i))
+        dispatch(pixelEditorChangeImage(i, 0, pName))
 
 
-        dispatch(pixelEditorSetImageName(pName))
+        //dispatch(pixelEditorSetImageName(pName))
 
       }
       reader.readAsArrayBuffer(file) // start async operation
@@ -404,12 +404,15 @@ class PixelEditor extends Component {
 }
 
 const mapStateToProps = state => {
-  const { width, height, color, tool, toolSize, frames, palette, imagePalette, frameIdx, imageName } = state.pixelEditor.present
+  const { width, height, color, tool, toolSize, frames, framesDelays, palette, imagePalette, frameIdx, imageName } = state.pixelEditor.present
   const { past, future } = state.pixelEditor
   const { toolsVisible } = state.sidebar
 
   return {
-    width, height, color, tool, toolSize, frames, palette, imagePalette, frameIdx, imageName,
+    width, height, color, tool, toolSize,
+    frameIdx, imageName,
+    frames, framesDelays,
+    palette, imagePalette,
     toolsVisible,
     enableUndo: past.length > 0,
     enableRedo: future.length > 0

@@ -8,7 +8,7 @@ export default class Image {
     this.width = width
     this.height = height
     this.frames = frames
-    // TODO: implement an len check array
+
     if (isInteger(delayMsOrArray)) {
       this.framesDelays = []
       for (var i = 0; i < frames.length; i++) {
