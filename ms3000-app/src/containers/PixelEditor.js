@@ -350,6 +350,55 @@ class PixelEditor extends Component {
     const { dispatch } = this.props
     dispatch(pixelEditorSetToolSize(newToolSize))
   }
+
+
+
+  getFileName =
+    () => {
+      var fileName = this.refs.fileName.value;
+      fileName = fileName + '.magicBitmap';
+      return fileName;
+    };
+
+  onFileDownload =
+    () => {
+      const blob = this.getBlob();
+      const fileName = this.getFileName();
+      saveAs(blob, fileName);
+    };
+
+  onClick =
+    () => {
+      const blob = this.getBlob();
+      const fileName = this.getFileName();
+
+      var url = this.props.url;
+      // console.log({url});
+      if (url === 'http://') {
+        url = '';
+      }
+      // console.log({url});
+
+      const formData = new window.FormData();
+      formData.append('uploadFile', blob, fileName);
+
+      const request = new window.XMLHttpRequest();
+      request.onload =
+        () =>
+          request.status === 200
+            ? console.log('Uploaded!')
+            : console.warn(`Error ${request.status} occurred when trying to upload your file.`);
+
+      request.timeout = 3000;
+      request.ontimeout =
+        () =>
+          console.warn(`Connection to ${url} timed out!!!`);
+
+      request.open('POST', `${url}/upload`);
+      request.send(formData);
+    };
+
+
 }
 
 const mapStateToProps = state => {

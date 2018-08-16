@@ -61,6 +61,10 @@ export default class MagicBitmap {
     this.delayMs = type === 'bitmap' ? delayOrFirstCharOrDelayArray : 0
   }
 
+  static fromImage = (image) => {
+
+  }
+
   static encodeType = (type) => {
     const ts = MagicBitmap.TYPES
     const kk = Object.keys(ts)

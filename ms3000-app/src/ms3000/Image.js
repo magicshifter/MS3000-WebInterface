@@ -1,20 +1,33 @@
 import { List }  from 'immutable'
 import UPNG from 'upng-js'
 import { RGB } from '../utils/color'
+import { isInteger } from  '../utils/types'
 
 export default class Image {
-  constructor(width, height, frames) {
+  constructor(width, height, frames, delayMsOrArray) {
     this.width = width
     this.height = height
     this.frames = frames
+    // TODO: implement an len check array
+    if (isInteger(delayMsOrArray)) {
+      this.framesDelay = []
+      for (var i = 0; i < frames.length; i++) {
+        this.framesDelay.push(delayMsOrArray)
+      }
+    }
+    else {
+      if (delayMsOrArray.length !== frames.length) {
+        throw "Image.constructor delays dont have same len as frames: " + delayMsOrArray.length + " " + frames.length
+      }
+      this.framesDelay = delayMsOrArray
+    }
   }
 
-  toPNG(frameDelay = 1000) {
-    const { width, height, frames } = this
+  toPNG() {
+    const { width, height, frames, framesDelay } = this
 
     const fS = frames.length
     const buffers = []
-    const delays = []
 
     for (var i=0; i < fS; i++) {
       const pixel = frames[i]
@@ -34,14 +47,19 @@ export default class Image {
         }
       }
       buffers.push(rgba.buffer)
-      delays.push(frameDelay)
     }
 
-    return UPNG.encode(buffers, width, height, 0, delays)
+    if (buffers.length !== framesDelay.length) {
+      throw "Image.toPNG delays dont have same len as frames: " + buffers.length + " " + framesDelay.length
+    }
+
+    return UPNG.encode(buffers, width, height, 0, framesDelay)
   }
 
   static fromPNG(arrayBuffer) {
     var png = UPNG.decode(arrayBuffer);
+
+    console.log("fromPNG", png.frames)
 
     const sizeX = png.width
     const sizeY = png.height
@@ -57,6 +75,7 @@ export default class Image {
 
 
     const frames = []
+    const delays = []
     const pngRGBAs = UPNG.toRGBA8(png)
     for (var i = 0; i < pngRGBAs.length; i++) {
       const pngRGBA = new Uint8Array(pngRGBAs[i])
@@ -73,6 +92,7 @@ export default class Image {
           //console.log("pixel png", r, g, b, idxPng)
           const rgb = RGB(r, g, b)
           patternData.push(rgb)
+          delays.push(png.frames[i].delay)
         }
       }
 
@@ -80,7 +100,7 @@ export default class Image {
     }
 
     console.log("decoded PNG", frames)
-    return new Image(sizeX, sizeY, frames)
+    return new Image(sizeX, sizeY, frames, delays)
   }
 
   static fromMagicBitmap(arrayBuffer) {

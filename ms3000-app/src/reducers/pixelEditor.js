@@ -12,6 +12,10 @@ import {
   PIXEL_EDITOR_SET_IMAGE_NAME,
   PIXEL_EDITOR_CHANGE_TOOL_SIZE,
   PIXEL_EDITOR_SCROLL_PIXEL,
+  PIXEL_EDITOR_ADD_NEW_FRAME,
+  PIXEL_EDITOR_DELETE_FRAME,
+  PIXEL_EDITOR_MOVE_FRAME,
+  PIXEL_EDITOR_DUPLICATE_FRAME, PIXEL_EDITOR_SET_FRAME_DELAY,
 } from '../actions'
 import { RGB, emptyPixel, equRGB, paletteFromImage } from '../utils/color'
 
@@ -142,6 +146,7 @@ const pixelEditor = (state = null, action) => {
     height: DEFAULT_HEIGHT,
     frameIdx: 0,
     frames: [emptyPixel(DEFAULT_WIDTH, DEFAULT_HEIGHT)],
+    framesDelays: [1000],
     tool: "draw",
     toolSize: 1,
     color: RGB(255, 255, 255),
@@ -150,6 +155,9 @@ const pixelEditor = (state = null, action) => {
     frameDelay: 500, // TODO: individual!!!
     imageName: "newImage",
   }
+
+  const { srcIdx, targetIdx } = action
+  const { frameIdx, frames, framesDelay } = state
 
   switch (action.type) {
     case PIXEL_EDITOR_CHANGE_TOOL:
@@ -183,6 +191,93 @@ const pixelEditor = (state = null, action) => {
         frameIdx: action.activeFrame
       }
 
+
+
+    case PIXEL_EDITOR_ADD_NEW_FRAME:
+      const newDelaysANF = state.framesDelays.slice(0)
+      const v = newDelaysANF.length >= 1 ? state.framesDelays[newDelaysANF.length - 1] : 1000
+      newDelaysANF.push(v)
+      const newFramesANF = state.frames.slice(0)
+      newFramesANF.push(emptyPixel(state.width, state.height))
+
+      return {
+        ...state,
+        frames: newFramesANF,
+        framesDelays: newDelaysANF,
+        frameIdx: newFramesANF.length - 1,
+      }
+
+    case PIXEL_EDITOR_DELETE_FRAME:
+      const newFramesDF = frames.slice(0)
+      newFramesDF.splice(targetIdx, 1);
+
+      const newDelaysDF = framesDelay.slice(0)
+      newDelaysDF.splice(targetIdx, 1);
+
+      var newIdxDF = frameIdx >= targetIdx ? frameIdx - 1 : frameIdx
+      if (newIdxDF < 0) newIdxDF = 0
+
+      return {
+        ...state,
+        frames: newFramesDF,
+        framesDelays: newDelaysDF,
+        frameIdx: newIdxDF,
+      }
+
+    case PIXEL_EDITOR_MOVE_FRAME:
+
+
+
+      var dropIdx = targetIdx
+      if (dropIdx > srcIdx) {
+        dropIdx--
+      }
+
+      const f = frames[srcIdx]
+      const newFramesMF = frames.slice(0)
+      newFramesMF.splice(srcIdx, 1);
+      newFramesMF.splice(dropIdx, 0, f);
+
+      const d = framesDelay[srcIdx]
+      const newDelaysMF = framesDelay.slice(0)
+      newDelaysMF.splice(srcIdx, 1);
+      newDelaysMF.splice(dropIdx, 0, d);
+
+      var newIdxMF = frameIdx === srcIdx ? dropIdx :
+          ((dropIdx <= frameIdx) && (srcIdx > frameIdx)) ? frameIdx + 1 :
+            ((dropIdx >= frameIdx) && (srcIdx < frameIdx)) ? frameIdx - 1 : frameIdx
+
+      return {
+        ...state,
+        frames: newFramesMF,
+        framesDelay: newDelaysMF,
+        frameIdx: newIdxMF,
+      }
+
+    case PIXEL_EDITOR_DUPLICATE_FRAME:
+      const newFramesDUPF = frames.slice(0)
+      newFramesDUPF.splice(targetIdx, 0, frames[targetIdx])
+
+      const newDelaysDUPF = framesDelay.slice(0)
+      newDelaysDUPF.splice(targetIdx, 0, framesDelay[targetIdx])
+
+      return {
+        ...state,
+        frames: newFramesDUPF,
+        framesDelay: newDelaysDUPF,
+        frameIdx: targetIdx + 1,
+      }
+
+    case PIXEL_EDITOR_SET_FRAME_DELAY:
+      const newDelaysSFD = framesDelay.slice(0)
+      newDelaysSFD.splice(frameIdx, 0, framesDelay[frameIdx])
+
+      return {
+        ...state,
+        framesDelay: newDelaysSFD,
+      }
+
+
     case PIXEL_EDITOR_CHANGE_IMAGE:
       //console.log("PIXEL_EDITOR_CHANGE_IMAGE", action)
       return {
@@ -202,6 +297,7 @@ const pixelEditor = (state = null, action) => {
         height: DEFAULT_HEIGHT,
         frameIdx: 0,
         frames: [emptyPixel(DEFAULT_WIDTH, DEFAULT_HEIGHT)],
+        framesDelays: [1000],
         palette: DEFAULT_PALETTE,
         imagePalette: [],
         imageName: "newImage",
@@ -221,11 +317,11 @@ const pixelEditor = (state = null, action) => {
       }
 
     case PIXEL_EDITOR_SCROLL_PIXEL:
-      const newFrames2 = scrollPixel(state, action)
-      if (newFrames2 !== state.frames) {
+      const newFramesSP = scrollPixel(state, action)
+      if (newFramesSP !== state.frames) {
         return {
           ...state,
-          frames: newFrames2,
+          frames: newFramesSP,
           resizeFrames: null,
         }
       }

@@ -8,15 +8,26 @@ export const RECEIVE_SHIFTER_STATE = 'RECEIVE_SHIFTER_STATE'
 export const PIXEL_EDITOR_SET_PALETTE = "PIXEL_EDITOR_SET_PALETTE"
 export const PIXEL_EDITOR_ADD_TO_PALETTE = "PIXEL_EDITOR_ADD_TO_PALETTE"
 
+export const PIXEL_EDITOR_SET_ACTIVE_FRAME = "PIXEL_EDITOR_SET_ACTIVE_FRAME"
 export const PIXEL_EDITOR_CHANGE_SIZE = "PIXEL_EDITOR_CHANGE_SIZE"
 export const PIXEL_EDITOR_CHANGE_IMAGE = "PIXEL_EDITOR_CHANGE_IMAGE"
 export const PIXEL_EDITOR_RESET_IMAGE = "PIXEL_EDITOR_RESET_IMAGE"
 export const PIXEL_EDITOR_CHANGE_PIXEL = "CHANGE_PIXEL"
 export const PIXEL_EDITOR_SCROLL_PIXEL = "PIXEL_EDITOR_SCROLL_PIXEL"
+
+export const PIXEL_EDITOR_MOVE_FRAME = 'PIXEL_EDITOR_MOVE_FRAME'
+export const PIXEL_EDITOR_ADD_NEW_FRAME = 'PIXEL_EDITOR_ADD_NEW_FRAME'
+export const PIXEL_EDITOR_DUPLICATE_FRAME = 'PIXEL_EDITOR_DUPLICATE_FRAME'
+export const PIXEL_EDITOR_DELETE_FRAME = 'PIXEL_EDITOR_DELETE_FRAME'
+export const PIXEL_EDITOR_SET_FRAME_DELAY = 'PIXEL_EDITOR_SET_FRAME_DELAY'
+
+
+
+
 export const PIXEL_EDITOR_CHANGE_TOOL = "CHANGE_TOOL"
 export const PIXEL_EDITOR_CHANGE_TOOL_SIZE = "CHANGE_TOOL_SIZE"
 export const PIXEL_EDITOR_SET_COLOR = "PIXEL_EDITOR_SET_COLOR"
-export const PIXEL_EDITOR_SET_ACTIVE_FRAME = "PIXEL_EDITOR_SET_ACTIVE_FRAME"
+
 export const PIXEL_EDITOR_SET_IMAGE_NAME = "PIXEL_EDITOR_SET_IMAGE_NAME"
 
 export const NAVIGATION_SET_LOCATION = 'NAVIGATION_SET_LOCATION'
@@ -85,6 +96,37 @@ export const pixelEditorSetActiveFrame = (activeFrame) => {
     activeFrame
   }
 }
+
+
+export const pixelEditorMoveFrame = (srcIdx, targetIdx) => ({
+  type: PIXEL_EDITOR_MOVE_FRAME,
+  srcIdx,
+  targetIdx
+})
+
+export const pixelEditorAddNewFrame = () => ({
+  type: PIXEL_EDITOR_ADD_NEW_FRAME,
+})
+
+export const pixelEditorDuplicteFrame = (targetIdx) => ({
+  type: PIXEL_EDITOR_DUPLICATE_FRAME,
+  targetIdx
+})
+
+export const pixelEditorDeleteFrame = (targetIdx) => ({
+  type: PIXEL_EDITOR_DELETE_FRAME,
+  targetIdx
+})
+
+export const pixelEditorSetFrameDelay = (targetIdx, delayMs) => ({
+  type: PIXEL_EDITOR_SET_FRAME_DELAY,
+  targetIdx,
+  delayMs
+})
+
+
+
+
 
 export const pixelEditorChangeImage = (image, activeFrame = 0) => ({
   type: PIXEL_EDITOR_CHANGE_IMAGE,

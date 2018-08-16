@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from "prop-types";
-import { hexFromRGB, shadeRGB, equRGB } from "../../utils/color"
+import { hexFromRGB, shadeRGB, equRGB, RGB } from "../../utils/color"
 import floodFill from "n-dimensional-flood-fill"
 
 //import { ResizeSensor } from 'css-element-queries'
@@ -259,7 +259,7 @@ export default class PixelCanvas extends Component {
   }
 
 
-  static black = { r:0, g: 0, b: 0 }
+  static black = RGB(0,0,0)
 
   useDrawToolInternal = (evt, color) => {
     const { onChange, toolSize, width, height } = this.props
