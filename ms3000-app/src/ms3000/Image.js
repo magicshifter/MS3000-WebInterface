@@ -10,21 +10,21 @@ export default class Image {
     this.frames = frames
     // TODO: implement an len check array
     if (isInteger(delayMsOrArray)) {
-      this.framesDelay = []
+      this.framesDelays = []
       for (var i = 0; i < frames.length; i++) {
-        this.framesDelay.push(delayMsOrArray)
+        this.framesDelays.push(delayMsOrArray)
       }
     }
     else {
       if (delayMsOrArray.length !== frames.length) {
         throw "Image.constructor delays dont have same len as frames: " + delayMsOrArray.length + " " + frames.length
       }
-      this.framesDelay = delayMsOrArray
+      this.framesDelays = delayMsOrArray
     }
   }
 
   toPNG() {
-    const { width, height, frames, framesDelay } = this
+    const { width, height, frames, framesDelays } = this
 
     const fS = frames.length
     const buffers = []
@@ -49,11 +49,11 @@ export default class Image {
       buffers.push(rgba.buffer)
     }
 
-    if (buffers.length !== framesDelay.length) {
-      throw "Image.toPNG delays dont have same len as frames: " + buffers.length + " " + framesDelay.length
+    if (buffers.length !== framesDelays.length) {
+      throw "Image.toPNG delays dont have same len as frames: " + buffers.length + " " + framesDelays.length
     }
 
-    return UPNG.encode(buffers, width, height, 0, framesDelay)
+    return UPNG.encode(buffers, width, height, 0, framesDelays)
   }
 
   static fromPNG(arrayBuffer) {
@@ -78,6 +78,7 @@ export default class Image {
     const delays = []
     const pngRGBAs = UPNG.toRGBA8(png)
     for (var i = 0; i < pngRGBAs.length; i++) {
+      delays.push(png.frames[i].delay)
       const pngRGBA = new Uint8Array(pngRGBAs[i])
       //console.log("working on frame", i, pngRGBA)
 
@@ -92,7 +93,6 @@ export default class Image {
           //console.log("pixel png", r, g, b, idxPng)
           const rgb = RGB(r, g, b)
           patternData.push(rgb)
-          delays.push(png.frames[i].delay)
         }
       }
 

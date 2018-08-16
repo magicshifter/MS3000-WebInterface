@@ -157,7 +157,7 @@ const pixelEditor = (state = null, action) => {
   }
 
   const { srcIdx, targetIdx } = action
-  const { frameIdx, frames, framesDelay } = state
+  const { frameIdx, frames, framesDelays } = state
 
   switch (action.type) {
     case PIXEL_EDITOR_CHANGE_TOOL:
@@ -194,11 +194,15 @@ const pixelEditor = (state = null, action) => {
 
 
     case PIXEL_EDITOR_ADD_NEW_FRAME:
+
+
       const newDelaysANF = state.framesDelays.slice(0)
       const v = newDelaysANF.length >= 1 ? state.framesDelays[newDelaysANF.length - 1] : 1000
       newDelaysANF.push(v)
       const newFramesANF = state.frames.slice(0)
       newFramesANF.push(emptyPixel(state.width, state.height))
+
+      console.log("Add frame", newFramesANF, newDelaysANF)
 
       return {
         ...state,
@@ -211,7 +215,7 @@ const pixelEditor = (state = null, action) => {
       const newFramesDF = frames.slice(0)
       newFramesDF.splice(targetIdx, 1);
 
-      const newDelaysDF = framesDelay.slice(0)
+      const newDelaysDF = framesDelays.slice(0)
       newDelaysDF.splice(targetIdx, 1);
 
       var newIdxDF = frameIdx >= targetIdx ? frameIdx - 1 : frameIdx
@@ -238,8 +242,8 @@ const pixelEditor = (state = null, action) => {
       newFramesMF.splice(srcIdx, 1);
       newFramesMF.splice(dropIdx, 0, f);
 
-      const d = framesDelay[srcIdx]
-      const newDelaysMF = framesDelay.slice(0)
+      const d = framesDelays[srcIdx]
+      const newDelaysMF = framesDelays.slice(0)
       newDelaysMF.splice(srcIdx, 1);
       newDelaysMF.splice(dropIdx, 0, d);
 
@@ -250,7 +254,7 @@ const pixelEditor = (state = null, action) => {
       return {
         ...state,
         frames: newFramesMF,
-        framesDelay: newDelaysMF,
+        framesDelays: newDelaysMF,
         frameIdx: newIdxMF,
       }
 
@@ -258,23 +262,23 @@ const pixelEditor = (state = null, action) => {
       const newFramesDUPF = frames.slice(0)
       newFramesDUPF.splice(targetIdx, 0, frames[targetIdx])
 
-      const newDelaysDUPF = framesDelay.slice(0)
-      newDelaysDUPF.splice(targetIdx, 0, framesDelay[targetIdx])
+      const newDelaysDUPF = framesDelays.slice(0)
+      newDelaysDUPF.splice(targetIdx, 0, framesDelays[targetIdx])
 
       return {
         ...state,
         frames: newFramesDUPF,
-        framesDelay: newDelaysDUPF,
+        framesDelays: newDelaysDUPF,
         frameIdx: targetIdx + 1,
       }
 
     case PIXEL_EDITOR_SET_FRAME_DELAY:
-      const newDelaysSFD = framesDelay.slice(0)
-      newDelaysSFD.splice(frameIdx, 0, framesDelay[frameIdx])
+      const newDelaysSFD = framesDelays.slice(0)
+      newDelaysSFD.splice(frameIdx, 0, framesDelays[frameIdx])
 
       return {
         ...state,
-        framesDelay: newDelaysSFD,
+        framesDelays: newDelaysSFD,
       }
 
 
@@ -284,6 +288,7 @@ const pixelEditor = (state = null, action) => {
         ...state,
         frameIdx: action.activeFrame,
         frames: action.image.frames,
+        framesDelays: action.image.framesDelays,
         width: action.image.width,
         height: action.image.height,
         imagePalette: paletteFromImage(action.image.frames),

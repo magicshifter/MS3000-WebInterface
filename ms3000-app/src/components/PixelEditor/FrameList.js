@@ -9,6 +9,14 @@ import { faTrash, faClone, faArrowsAlt, faPlusSquare } from '@fortawesome/free-s
 
 import { emptyPixel } from '../../utils/color'
 
+import {
+  pixelEditorAddNewFrame,
+  pixelEditorDeleteFrame,
+  pixelEditorMoveFrame,
+  pixelEditorDuplicteFrame,
+  pixelEditorSetActiveFrame,
+} from  '../../actions'
+
 import './FrameList.css'
 
 const PREVIEW_SCALE = 3
@@ -37,35 +45,43 @@ export default class FrameList extends Component {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     frames: PropTypes.array.isRequired,
-    onChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired, // returns action
   }
 
   onClickFrame = (evt) => {
     const {onChange} = this.props
     //console.log("clicked tool", evt)
     const frameNr = parseInt(evt.currentTarget.dataset["frame"] || "0", 10)
+
+    onChange(pixelEditorSetActiveFrame(frameNr))
+
     //console.log("clicked tool", frameNr)
-    onChange(frameNr)
+    //onChange(frameNr)
   }
 
   onClickAddFrame = (evt) => {
     const {onChange, frames, width, height} = this.props
-    const newFrames = frames.slice(0)
-    newFrames.push(emptyPixel(width, height))
-    onChange(newFrames.length - 1, newFrames)
+
+    onChange(pixelEditorAddNewFrame())
+
+    // const newFrames = frames.slice(0)
+    // newFrames.push(emptyPixel(width, height))
+    // onChange(newFrames.length - 1, newFrames)
   }
 
   onClickDuplicateFrame = (evt) => {
     // dont let click go to select Frame!
     evt.stopPropagation();
 
-    const {onChange, frames} = this.props
+    const {onChange } = this.props
     const frameNr = parseInt(evt.currentTarget.dataset["frame"] || "0", 10)
+    onChange(pixelEditorDuplicteFrame(frameNr))
 
-    const newFrames = frames.slice(0)
-    newFrames.splice(frameNr, 0, frames[frameNr])
 
-    onChange(frameNr + 1, newFrames)
+    // const newFrames = frames.slice(0)
+    // newFrames.splice(frameNr, 0, frames[frameNr])
+    //
+    // onChange(frameNr + 1, newFrames)
   }
 
   onClickRemoveFrame = (evt) => {
@@ -76,13 +92,15 @@ export default class FrameList extends Component {
     //console.log("clicked tool", evt)
     const frameNr = parseInt(evt.currentTarget.dataset["frame"] || "0", 10)
 
-    const newFrames = frames.slice(0)
-    newFrames.splice(frameNr, 1);
+    onChange(pixelEditorDeleteFrame(frameNr))
 
-    var newIdx = activeFrame >= frameNr ? activeFrame - 1 : activeFrame
-    if (newIdx < 0) newIdx = 0
-
-    onChange(newIdx, newFrames)
+    // const newFrames = frames.slice(0)
+    // newFrames.splice(frameNr, 1);
+    //
+    // var newIdx = activeFrame >= frameNr ? activeFrame - 1 : activeFrame
+    // if (newIdx < 0) newIdx = 0
+    //
+    // onChange(newIdx, newFrames)
   }
 
   render() {
@@ -229,25 +247,29 @@ export default class FrameList extends Component {
   handleDropFrame = (evt) => {
     const { idx, isSpace } = findDataInParents(evt.target)
     const sourceIdx = this.dndSourceIdx
-
     if (isSpace && !isNaN(idx) && sourceIdx !== idx) {
-      const {frames, activeFrame, onChange} = this.props
+      const {onChange} = this.props
+      onChange(pixelEditorMoveFrame(sourceIdx, idx))
 
-      const f = frames[sourceIdx]
-      const newFrames = frames.slice(0)
-      newFrames.splice(sourceIdx, 1);
 
-      var dropIdx = idx
-      if (idx > sourceIdx) {
-        dropIdx--
-      }
-      newFrames.splice(dropIdx, 0, f);
 
-      var newIdx = activeFrame === sourceIdx ? dropIdx :
-        ((dropIdx <= activeFrame) && (sourceIdx > activeFrame)) ? activeFrame + 1 :
-          ((dropIdx >= activeFrame) && (sourceIdx < activeFrame)) ? activeFrame - 1 : activeFrame
-
-      onChange(newIdx, newFrames)
+      // const {frames, activeFrame, onChange} = this.props
+      //
+      // const f = frames[sourceIdx]
+      // const newFrames = frames.slice(0)
+      // newFrames.splice(sourceIdx, 1);
+      //
+      // var dropIdx = idx
+      // if (idx > sourceIdx) {
+      //   dropIdx--
+      // }
+      // newFrames.splice(dropIdx, 0, f);
+      //
+      // var newIdx = activeFrame === sourceIdx ? dropIdx :
+      //   ((dropIdx <= activeFrame) && (sourceIdx > activeFrame)) ? activeFrame + 1 :
+      //     ((dropIdx >= activeFrame) && (sourceIdx < activeFrame)) ? activeFrame - 1 : activeFrame
+      //
+      // onChange(newIdx, newFrames)
     }
   }
 }

@@ -147,16 +147,18 @@ class PixelEditor extends Component {
     dispatch(pixelEditorSetImageName(newName))
   }
 
-  onChangeFrames = (newFrameIdx, newFrames) => {
-    const { dispatch, width, height } = this.props
-    if (newFrames) {
-      //console.log("onChangeFrames newFrames")
-      dispatch(pixelEditorChangeImage(new Image(width, height, newFrames), newFrameIdx))
-    }
-    else {
-      //console.log("onChangeFrames only idx")
-      dispatch(pixelEditorSetActiveFrame(newFrameIdx))
-    }
+  onChangeFrames = (action) => {
+    const { dispatch } = this.props
+    console.log("winking action throug ftom Frames", action)
+    dispatch(action)
+    // if (newFrames) {
+    //   //console.log("onChangeFrames newFrames")
+    //   dispatch(pixelEditorChangeImage(new Image(width, height, newFrames), newFrameIdx))
+    // }
+    // else {
+    //   //console.log("onChangeFrames only idx")
+    //   dispatch(pixelEditorSetActiveFrame(newFrameIdx))
+    // }
   }
 
   onExportImage = () => {

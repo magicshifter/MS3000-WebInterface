@@ -120,7 +120,7 @@ export default class PixelCanvas extends Component {
     let dW = div.clientWidth;
     let dH = div.clientHeight;
 
-    console.log("resize". dW, dH)
+    //console.log("resize", dW, dH)
 
     this.canvas.width = dW
     this.canvas.height = dH
