@@ -21,6 +21,52 @@ function calcBufferSize(bitPerPixel, w, h) {
   }
 }
 
+function unpackPixel(bitPerPixel, fileData, pixelNr, offset) {
+  if (bitPerPixel === 24) {
+    const idx = pixelNr * 3 + offset
+    const r = fileData[idx]
+    const g = fileData[idx+1]
+    const b = fileData[idx+2]
+    return RGB(r,g,b)
+  }
+  else if (bitPerPixel === 8) {
+    const idx = pixelNr + offset
+    const x = fileData[idx]
+    return RGB(x,x,x)
+  }
+  else if (bitPerPixel === 1) {
+    const bitMask = 1 << (pixelNr % 8)
+    const idx = (pixelNr >> 3) + offset;
+    const x = fileData[idx] & bitMask ? 255 : 0
+    return RGB(x,x,x)
+  }
+  else {
+    throw "unpackPixel: unknown pitPerPixel: " + bitPerPixel
+  }
+}
+
+function packPixels(bitPerPixel, fileData, pixelNr, offset, rgb) {
+  if (bitPerPixel === 24) {
+    const idx = pixelNr * 3 + offset
+    fileData[idx] = rgb.R
+    fileData[idx+1] = rgb.G
+    fileData[idx+2] = rgb.B
+  }
+  else if (bitPerPixel === 8) {
+    const idx = pixelNr + offset
+    fileData[idx] = rgb.R
+  }
+  else if (bitPerPixel === 1) {
+    const bitMask = 1 << (pixelNr % 8)
+    const idx = pixelNr >> 3;
+    if (rgb.R !== 0)
+    fileData[idx] |= bitMask
+  }
+  else {
+    throw "packPixels: unknown pitPerPixel: " + bitPerPixel
+  }
+}
+
 export default class MagicBitmap {
   static TYPES = {
     'bitmap': 0xBA,
@@ -51,6 +97,7 @@ export default class MagicBitmap {
       throw "please give array for delays or TODO: implement types"
     }
     this.framesDelays = delayOrFirstCharOrDelayArray
+    // TODO: delays nach jedem frame in bitmap2
     this.delayBlockSize = 0
     this.delayBlock = null
     if (type === 'bitmap2') {
@@ -142,11 +189,14 @@ export default class MagicBitmap {
           for (let y = 0; y < height; y++) {
             const idx = x + (y * width);
             const pixel = pixels.get(idx)
-            const fileDataIdx = headerSize + 3 * (width * height * i + y + x * height);
-
-            fileData[fileDataIdx + 0] = pixel.R;
-            fileData[fileDataIdx + 1] = pixel.G;
-            fileData[fileDataIdx + 2] = pixel.B;
+            //
+            //
+            // const fileDataIdx = headerSize + 3 * (width * height * i + y + x * height);
+            //
+            // fileData[fileDataIdx + 0] = pixel.R;
+            // fileData[fileDataIdx + 1] = pixel.G;
+            // fileData[fileDataIdx + 2] = pixel.B;
+            packPixels(bitPerPixel, fileData, width * height * i + y + x * height, headerSize,pixel)
           }
         }
       }
@@ -203,11 +253,14 @@ export default class MagicBitmap {
 
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          const fileDataIdx = headerSize + 3 * (width * height * i + y + x * height);
-          const r = fileData[fileDataIdx + 0]
-          const g = fileData[fileDataIdx + 1]
-          const b = fileData[fileDataIdx + 2]
-          const rgb = RGB(r,g,b)
+          // const fileDataIdx = headerSize + 3 * (width * height * i + y + x * height);
+          // const r = fileData[fileDataIdx + 0]
+          // const g = fileData[fileDataIdx + 1]
+          // const b = fileData[fileDataIdx + 2]
+
+          const rgb = unpackPixel(bitPerPixel, fileData, width * height * i + y + x * height, headerSize)
+
+          //const rgb = RGB(r,g,b)
           pixels.push(rgb)
         }
       }

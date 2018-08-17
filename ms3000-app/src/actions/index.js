@@ -67,7 +67,6 @@ export const pixelEditorSetImageName = (name) => ({
   name
 })
 
-
 export const pixelEditorSetPalette = (palette) => ({
   type: PIXEL_EDITOR_SET_PALETTE,
   palette

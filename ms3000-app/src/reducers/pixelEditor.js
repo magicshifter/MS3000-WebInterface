@@ -192,8 +192,6 @@ const pixelEditor = (state = null, action) => {
         frameIdx: action.activeFrame
       }
 
-
-
     case PIXEL_EDITOR_ADD_NEW_FRAME:
       const newDelaysANF = state.framesDelays.slice(0)
       const v = newDelaysANF.length >= 1 ? state.framesDelays[newDelaysANF.length - 1] : 1000

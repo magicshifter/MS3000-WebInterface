@@ -44,6 +44,11 @@ import {
   faTint,
   faUndo,
   faUpload,
+
+  faCogs, faCloudDownloadAlt, faCloudUploadAlt,
+  faPlusSquare, // add frame
+  faSyncAlt, // als spinner
+  faWifi,
 } from '@fortawesome/free-solid-svg-icons'
 
 
@@ -152,16 +157,8 @@ class PixelEditor extends Component {
 
   onChangeFrames = (action) => {
     const { dispatch } = this.props
-    console.log("winking action throug ftom Frames", action)
+    //console.log("winking action throug ftom Frames", action)
     dispatch(action)
-    // if (newFrames) {
-    //   //console.log("onChangeFrames newFrames")
-    //   dispatch(pixelEditorChangeImage(new Image(width, height, newFrames), newFrameIdx))
-    // }
-    // else {
-    //   //console.log("onChangeFrames only idx")
-    //   dispatch(pixelEditorSetActiveFrame(newFrameIdx))
-    // }
   }
 
   onExportImage = () => {
@@ -213,13 +210,10 @@ class PixelEditor extends Component {
 
         const { dispatch } = this.props
         dispatch(pixelEditorChangeImage(i, 0, pName))
-
-
-        //dispatch(pixelEditorSetImageName(pName))
-
       }
       reader.readAsArrayBuffer(file) // start async operation
     }
+    // clear files so that next file open triggers a change even wehn same file is selected
     evt.target.value = null
   };
 
