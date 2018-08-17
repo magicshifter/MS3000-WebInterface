@@ -76,8 +76,6 @@ export default class MagicBitmap {
 
   }
 
-
-
   static encodeType = (type) => {
     const ts = MagicBitmap.TYPES
     const kk = Object.keys(ts)
@@ -118,7 +116,7 @@ export default class MagicBitmap {
         throw "UNKNOWN MagicBitmap type: " + type
       }
 
-      const fileSize = framesCnt * this.CalcBufferSize(bitPerPixel, width, height) + headerSize + delayBlockSize
+      const fileSize = framesCnt * calcBufferSize(bitPerPixel, width, height) + headerSize + delayBlockSize
       const fileData = new Uint8Array(fileSize);
 
       // write header
@@ -144,7 +142,7 @@ export default class MagicBitmap {
         for (let x = 0; x < width; x++) {
           for (let y = 0; y < height; y++) {
             const idx = x + (y * width);
-            const pixel = pixels[idx];
+            const pixel = pixels.get(idx)
             const fileDataIdx = headerSize + 3 * (width * height * i + y + x * height);
 
             fileData[fileDataIdx + 0] = pixel.R;

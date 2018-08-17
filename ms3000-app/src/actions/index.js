@@ -191,36 +191,31 @@ export function dumpU8(u8) {
 
 export const postShifterState = () => (dispatch, getState) => {
   const state = getState()
+  const { host } = state.ms3000
 
   console.log("postShifterStaet", state)
 
   const testObj = state.ms3000.shifterState
   var check = pb.MS3KG.verify(testObj);
 
-  var bufferU8 = pb.MS3KG.encode(testObj).finish()
-  dumpU8(bufferU8)
-  //var decoder = new TextDecoder('utf8');
+  const bufferU8 = pb.MS3KG.encode(testObj).finish()
+  //dumpU8(bufferU8)
+  const funkyStr = String.fromCharCode.apply(null, bufferU8)
+  const b64encoded = btoa(funkyStr);
 
-  var funkyStr = String.fromCharCode.apply(null, bufferU8)
-
-  var b64encoded = btoa(funkyStr);
-
-  //b64encoded = "abc"
-
-  fetch({method: "post", url: 'http://192.168.4.1/protobuf?myArg=' + b64encoded})
+  fetch({method: "post", url: host + '/protobuf?myArg=' + b64encoded})
 
   console.log(check, bufferU8)
 
   var message = (check == null ? "success :)" : check);
-
-  //message = "hello"
-
-
 }
 
 
 
 export const fetchShifterState = () => (dispatch, getState) => {
+  const state = getState()
+  const { host } = state.ms3000
+
   console.log("fetchShifterState")
     dispatch(requestShifterState())
 
@@ -228,7 +223,7 @@ export const fetchShifterState = () => (dispatch, getState) => {
   //const shifterState = { h: "uhdskjh", jhjk:7687, ii:{o:8,x:[7,8,9]}, oooo:getState().ms3000.shifterState }
   //setTimeout(function(){ dispatch(receiveShifterState(shifterState)) }, 1600);
 
-  fetch( {method: "get", url: 'http://192.168.4.1/protobuf' } ).then(data => {
+  fetch( {method: "get", url: host + '/protobuf' } ).then(data => {
     console.log("received shifter blob", data.response)
 
     var decoded = atob(data.response)

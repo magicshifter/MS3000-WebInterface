@@ -380,17 +380,19 @@ class PixelEditor extends Component {
       saveAs(blob, fileName);
     };
 
-  onClick =
-    () => {
-      const blob = this.getBlob();
-      const fileName = this.getFileName();
+  onUploadToShifter = () => {
+      const { width, height, frames, imageName } = this.props
 
-      var url = this.props.url;
-      // console.log({url});
-      if (url === 'http://') {
-        url = '';
-      }
-      // console.log({url});
+      const mb = new MagicBitmap('bitmap', 24, width, height, frames, [999])
+      const blob = mb.toBlob()
+
+
+      const host = 'http://magicshifter.local'
+      //const host = 'http://192.168.4.1'
+
+      const url = host + '/upload';
+
+      const fileName = imageName + '.magicBitmap'
 
       const formData = new window.FormData();
       formData.append('uploadFile', blob, fileName);
@@ -407,7 +409,7 @@ class PixelEditor extends Component {
         () =>
           console.warn(`Connection to ${url} timed out!!!`);
 
-      request.open('POST', `${url}/upload`);
+      request.open('POST', url);
       request.send(formData);
     };
 
