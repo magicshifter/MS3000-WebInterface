@@ -1,20 +1,19 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {
-  pixelEditorSetTool,
-  pixelEditorChangePixelList,
-  pixelEditorSetColor,
-  pixelEditorChangeSize,
-  pixelEditorChangeImage,
-  pixelEditorResetImage,
-  pixelEditorSetActiveFrame,
-  pixelEditorSetImageName,
-  pixelEditorSetToolSize,
-  pixelEditorSetPalette,
   pixelEditorAddToPalette,
-  sidebarToolsVisible, sidebarFilesVisible, pixelEditorScrollPixel
+  pixelEditorChangeImage,
+  pixelEditorChangePixelList,
+  pixelEditorChangeSize,
+  pixelEditorResetImage,
+  pixelEditorScrollPixel,
+  pixelEditorSetColor,
+  pixelEditorSetImageName,
+  pixelEditorSetTool,
+  pixelEditorSetToolSize,
+  sidebarToolsVisible
 } from '../actions'
-import { ActionCreators } from 'redux-undo';
+import {ActionCreators} from 'redux-undo';
 
 import PixelCanvas from '../components/PixelEditor/PixelCanvas'
 import ToolsMenu from '../components/PixelEditor/ToolsMenu'
@@ -25,27 +24,30 @@ import StringInput from '../components/inputs/StringInput'
 import NumberInput from '../components/inputs/NumberInput'
 import FrameList from '../components/PixelEditor/FrameList'
 import Collapsable from '../components/Collapsable'
-import Sidebar from '../components/Sidebar'
 
 import Image from '../ms3000/Image'
 
-import { saveAs } from 'file-saver'
-import { connect } from "react-redux";
+import {saveAs} from 'file-saver'
+import {connect} from "react-redux";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEraser, faPencilAlt, faPaintBrush, faEyeDropper, faSave, faFolderOpen, faUpload, faRecycle,  faTint, faUndo, faRedo, faPalette,
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {
   faArrowsAlt,
-  faCogs, faCloudDownloadAlt, faCloudUploadAlt,
-  faFile, // for new?
-  faPlusSquare, // add frame
-  faSyncAlt, // als spinner
-  faWifi,
-
+  faEraser,
+  faEyeDropper,
+  faFile,
+  faFolderOpen,
+  faPalette,
+  faPencilAlt,
+  faRedo,
+  faSave,
+  faTint,
+  faUndo,
+  faUpload,
 } from '@fortawesome/free-solid-svg-icons'
 
 
 import './PixelEditor.css'
-import {faFolder} from "@fortawesome/free-solid-svg-icons/index";
 import MagicBitmap from "../ms3000/MagicBitmap";
 
 

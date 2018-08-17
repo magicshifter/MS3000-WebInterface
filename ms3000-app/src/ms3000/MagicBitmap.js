@@ -1,6 +1,5 @@
-import { List }  from 'immutable'
-import UPNG from 'upng-js'
-import { RGB } from '../utils/color'
+import {List} from 'immutable'
+import {RGB} from '../utils/color'
 import Image from "./Image";
 
 function calcBufferSize(bitPerPixel, w, h) {

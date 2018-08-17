@@ -1,5 +1,3 @@
-import {  } from '../actions'
-
 const DEFAULT_STATE = {
   files: [
     {name: "index.html", size: 1232},

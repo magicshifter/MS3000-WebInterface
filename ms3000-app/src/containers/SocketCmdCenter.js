@@ -1,8 +1,6 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { fetchShifterState, receiveShifterState } from '../actions'
-import protobufs from '../utils/protoBufLoader'
+import {connect} from 'react-redux'
 
 import * as socketActions from '../actions/socket'
 

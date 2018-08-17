@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from "prop-types";
-import { hexFromRGB, shadeRGB, equRGB, RGB } from "../../utils/color"
+import {equRGB, hexFromRGB, RGB, shadeRGB} from "../../utils/color"
 import floodFill from "n-dimensional-flood-fill"
 
 function toolSL(size) {

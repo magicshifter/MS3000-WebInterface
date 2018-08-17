@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from "prop-types";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { defaultParseInt }  from '../../utils/types'
+import {defaultParseInt} from '../../utils/types'
 
 import './ToolsMenu.css'
 

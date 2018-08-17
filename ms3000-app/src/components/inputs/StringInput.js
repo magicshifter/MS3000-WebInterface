@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import { isInteger, isString } from '../../utils/types'
 
 
 export default class StringInput extends Component {

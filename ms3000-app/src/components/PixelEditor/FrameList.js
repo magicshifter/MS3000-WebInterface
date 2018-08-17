@@ -1,21 +1,19 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from "prop-types";
 import PixelPreview from './PixelPreview'
 
 import IconButton from '../inputs/IconButton'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faClone, faArrowsAlt, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
-
-
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faArrowsAlt, faClone, faPlusSquare, faTrash} from '@fortawesome/free-solid-svg-icons'
 // TODO: is it ok to have actions here??
 import {
   pixelEditorAddNewFrame,
   pixelEditorDeleteFrame,
-  pixelEditorMoveFrame,
   pixelEditorDuplicteFrame,
+  pixelEditorMoveFrame,
   pixelEditorSetActiveFrame,
-} from  '../../actions'
+} from '../../actions'
 
 import './FrameList.css'
 

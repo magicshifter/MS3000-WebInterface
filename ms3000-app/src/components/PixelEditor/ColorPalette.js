@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from "prop-types";
-import { hexFromRGB, equRGB } from '../../utils/color'
+import {equRGB, hexFromRGB} from '../../utils/color'
 
 import './ColorPalette.css'
 

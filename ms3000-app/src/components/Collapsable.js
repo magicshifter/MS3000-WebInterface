@@ -1,11 +1,8 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from "prop-types";
 
 import IconButton from './inputs/IconButton'
-import { faPlus, faMinus} from '@fortawesome/free-solid-svg-icons'
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-import { defaultParseInt }  from '../utils/types'
 
 
 export default class Collapsable extends Component {

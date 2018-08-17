@@ -1,7 +1,7 @@
-import { List }  from 'immutable'
+import {List} from 'immutable'
 import UPNG from 'upng-js'
-import { RGB } from '../utils/color'
-import { isInteger } from  '../utils/types'
+import {RGB} from '../utils/color'
+import {isInteger} from '../utils/types'
 
 export default class Image {
   constructor(width, height, frames, delayMsOrArray) {

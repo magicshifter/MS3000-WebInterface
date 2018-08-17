@@ -1,14 +1,13 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 
 import AutoInterface from './index'
 import RGBControl from './RGBControl'
 import EnumControl from './EnumControl'
 
-import { defaultParseInt } from '../../utils/types'
+import {defaultParseInt} from '../../utils/types'
 
 import protobuf from 'protobufjs'
-
 
 
 export default class AutoControl extends Component {

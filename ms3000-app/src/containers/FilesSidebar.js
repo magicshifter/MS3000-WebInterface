@@ -1,15 +1,13 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { sidebarFilesVisible } from '../actions'
+import {connect} from 'react-redux'
+import {sidebarFilesVisible} from '../actions'
 
 
 import Sidebar from '../components/Sidebar'
 import SelectableList from '../components/inputs/SelectableList'
 
-import { faFolder
-
-} from '@fortawesome/free-solid-svg-icons'
+import {faFolder} from '@fortawesome/free-solid-svg-icons'
 
 
 import './App.css';

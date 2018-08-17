@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from "prop-types";
-import { hexFromRGB, shadeRGB, equRGB } from "../../utils/color"
-
+import {hexFromRGB} from "../../utils/color"
 
 
 export default class PixelPreview extends Component {

@@ -1,4 +1,4 @@
-import { SIDEBAR_FILES_VISIBLE, SIDEBAR_TOOLS_VISIBLE } from '../actions'
+import {SIDEBAR_FILES_VISIBLE, SIDEBAR_TOOLS_VISIBLE} from '../actions'
 
 
 const sidebar = (state = {filesVisible: true, toolsVisible: true}, action) => {

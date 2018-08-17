@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from "prop-types";
-import { hexFromRGB, createRGBFromHex } from '../../utils/color'
+import {createRGBFromHex, hexFromRGB} from '../../utils/color'
 
 import './ColorChooser.css'
 

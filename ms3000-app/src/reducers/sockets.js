@@ -1,8 +1,5 @@
-import { combineReducers } from 'redux';
-import { createReducer } from 'redux-act';
-import {
-  login, logout, addUser, removeUser, newMessage
-} from '../actions/socket';
+import {combineReducers} from 'redux';
+import {createReducer} from 'redux-act';
 
 const initial = {
   app: {

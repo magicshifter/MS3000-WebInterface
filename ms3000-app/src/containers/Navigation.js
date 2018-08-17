@@ -1,14 +1,9 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { navigationSetLocation } from '../actions'
-import protobufs from '../utils/protoBufLoader'
-
-import AutoInterface from '../components/AutoInterface/index'
-import PixelEditor from './PixelEditor'
+import {connect} from 'react-redux'
+import {navigationSetLocation} from '../actions'
 
 import './App.css';
-import logo from '../logo.svg';
 
 const navStructure = [
   { name: "wifi" },

@@ -1,5 +1,4 @@
 import Color from "color"
-import { isInteger } from './types'
 import {List} from "immutable";
 
 export function emptyPixel(w, h) {

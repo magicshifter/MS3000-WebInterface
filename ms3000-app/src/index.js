@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import AppDebug from './App';
 import registerServiceWorker from './registerServiceWorker';
-import { getProtocolBuffersPromise } from './utils/protoBufLoader'
-import { createStore, applyMiddleware } from 'redux'
-import { Provider } from 'react-redux'
+import {getProtocolBuffersPromise} from './utils/protoBufLoader'
+import {applyMiddleware, createStore} from 'redux'
+import {Provider} from 'react-redux'
 
-import { createLogger } from 'redux-logger'
+import {createLogger} from 'redux-logger'
 import reducer from './reducers'
 import App from './containers/App'
 

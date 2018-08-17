@@ -1,9 +1,7 @@
 import io from 'socket.io-client';
-import { eventChannel } from 'redux-saga';
-import { fork, take, call, put, cancel } from 'redux-saga/effects';
-import {
-  login, logout, addUser, removeUser, newMessage, sendMessage
-} from '../actions/socket';
+import {eventChannel} from 'redux-saga';
+import {call, cancel, fork, put, take} from 'redux-saga/effects';
+import {addUser, login, logout, newMessage, removeUser} from '../actions/socket';
 
 function connect() {
   const socket = io('http://localhost:8123');

@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import {dumpU8, fetchShifterState, postShifterState, receiveShifterState, stringToArray} from '../actions'
+import {connect} from 'react-redux'
+import {dumpU8, fetchShifterState, postShifterState, receiveShifterState} from '../actions'
 import protobufs from '../utils/protoBufLoader'
+import pb from '../utils/protoBufLoader'
 
 import AutoInterface from '../components/AutoInterface/index'
 import PixelEditor from './PixelEditor'
@@ -13,15 +14,8 @@ import IconTest from '../components/IconTest'
 
 import FilesSidebar from './FilesSidebar'
 
-import pb from '../utils/protoBufLoader'
-
 import './App.css';
 import logo from '../logo.svg';
-
-
-import * as socketActions from '../actions/socket'
-import * as dg from 'dis-gui';
-import {fetch} from "../utils/http";
 
 
 class App extends Component {
