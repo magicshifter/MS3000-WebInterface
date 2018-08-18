@@ -7,10 +7,12 @@ import {sidebarFilesVisible} from '../actions'
 import Sidebar from '../components/Sidebar'
 import SelectableList from '../components/inputs/SelectableList'
 
-import {faFolder} from '@fortawesome/free-solid-svg-icons'
+import {faFolder, faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 
 
 import './App.css';
+import IconButton from "../components/inputs/IconButton";
+import { filesystemRefresh } from "../actions/filesystem";
 
 
 class FilesSidebar extends Component {
@@ -23,15 +25,28 @@ class FilesSidebar extends Component {
     dispatch(sidebarFilesVisible(newState))
   }
 
+  onClickRefresh = () => {
+    const { dispatch } = this.props
+    dispatch(filesystemRefresh())
+  }
+
   render() {
-    const { filesVisible, files } = this.props
+    const { filesVisible, files, isFetching, error } = this.props
 
     return (
       <Sidebar enlarged={filesVisible} onChange={this.onChangeFilesSidebar} icon={faFolder} tooltip='MS3000 Filesystem'
         right={0} top={0} >
-        <p>Hier kommen dann die Files<br/>die am Shifter lagern<br/>hello world!</p>
-        <SelectableList listItems={files} fieldId='name' fieldText='name' lines={20}
-                        select={this.selectFile} doubleClick={this.doubleClickFile}  />
+
+        <IconButton icon={faSyncAlt} tooltip='refresh filesystem' onClick={this.onClickRefresh}/>
+        {isFetching ?
+          "fetchin..." : null
+        }
+        {error ? "error: " + error : null}
+        {!files ?
+          <p>Please press refresh to update the filelist</p> :
+          <SelectableList listItems={files} fieldId='name' fieldText='name' lines={35}
+                          select={this.selectFile} doubleClick={this.doubleClickFile}/>
+        }
       </Sidebar>
     )
   }
@@ -39,11 +54,12 @@ class FilesSidebar extends Component {
 
 const mapStateToProps = state => {
   const { filesVisible } = state.sidebar
-  const { files } = state.fileSystem
+  const { files, isFetching, error } = state.fileSystem
 
   return {
     filesVisible,
-    files
+        isFetching,
+    files, error
   }
 }
 
