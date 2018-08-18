@@ -7,7 +7,7 @@ import {
 const DEFAULT_STATE = {
   isFetching: false,
   error: null,
-  files: null, 
+  files: null,
   //   [
   //   // {name: "index.html", size: 1232},
   //   // {name: "hello.txt", size: 122},
@@ -37,7 +37,7 @@ const fileSystem = (state = DEFAULT_STATE, action) => {
     case FILESYSTEM_REQUEST_FAIL:
       return {
         ...state,
-        files: [],
+        files: null,
         isFetching: false,
         error: action.error
       }

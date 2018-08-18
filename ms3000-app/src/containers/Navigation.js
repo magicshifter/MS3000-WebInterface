@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {navigationSetLocation} from '../actions'
+import {navigationSetLocation} from '../actions/navigation'
 
 import './App.css';
 

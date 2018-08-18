@@ -12,7 +12,7 @@ import {
   pixelEditorSetTool,
   pixelEditorSetToolSize,
   sidebarToolsVisible
-} from '../actions'
+} from '../actions/pixelEditor'
 import {ActionCreators} from 'redux-undo';
 
 import PixelCanvas from '../components/PixelEditor/PixelCanvas'

@@ -13,7 +13,7 @@ import {
   pixelEditorDuplicteFrame,
   pixelEditorMoveFrame,
   pixelEditorSetActiveFrame,
-} from '../../actions'
+} from '../../actions/pixelEditor'
 
 import './FrameList.css'
 

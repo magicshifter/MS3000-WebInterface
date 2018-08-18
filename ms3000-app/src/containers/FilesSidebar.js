@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {sidebarFilesVisible} from '../actions'
+import {sidebarFilesVisible} from '../actions/pixelEditor'
 
 
 import Sidebar from '../components/Sidebar'
@@ -39,9 +39,10 @@ class FilesSidebar extends Component {
 
         <IconButton icon={faSyncAlt} tooltip='refresh filesystem' onClick={this.onClickRefresh}/>
         {isFetching ?
-          "fetchin..." : null
+          <span> fetchin...</span> : null
         }
-        {error ? "error: " + error : null}
+        {error ? <p style={{color: 'red'}}>error: {error.toString()}</p> : null}
+
         {!files ?
           <p>Please press refresh to update the filelist</p> :
           <SelectableList listItems={files} fieldId='name' fieldText='name' lines={35}

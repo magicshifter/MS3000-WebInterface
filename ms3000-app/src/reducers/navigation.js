@@ -1,5 +1,4 @@
-import {NAVIGATION_SET_LOCATION} from '../actions'
-
+import { NAVIGATION_SET_LOCATION } from '../actions/navigation'
 
 const navigation = (state = {location: "mode-Image"}, action) => {
   switch (action.type) {

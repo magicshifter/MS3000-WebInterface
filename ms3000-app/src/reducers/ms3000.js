@@ -1,4 +1,4 @@
-import {RECEIVE_SHIFTER_STATE, REQUEST_SHIFTER_STATE} from '../actions'
+import { RECEIVE_SHIFTER_STATE, REQUEST_SHIFTER_STATE } from '../actions/ms3000'
 
 
 const ms3000 = (state = {isFetching: false, shifterState: {}, host: 'http://magicshifter.local' /*'http://192.168.4.1' */}, action) => {

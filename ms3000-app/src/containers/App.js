@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {dumpU8, fetchShifterState, postShifterState, receiveShifterState} from '../actions'
+import {dumpU8, fetchShifterState, postShifterState, receiveShifterState} from '../actions/ms3000'
 import protobufs from '../utils/protoBufLoader'
 import pb from '../utils/protoBufLoader'
 

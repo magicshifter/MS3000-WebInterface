@@ -17,7 +17,7 @@ import {
   PIXEL_EDITOR_SET_FRAME_DELAY,
   PIXEL_EDITOR_SET_IMAGE_NAME,
   PIXEL_EDITOR_SET_PALETTE,
-} from '../actions'
+} from '../actions/pixelEditor'
 import {emptyPixel, equRGB, paletteFromImage, RGB} from '../utils/color'
 
 
