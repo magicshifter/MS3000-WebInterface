@@ -362,7 +362,7 @@ export default class PixelCanvas extends Component {
     let { width, height } = this.props
 
     return (
-      <div ref='div' style={{width: '100%', flex: "1 1 auto", backgroundColor:'gray'}}
+      <div ref='div' style={{minWidth: '0', flex: "1 1 auto", backgroundColor:'gray', border: '2px solid blue'}}
            className="pure-menu pure-menu-horizontal pure-menu-scrollable">
         <canvas ref="canvas"
                 onMouseDown={this.onMouseDownCanvas}

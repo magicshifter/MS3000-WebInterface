@@ -37,12 +37,8 @@ class FilesSidebar extends Component {
       <Sidebar enlarged={filesVisible} onChange={this.onChangeFilesSidebar} icon={faFolder} tooltip='MS3000 Filesystem'
         right={0} top={0} >
 
-        <IconButton icon={faSyncAlt} tooltip='refresh filesystem' onClick={this.onClickRefresh}/>
-        {isFetching ?
-          <span> fetchin...</span> : null
-        }
+        <IconButton icon={faSyncAlt} tooltip='refresh filesystem' onClick={this.onClickRefresh} rotate={isFetching}/>
         {error ? <p style={{color: 'red'}}>error: {error.toString()}</p> : null}
-
         {!files ?
           <p>Please press refresh to update the filelist</p> :
           <SelectableList listItems={files} fieldId='name' fieldText='name' lines={35}

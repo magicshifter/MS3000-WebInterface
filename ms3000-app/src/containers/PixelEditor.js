@@ -241,8 +241,14 @@ class PixelEditor extends Component {
     const { width, height, tool, toolSize, color, frames, frameIdx, palette, imagePalette, imageName, enableRedo, enableUndo, toolsVisible } = this.props
     const pixel = frames[frameIdx]
 
+    /*<div style={{ display: 'flex', flexFlow: 'row', flex: '1 1 auto'}}>
+        <div style={{border: "2px solid green", flex: '1 1 auto'}}>
+          the new bar is here
+        </div>
+        */
     return (
       <div style={{display: 'flex', flexFlow: 'column', flex: '1 1 auto'}}>
+        <div style={{display: 'flex', flexFlow: 'column', flex: '1 1 auto'}}>
         <Collapsable enlarged={toolsVisible} onChange={this.onChangeToolsSidebar} icon={faPalette} tooltip='Draw Tools'
           float="right" top={"3em"} left='1em' width='95%'>
           <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
@@ -344,7 +350,9 @@ class PixelEditor extends Component {
                        onChange={this.onChangePixel} onPick={this.onChangePick} onScroll={this.onChangeScroll} />
           : <span>No Frames :( Are you happy now?!?</span>
         }
+        </div>
       </div>
+
     )
   }
 
