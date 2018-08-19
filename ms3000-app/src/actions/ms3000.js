@@ -1,9 +1,9 @@
-import {fetch} from "../utils/http";
+import {fetch as legacyFetch } from "../utils/http";
 import { trimExtension } from '../utils/files'
 import pb from '../utils/protoBufLoader'
 import MagicBitmap from "../ms3000/MagicBitmap";
 
-
+import { pixelEditorChangeImage } from './pixelEditor'
 
 
 export const IMAGE_UPLOAD_REQUEST_START = "IMAGE_UPLOAD_REQUEST_START"
@@ -34,7 +34,6 @@ function uploadError(dispatch, error) {
 }
 
 export const imageUpload = () => (dispatch, getState) => {
-  console.log("fetching filesytem")
   dispatch(imageUploadStart())
 
   const state = getState()
@@ -95,6 +94,62 @@ export const imageUpload = () => (dispatch, getState) => {
 }
 
 
+export const IMAGE_DOWNLOAD_REQUEST_START = "IMAGE_DOWNLOAD_REQUEST_START"
+export const IMAGE_DOWNLOAD_REQUEST_SUCCESS = "IMAGE_DOWNLOAD_REQUEST_SUCCESS"
+export const IMAGE_DOWNLOAD_REQUEST_FAIL = "IMAGE_DOWNLOAD_REQUEST_FAIL"
+
+
+const imageDownloadStart = (name) => ({
+  type: IMAGE_DOWNLOAD_REQUEST_START,
+  name,
+})
+
+const imageDownloadSuccess = () => ({
+  type: IMAGE_DOWNLOAD_REQUEST_SUCCESS,
+})
+
+const imageDownloadFail = (error) => ({
+  type: IMAGE_DOWNLOAD_REQUEST_FAIL,
+  error
+})
+
+
+function downloadError(dispatch, error) {
+  error = "Image Upload Failed! " + error
+  console.log(error)
+  dispatch(imageDownloadFail(error))
+}
+
+export const imageDownload = (name) => (dispatch, getState) => {
+  dispatch(imageDownloadStart())
+
+  const state = getState()
+  const { host } = state.ms3000
+  const url = host + '/download?file=' + name;
+
+  const imageName = trimExtension(name)
+
+
+  fetch(url)
+    .then(data => data.arrayBuffer())
+    .then((arrayBufffer) => {
+      const mb = MagicBitmap.fromArrayBuffer(arrayBufffer)
+      const image = mb.toImage()
+
+      dispatch(imageDownloadSuccess())
+      dispatch(pixelEditorChangeImage(image, 0, imageName))
+    })
+    .catch(error => {
+      console.error('Error:', error)
+      dispatch(imageDownloadFail(error))
+    });
+}
+
+
+
+
+
+
 
 
 export const REQUEST_SHIFTER_STATE = 'REQUEST_SHIFTER_STATE'
@@ -144,7 +199,7 @@ export const postShifterState = () => (dispatch, getState) => {
   const funkyStr = String.fromCharCode.apply(null, bufferU8)
   const b64encoded = btoa(funkyStr);
 
-  fetch({method: "post", url: host + '/protobuf?myArg=' + b64encoded})
+  legacyFetch({method: "post", url: host + '/protobuf?myArg=' + b64encoded})
 
   console.log(check, bufferU8)
 
@@ -164,7 +219,7 @@ export const fetchShifterState = () => (dispatch, getState) => {
   //const shifterState = { h: "uhdskjh", jhjk:7687, ii:{o:8,x:[7,8,9]}, oooo:getState().ms3000.shifterState }
   //setTimeout(function(){ dispatch(receiveShifterState(shifterState)) }, 1600);
 
-  fetch( {method: "get", url: host + '/protobuf' } ).then(data => {
+  legacyFetch( {method: "get", url: host + '/protobuf' } ).then(data => {
     console.log("received shifter blob", data.response)
 
     var decoded = atob(data.response)

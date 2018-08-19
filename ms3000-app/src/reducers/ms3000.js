@@ -5,6 +5,10 @@ import {
   IMAGE_UPLOAD_REQUEST_START,
   IMAGE_UPLOAD_REQUEST_FAIL,
   IMAGE_UPLOAD_REQUEST_SUCCESS,
+
+  IMAGE_DOWNLOAD_REQUEST_START,
+  IMAGE_DOWNLOAD_REQUEST_FAIL,
+  IMAGE_DOWNLOAD_REQUEST_SUCCESS,
 } from '../actions/ms3000'
 
 import {FILESYSTEM_REQUEST_START, FILESYSTEM_REQUEST_SUCCESS} from "../actions/filesystem";
@@ -19,6 +23,9 @@ const DEFAULT_STATE = {
 
   isUploading: false,
   uploadError: null,
+
+  isDownloading: false,
+  downloadError: null,
 }
 
 
@@ -60,6 +67,29 @@ const ms3000 = (state = DEFAULT_STATE, action) => {
         files: null,
         isUploading: false,
         uploadError: action.error
+      }
+
+
+
+    case IMAGE_DOWNLOAD_REQUEST_START:
+      return {
+        ...state,
+        isDownloading: true,
+        downloadError: null,
+      }
+
+    case IMAGE_DOWNLOAD_REQUEST_SUCCESS:
+      return {
+        ...state,
+        isDownloading: false,
+        downloadError: null
+      }
+
+    case IMAGE_DOWNLOAD_REQUEST_FAIL:
+      return {
+        ...state,
+        isDownloading: false,
+        downloadError: action.error
       }
 
     default:

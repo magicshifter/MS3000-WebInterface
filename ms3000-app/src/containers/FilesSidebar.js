@@ -13,6 +13,7 @@ import {faFolder, faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 import './App.css';
 import IconButton from "../components/inputs/IconButton";
 import { filesystemRefresh } from "../actions/filesystem";
+import { imageDownload } from '../actions/ms3000'
 
 
 class FilesSidebar extends Component {
@@ -30,6 +31,13 @@ class FilesSidebar extends Component {
     dispatch(filesystemRefresh())
   }
 
+  doubleClickFile = (name) => {
+    const { dispatch } = this.props
+    dispatch(imageDownload(name))
+  }
+
+
+
   render() {
     const { filesVisible, files, isFetching, error } = this.props
 
@@ -41,7 +49,7 @@ class FilesSidebar extends Component {
         {error ? <p style={{color: 'red'}}>error: {error.toString()}</p> : null}
         {!files ?
           <p>Please press refresh to update the filelist</p> :
-          <SelectableList listItems={files} fieldId='name' fieldText='name' lines={35}
+          <SelectableList listItems={files} fieldId='name' fieldText='name' lines={30}
                           select={this.selectFile} doubleClick={this.doubleClickFile}/>
         }
       </Sidebar>

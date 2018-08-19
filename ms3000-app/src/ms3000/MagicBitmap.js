@@ -71,7 +71,7 @@ export default class MagicBitmap {
   static TYPES = {
     'bitmap': 0xBA,
     'font': 0xF0,
-    'bitmap2': 0xB2 // V2 with delay for each frame
+    'bitmap2': 0xB2 // TODO: V2 with delay for each frame
   };
 
   constructor(type, bitPerPixel, width, height, frames, delayOrFirstCharOrDelayArray) {
@@ -87,7 +87,6 @@ export default class MagicBitmap {
     this.frames = frames
 
     this.delayOrFirstCharOrDelayArray = delayOrFirstCharOrDelayArray
-
 
     const framesCnt = frames.length;
     this.framesCnt = framesCnt
@@ -118,7 +117,7 @@ export default class MagicBitmap {
     return new Image(width, height,  frames,  framesDelays)
   }
 
-  static fromImage = (image) => {
+  static fromImage = (type, bitsPerPixel, image) => {
 
   }
 
