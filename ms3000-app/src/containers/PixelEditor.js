@@ -390,46 +390,7 @@ class PixelEditor extends Component {
   onUploadToShifter = () => {
     const { dispatch } = this.props
     dispatch(imageUpload())
-
-
-    return;
-
-
-
-
-      const { width, height, frames, imageName } = this.props
-
-      const mb = new MagicBitmap('bitmap', 24, width, height, frames, [999])
-      const blob = mb.toBlob()
-
-
-      const host = 'http://magicshifter.local'
-      //const host = 'http://192.168.4.1'
-
-      const url = host + '/upload';
-
-      const fileName = imageName + '.magicBitmap'
-
-      const formData = new window.FormData();
-      formData.append('uploadFile', blob, fileName);
-
-      const request = new window.XMLHttpRequest();
-      request.onload =
-        () =>
-          request.status === 200
-            ? console.log('Uploaded!')
-            : console.warn(`Error ${request.status} occurred when trying to upload your file.`);
-
-      request.timeout = 3000;
-      request.ontimeout =
-        () =>
-          console.warn(`Connection to ${url} timed out!!!`);
-
-      request.open('POST', url);
-      request.send(formData);
     };
-
-
 }
 
 const mapStateToProps = state => {
