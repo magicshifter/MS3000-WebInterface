@@ -58,7 +58,7 @@ const ms3000 = (state = DEFAULT_STATE, action) => {
       return {
         ...state,
         files: null,
-        isFetching: false,
+        isUploading: false,
         uploadError: action.error
       }
 

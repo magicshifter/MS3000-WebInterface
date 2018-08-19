@@ -26,61 +26,72 @@ const imageUploadFail = (error) => ({
   error
 })
 
-export const imageUpload = () => (dispatch, getState) => {
-  const state = getState()
-  const { host } = state.ms3000
 
+function uploadError(dispatch, error) {
+  error = "Image Upload Failed! " + error
+  console.log(error)
+  dispatch(imageUploadFail(error))
+}
+
+export const imageUpload = () => (dispatch, getState) => {
   console.log("fetching filesytem")
   dispatch(imageUploadStart())
 
+  const state = getState()
+  const { host } = state.ms3000
+  const { width, height, frames, imageName } = state.pixelEditor.present
 
-  //onUploadToShifter = () => {
-    const { width, height, frames, imageName } = state.pixelEditor
+// TODO: implement arrayu!!!
+  const mb = new MagicBitmap('bitmap', 24, width, height, frames, [999])
+  const blob = mb.toBlob()
+  const url = host + '/upload';
+  const fileName = trimExtension(imageName) + '.magicBitmap'
+  const formData = new window.FormData();
+  formData.append('uploadFile', blob, fileName);
 
-  // TODO: implement arrayu!!!
-    const mb = new MagicBitmap('bitmap', 24, width, height, frames, [999])
-    const blob = mb.toBlob()
-
-    const url = host + '/upload';
-
-
-
-    const fileName = trimExtension(imageName) + '.magicBitmap'
-
-    const formData = new window.FormData();
-    formData.append('uploadFile', blob, fileName);
-
-    const request = new window.XMLHttpRequest();
-    request.onload =
-      () => {
-        if (request.status === 200) {
-          console.log("uploaded the bitmap :) ")
-          dispatch(imageUploadSuccess())
-        }
-        else {
-          const error = 'Error: ' + request.status
-          console.log(error)
-          dispatch(imageUploadFail(error))
-        }
+  const request = new window.XMLHttpRequest();
+  request.onload =
+    () => {
+      if (request.status === 200) {
+        console.log("uploaded the bitmap :) ")
+        dispatch(imageUploadSuccess())
       }
+      else {
+        uploadError('Request Failed: ' + request.status)
+      }
+    }
 
     request.timeout = 3000;
     request.ontimeout =
       () => {
-        const error = 'Timeout'
-        console.log(error)
-        dispatch(imageUploadFail(error))
+        uploadError(dispatch, 'Timeout')
       }
 
     request.onerror =
-      () => () => {
-        const error = 'Error during Request'
-        console.log(error)
-        dispatch(imageUploadFail(error))
+      () => {
+        uploadError(dispatch, 'Error occured')
       }
 
-    request.open('POST', url);
-    request.send(formData);
+  request.onabort =
+    () => {
+      uploadError(dispatch, 'Aborted')
+    }
+
+
+    request.onloadend = ()  => {
+      //if (request.status !== 200) {
+      //  uploadError(dispatch, 'LOADEND')
+      //}
+    }
+
+    try {
+      console.log("postin", url)
+      request.open('POST', url);
+      request.send(formData);
+    }
+    catch (e) {
+      uploadError(dispatch, 'Exception: ' + e.toString())
+    }
 }
 
 

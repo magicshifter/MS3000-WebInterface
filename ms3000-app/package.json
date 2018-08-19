@@ -41,6 +41,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "testServer": "./node_modules/.bin/babel-node src/testServer/index.js",
-    "proto": "cp ../../MS3000.proto public"
+    "proto": "cp ../../MS3000.proto public",
+    "loc": "find ./src -name '*.*' | xargs wc -l"
   }
 }

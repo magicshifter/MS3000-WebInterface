@@ -13,6 +13,10 @@ import {
   pixelEditorSetToolSize,
   sidebarToolsVisible
 } from '../actions/pixelEditor'
+import {
+  imageUpload
+} from '../actions/ms3000'
+
 import {ActionCreators} from 'redux-undo';
 
 import PixelCanvas from '../components/PixelEditor/PixelCanvas'
@@ -22,6 +26,7 @@ import ColorPalette from '../components/PixelEditor/ColorPalette'
 import ColorChooser from '../components/PixelEditor/ColorChooser'
 import StringInput from '../components/inputs/StringInput'
 import NumberInput from '../components/inputs/NumberInput'
+import IconButton from '../components/inputs/IconButton'
 import FrameList from '../components/PixelEditor/FrameList'
 import Collapsable from '../components/Collapsable'
 
@@ -238,7 +243,8 @@ class PixelEditor extends Component {
   }
 
   render() {
-    const { width, height, tool, toolSize, color, frames, frameIdx, palette, imagePalette, imageName, enableRedo, enableUndo, toolsVisible } = this.props
+    const { width, height, tool, toolSize, color, frames, frameIdx, palette, imagePalette, imageName, enableRedo, enableUndo, toolsVisible,
+      isUploading, uploadError} = this.props
     const pixel = frames[frameIdx]
 
     /*<div style={{ display: 'flex', flexFlow: 'row', flex: '1 1 auto'}}>
@@ -291,12 +297,7 @@ class PixelEditor extends Component {
                   </label>
                 </button>
               </li>
-              <li className="pure-menu-item ToolsMenuTooltip">
-                <span className="ToolsMenuTooltipText" style={{width: "260px"}}>upload to MagicShifter</span>
-                <button className="pure-button" onClick={this.onUploadToShifter}>
-                  <FontAwesomeIcon icon={faUpload} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
-                </button>
-              </li>
+              <IconButton icon={faUpload} tooltip='upload to MagicShifter' onClick={this.onUploadToShifter} rotate={isUploading}/>
 
               {enableUndo ?
                 <li className="pure-menu-item ToolsMenuTooltip">
@@ -315,6 +316,8 @@ class PixelEditor extends Component {
                   </button>
                 </li>
                 : null}
+
+              {uploadError ? <p style={{color: 'red'}}>{uploadError.toString()}</p> : null}
             </ul>
           </div>
           <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
@@ -385,6 +388,15 @@ class PixelEditor extends Component {
     };
 
   onUploadToShifter = () => {
+    const { dispatch } = this.props
+    dispatch(imageUpload())
+
+
+    return;
+
+
+
+
       const { width, height, frames, imageName } = this.props
 
       const mb = new MagicBitmap('bitmap', 24, width, height, frames, [999])
