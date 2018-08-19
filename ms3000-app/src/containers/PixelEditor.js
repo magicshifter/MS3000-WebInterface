@@ -424,6 +424,7 @@ const mapStateToProps = state => {
   const { width, height, color, tool, toolSize, frames, framesDelays, palette, imagePalette, frameIdx, imageName } = state.pixelEditor.present
   const { past, future } = state.pixelEditor
   const { toolsVisible } = state.sidebar
+  const { isUploading, uploadError } = state.ms3000
 
   return {
     width, height, color, tool, toolSize,
@@ -432,7 +433,9 @@ const mapStateToProps = state => {
     palette, imagePalette,
     toolsVisible,
     enableUndo: past.length > 0,
-    enableRedo: future.length > 0
+    enableRedo: future.length > 0,
+
+    isUploading, uploadError
   }
 }
 

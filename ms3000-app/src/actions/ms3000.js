@@ -1,5 +1,90 @@
 import {fetch} from "../utils/http";
+import { trimExtension } from '../utils/files'
 import pb from '../utils/protoBufLoader'
+import MagicBitmap from "../ms3000/MagicBitmap";
+
+
+
+
+export const IMAGE_UPLOAD_REQUEST_START = "IMAGE_UPLOAD_REQUEST_START"
+export const IMAGE_UPLOAD_REQUEST_SUCCESS = "IMAGE_UPLOAD_REQUEST_SUCCESS"
+export const IMAGE_UPLOAD_REQUEST_FAIL = "IMAGE_UPLOAD_REQUEST_FAIL"
+
+
+const imageUploadStart = (name, magicBitmap) => ({
+  type: IMAGE_UPLOAD_REQUEST_START,
+  name,
+  magicBitmap
+})
+
+const imageUploadSuccess = () => ({
+  type: IMAGE_UPLOAD_REQUEST_SUCCESS,
+})
+
+const imageUploadFail = (error) => ({
+  type: IMAGE_UPLOAD_REQUEST_FAIL,
+  error
+})
+
+export const imageUpload = () => (dispatch, getState) => {
+  const state = getState()
+  const { host } = state.ms3000
+
+  console.log("fetching filesytem")
+  dispatch(imageUploadStart())
+
+
+  //onUploadToShifter = () => {
+    const { width, height, frames, imageName } = state.pixelEditor
+
+  // TODO: implement arrayu!!!
+    const mb = new MagicBitmap('bitmap', 24, width, height, frames, [999])
+    const blob = mb.toBlob()
+
+    const url = host + '/upload';
+
+
+
+    const fileName = trimExtension(imageName) + '.magicBitmap'
+
+    const formData = new window.FormData();
+    formData.append('uploadFile', blob, fileName);
+
+    const request = new window.XMLHttpRequest();
+    request.onload =
+      () => {
+        if (request.status === 200) {
+          console.log("uploaded the bitmap :) ")
+          dispatch(imageUploadSuccess())
+        }
+        else {
+          const error = 'Error: ' + request.status
+          console.log(error)
+          dispatch(imageUploadFail(error))
+        }
+      }
+
+    request.timeout = 3000;
+    request.ontimeout =
+      () => {
+        const error = 'Timeout'
+        console.log(error)
+        dispatch(imageUploadFail(error))
+      }
+
+    request.onerror =
+      () => () => {
+        const error = 'Error during Request'
+        console.log(error)
+        dispatch(imageUploadFail(error))
+      }
+
+    request.open('POST', url);
+    request.send(formData);
+}
+
+
+
 
 export const REQUEST_SHIFTER_STATE = 'REQUEST_SHIFTER_STATE'
 export const RECEIVE_SHIFTER_STATE = 'RECEIVE_SHIFTER_STATE'
