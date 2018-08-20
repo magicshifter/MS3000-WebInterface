@@ -33,6 +33,7 @@ import NumberInput from '../components/inputs/NumberInput'
 import IconButton from '../components/inputs/IconButton'
 import FrameList from '../components/PixelEditor/FrameList'
 import Collapsable from '../components/Collapsable'
+import ErrorBox from '../components/outputs/ErrorBox'
 
 import Image from '../ms3000/Image'
 
@@ -321,7 +322,8 @@ class PixelEditor extends Component {
                 </li>
                 : null}
 
-              {uploadError ? <p style={{color: 'red'}}>{uploadError.toString()}</p> : null}
+                <ErrorBox error={uploadError}/>
+
             </ul>
           </div>
           <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>

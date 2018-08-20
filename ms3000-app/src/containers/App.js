@@ -157,7 +157,7 @@ class App extends Component {
               <button onClick={this.handlePostClick}>
                 Post
               </button>
-              fast sync: <input ref="fastSync" type="checkbox" />
+              fast sync: <input ref="fastSync" type="checkbox" defaultChecked={true} />
             </div>
 
             <AutoInterface type={protobufs.MS3KG}
