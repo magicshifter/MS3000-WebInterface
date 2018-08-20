@@ -22,21 +22,6 @@ export const PIXEL_EDITOR_SET_COLOR = "PIXEL_EDITOR_SET_COLOR"
 
 
 
-export const SIDEBAR_FILES_VISIBLE = "SIDEBAR_FILES_VISIBLE"
-export const SIDEBAR_TOOLS_VISIBLE = "SIDEBAR_TOOLS_VISIBLE"
-
-
-
-export const sidebarFilesVisible = (filesVisible) => ({
-  type: SIDEBAR_FILES_VISIBLE,
-  filesVisible
-})
-
-export const sidebarToolsVisible = (toolsVisible) => ({
-  type: SIDEBAR_TOOLS_VISIBLE,
-  toolsVisible
-})
-
 export const pixelEditorSetTool = (tool) => ({
   type: PIXEL_EDITOR_CHANGE_TOOL,
   tool
@@ -74,7 +59,7 @@ export const pixelEditorChangeSize = (width, height) => ({
 })
 
 export const pixelEditorSetActiveFrame = (activeFrame) => {
-  console.log("pixelEditorSetActiveFrame", activeFrame)
+  //console.log("pixelEditorSetActiveFrame", activeFrame)
   return {
     type: PIXEL_EDITOR_SET_ACTIVE_FRAME,
     activeFrame

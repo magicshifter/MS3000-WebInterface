@@ -11,8 +11,12 @@ import {
   pixelEditorSetImageName,
   pixelEditorSetTool,
   pixelEditorSetToolSize,
-  sidebarToolsVisible
 } from '../actions/pixelEditor'
+
+import {
+  sidebarToolsVisible
+} from '../actions/sidebar'
+
 import {
   imageUpload
 } from '../actions/ms3000'

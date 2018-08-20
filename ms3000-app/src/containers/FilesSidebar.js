@@ -1,17 +1,17 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {sidebarFilesVisible} from '../actions/pixelEditor'
-
 
 import Sidebar from '../components/Sidebar'
 import SelectableList from '../components/inputs/SelectableList'
 
-import {faFolder, faSyncAlt } from '@fortawesome/free-solid-svg-icons'
+import {faFolder, faSyncAlt, faDownload } from '@fortawesome/free-solid-svg-icons'
 
 
 import './App.css';
 import IconButton from "../components/inputs/IconButton";
+
+import { sidebarFilesVisible, sidebarSelectFile } from '../actions/sidebar'
 import { filesystemRefresh } from "../actions/filesystem";
 import { imageDownload } from '../actions/ms3000'
 
@@ -22,7 +22,7 @@ class FilesSidebar extends Component {
   }
 
   onChangeFilesSidebar = (newState) => {
-    const { dispatch, filesVisible } = this.props
+    const { dispatch } = this.props
     dispatch(sidebarFilesVisible(newState))
   }
 
@@ -36,20 +36,34 @@ class FilesSidebar extends Component {
     dispatch(imageDownload(name))
   }
 
+  onClickDownload = () => {
+    const { dispatch, selectedFile } = this.props
+    dispatch(imageDownload(selectedFile))
+  }
+
+  selectFile = (name) => {
+    console.log("selected", name)
+    const { dispatch } = this.props
+    dispatch(sidebarSelectFile(name))
+  }
+
 
 
   render() {
-    const { filesVisible, files, isFetching, error } = this.props
+    const { filesVisible, selectedFile, files, isFetching, filesError, downloadError, isDownloading } = this.props
 
     return (
       <Sidebar enlarged={filesVisible} onChange={this.onChangeFilesSidebar} icon={faFolder} tooltip='MS3000 Filesystem'
         right={0} top={0} >
 
-        <IconButton icon={faSyncAlt} tooltip='refresh filesystem' onClick={this.onClickRefresh} rotate={isFetching}/>
-        {error ? <p style={{color: 'red'}}>error: {error.toString()}</p> : null}
+        <IconButton icon={faSyncAlt} tooltip='refresh file list' onClick={this.onClickRefresh} rotate={isFetching}/>
+        <IconButton icon={faDownload} tooltip='download image' onClick={this.onClickDownload} rotate={isDownloading}/>
+        {filesError ? <p style={{color: 'red'}}>Filelist: {filesError.toString()}</p> : null}
+        {downloadError ? <p style={{color: 'red'}}>Download: {downloadError.toString()}</p> : null}
         {!files ?
           <p>Please press refresh to update the filelist</p> :
           <SelectableList listItems={files} fieldId='name' fieldText='name' lines={30}
+                          selectedId={selectedFile}
                           select={this.selectFile} doubleClick={this.doubleClickFile}/>
         }
       </Sidebar>
@@ -58,13 +72,19 @@ class FilesSidebar extends Component {
 }
 
 const mapStateToProps = state => {
-  const { filesVisible } = state.sidebar
+  const { filesVisible, selectedFile } = state.sidebar
   const { files, isFetching, error } = state.fileSystem
+
+  const { isDownloading, downloadError } = state.ms3000
 
   return {
     filesVisible,
-        isFetching,
-    files, error
+    selectedFile,
+
+    isFetching,
+    files, filesError: error,
+
+    isDownloading, downloadError
   }
 }
 

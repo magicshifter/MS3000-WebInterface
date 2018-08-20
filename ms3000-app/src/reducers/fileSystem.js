@@ -7,14 +7,14 @@ import {
 const DEFAULT_STATE = {
   isFetching: false,
   error: null,
-  files: null,
-  //   [
-  //   // {name: "index.html", size: 1232},
-  //   // {name: "hello.txt", size: 122},
-  //   // {name: "mario.magicBitmap", size: 1032},
-  //   // {name: "flower.magicBitmap", size: 1232},
-  //   // {name: "oneup.magicBitmap", size: 1232},
-  // ]
+  files: //null,
+    [
+      {name: "giraffe.magicBitmap", size: 1232},
+      {name: "smile.magicBitmap", size: 122},
+      {name: "mario.magicBitmap", size: 1032},
+      {name: "flower.magicBitmap", size: 1232},
+      {name: "oneup.magicBitmap", size: 1232},
+    ]
 }
 
 const fileSystem = (state = DEFAULT_STATE, action) => {

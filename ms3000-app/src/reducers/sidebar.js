@@ -1,7 +1,18 @@
-import {SIDEBAR_FILES_VISIBLE, SIDEBAR_TOOLS_VISIBLE} from '../actions/pixelEditor'
+import {
+  SIDEBAR_FILES_VISIBLE,
+  SIDEBAR_TOOLS_VISIBLE,
+  SIDEBAR_SELECT_FILE,
+} from '../actions/sidebar'
 
 
-const sidebar = (state = {filesVisible: true, toolsVisible: true}, action) => {
+const DEFAULT_STATE = {
+  filesVisible: true,
+  toolsVisible: true,
+
+  selectedFile: 'mario.magicBitmap'
+}
+
+const sidebar = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
     case SIDEBAR_FILES_VISIBLE:
       return {
@@ -13,6 +24,12 @@ const sidebar = (state = {filesVisible: true, toolsVisible: true}, action) => {
       return {
         ...state,
         toolsVisible: action.toolsVisible
+      }
+
+    case SIDEBAR_SELECT_FILE:
+      return {
+        ...state,
+        selectedFile: action.name
       }
 
     default:

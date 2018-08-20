@@ -123,6 +123,8 @@ function downloadError(dispatch, error) {
 export const imageDownload = (name) => (dispatch, getState) => {
   dispatch(imageDownloadStart())
 
+  console.log("started download", name)
+
   const state = getState()
   const { host } = state.ms3000
   const url = host + '/download?file=' + name;
