@@ -1,6 +1,11 @@
 import { NAVIGATION_SET_LOCATION } from '../actions/navigation'
 
-const navigation = (state = {location: "mode-Image"}, action) => {
+const DEFAULT_MODE = {
+  location: 'config'
+  //location: "mode-Image"
+}
+
+const navigation = (state = DEFAULT_MODE, action) => {
   switch (action.type) {
     case NAVIGATION_SET_LOCATION:
       return {

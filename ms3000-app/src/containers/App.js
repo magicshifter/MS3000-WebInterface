@@ -2,8 +2,10 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {dumpU8, fetchShifterState, postShifterState, receiveShifterState} from '../actions/ms3000'
+
 import protobufs from '../utils/protoBufLoader'
 import pb from '../utils/protoBufLoader'
+import debounce from '../utils/debounce'
 
 import AutoInterface from '../components/AutoInterface/index'
 import PixelEditor from './PixelEditor'
@@ -25,20 +27,35 @@ class App extends Component {
     location: PropTypes.string.isRequired,
   }
 
-  // TODO: this must go to shadow state!
-  onChangeLightState = (newLightState) => {
-    const { shifterState, dispatch } = this.props
-    const newS = Object.assign({}, shifterState,
-      { modes: Object.assign({}, shifterState ? shifterState.modes : null, {light: newLightState})})
-    dispatch(receiveShifterState(newS))
+  constructor(props) {
+    super(props)
+
+    var cnt = 0
+
+    const ctx = this
+    this.dispatchDebouncedPostShifterState = debounce(() => {
+      const { dispatch } = ctx.props
+
+      console.log("postin....", cnt)
+      cnt++
+      dispatch(postShifterState())
+    }, 1000, true)
   }
+
+  // // TODO: this must go to shadow state!
+  // onChangeLightState = (newLightState) => {
+  //   const { shifterState, dispatch } = this.props
+  //   const newS = Object.assign({}, shifterState,
+  //     { modes: Object.assign({}, shifterState ? shifterState.modes : null, {light: newLightState})})
+  //   dispatch(receiveShifterState(newS))
+  // }
 
   onChangeAutoInterface = (newState, theType) => {
     const { dispatch } = this.props
     dispatch(receiveShifterState(newState))
 
     if (this.refs.fastSync.checked)
-      dispatch(postShifterState())
+      this.dispatchDebouncedPostShifterState()
   }
 
   handleRefreshClick = e => {
@@ -51,7 +68,7 @@ class App extends Component {
   handlePostClick = e => {
     e.preventDefault()
     const { dispatch } = this.props
-    dispatch(postShifterState())
+    this.dispatchDebouncedPostShifterState()
   }
 
   handleTestBuffer = e => {
