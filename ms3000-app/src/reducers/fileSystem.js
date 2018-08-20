@@ -1,7 +1,9 @@
 import {
   FILESYSTEM_REQUEST_START,
   FILESYSTEM_REQUEST_SUCCESS,
-  FILESYSTEM_REQUEST_FAIL
+  FILESYSTEM_REQUEST_FAIL,
+  FILESYSTEM_FAKE_ADD_FILE,
+  FILESYSTEM_FAKE_REMOVE_FILE,
 } from '../actions/filesystem'
 
 const DEFAULT_STATE = {
@@ -18,7 +20,29 @@ const DEFAULT_STATE = {
 }
 
 const fileSystem = (state = DEFAULT_STATE, action) => {
+  const { files } = state
+
   switch (action.type) {
+    case FILESYSTEM_FAKE_ADD_FILE:
+      // NODE: selection is handles in other reducer as well: sidebar
+      const idx = files.findIndex((f) => f.name === action.name)
+      // TODO: add filesize?
+      const newFiles = (idx < 0) ? [...files, {name: action.name }] : files
+
+      return {
+        ...state,
+        files: newFiles
+      }
+
+    case FILESYSTEM_FAKE_REMOVE_FILE:
+      const idx2 = files.findIndex((f) => f.name === action.name)
+      const newFiles2 = (idx2 > 0) ? files.slice().splice(idx2, 1) : files
+
+      return {
+        ...state,
+        files: newFiles2
+      }
+
     case FILESYSTEM_REQUEST_START:
       return {
         ...state,

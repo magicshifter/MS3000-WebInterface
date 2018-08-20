@@ -3,6 +3,7 @@ import {
   SIDEBAR_TOOLS_VISIBLE,
   SIDEBAR_SELECT_FILE,
 } from '../actions/sidebar'
+import {FILESYSTEM_FAKE_ADD_FILE, FILESYSTEM_FAKE_REMOVE_FILE} from "../actions/filesystem";
 
 
 const DEFAULT_STATE = {
@@ -31,6 +32,20 @@ const sidebar = (state = DEFAULT_STATE, action) => {
         ...state,
         selectedFile: action.name
       }
+
+      // NOTE handling same actions ad fake add and delete in ms3000
+    case FILESYSTEM_FAKE_ADD_FILE:
+      return {
+        ...state,
+        selectedFile: action.name,
+      }
+
+    case FILESYSTEM_FAKE_REMOVE_FILE:
+      return {
+        ...state,
+        selectedFile: state.selectedFile === action.name ? null : state.selectedFile,
+      }
+
 
     default:
       return state

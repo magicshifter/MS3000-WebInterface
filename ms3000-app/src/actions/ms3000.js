@@ -4,6 +4,7 @@ import pb from '../utils/protoBufLoader'
 import MagicBitmap from "../ms3000/MagicBitmap";
 
 import { pixelEditorChangeImage } from './pixelEditor'
+import {filesystemFakeAddFile, filesystemRefresh} from './filesystem'
 
 
 export const IMAGE_UPLOAD_REQUEST_START = "IMAGE_UPLOAD_REQUEST_START"
@@ -54,13 +55,14 @@ export const imageUpload = () => (dispatch, getState) => {
       if (request.status === 200) {
         console.log("uploaded the bitmap :) ")
         dispatch(imageUploadSuccess())
+        dispatch(filesystemFakeAddFile(fileName))
       }
       else {
         uploadError('Request Failed: ' + request.status)
       }
     }
 
-    request.timeout = 3000;
+    request.timeout = 10000;
     request.ontimeout =
       () => {
         uploadError(dispatch, 'Timeout')
