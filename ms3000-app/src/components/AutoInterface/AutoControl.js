@@ -45,7 +45,7 @@ export default class AutoControl extends Component {
         break;
 
       case 'int32':
-        controls.push(<input id={ field.name } key="str" type='text' value={value || ""} onChange={(evt) => {
+        controls.push(<input id={ field.name } key="str" type='text' value={value || "0"} onChange={(evt) => {
           const v = defaultParseInt(evt.target.value)
           //console.log("text chnage", evt)
 
