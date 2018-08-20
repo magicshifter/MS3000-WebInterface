@@ -40,6 +40,12 @@ class App extends Component {
       cnt++
       dispatch(postShifterState())
     }, 1000, true)
+
+
+    this.dispatchDebouncedPostShifterState = () => {
+      const { dispatch } = ctx.props
+      dispatch(postShifterState())
+    }
   }
 
   // // TODO: this must go to shadow state!
