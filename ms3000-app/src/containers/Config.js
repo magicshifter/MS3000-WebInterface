@@ -8,9 +8,11 @@ import pb from '../utils/protoBufLoader'
 import {throttle} from "../utils/debounce";
 
 import AutoInterface from '../components/AutoInterface/index'
+import IconButton from  '../components/inputs/IconButton'
 
 import './App.css';
 import logo from '../logo.svg';
+import {faCloudUploadAlt, faCloudDownloadAlt, faSyncAlt} from "@fortawesome/free-solid-svg-icons/index";
 
 
 class Config extends Component {
@@ -98,7 +100,16 @@ class Config extends Component {
 
       return (
           <div style={{border: '2px solid yellow'}}>
-            <div>
+            <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
+              <ul className="pure-menu-list">
+                <IconButton icon={faSyncAlt} tooltip='download config' onClick={this.handleRefreshClick} rotate={isFetching}/>
+                <IconButton icon={faCloudUploadAlt} tooltip='upload config' onClick={this.handlePostClick} rotate={false}/>
+
+              </ul>
+            </div>
+
+
+                <div>
               { !isFetching ?
                 <button onClick={this.handleRefreshClick}>
                   Refresh
