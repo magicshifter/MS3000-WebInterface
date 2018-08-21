@@ -40,41 +40,41 @@ export const imageUpload = () => (dispatch, getState) => {
   const { width, height, frames, imageName } = state.pixelEditor.present
 
 // TODO: implement arrayu!!!
-  const mb = new MagicBitmap('bitmap', 24, width, height, frames, [999])
-  const blob = mb.toBlob()
-  const url = host + '/upload';
-  const fileName = trimExtension(imageName) + '.magicBitmap'
-  const formData = new window.FormData();
-  formData.append('uploadFile', blob, fileName);
+  try {
+    const mb = new MagicBitmap('bitmap', 24, width, height, frames, [999])
+    const blob = mb.toBlob()
+    const url = host + '/upload';
+    const fileName = trimExtension(imageName) + '.magicBitmap'
+    const formData = new window.FormData();
+    formData.append('uploadFile', blob, fileName);
 
-  const request = new window.XMLHttpRequest();
-  request.onload =
-    () => {
-      if (request.status === 200) {
-        console.log("uploaded the bitmap :) ")
-        dispatch(imageUploadSuccess())
-        dispatch(filesystemFakeAddFile(fileName))
-      }
-      else {
-        uploadError('Request Failed: ' + request.status)
-      }
-    }
-
-    request.timeout = 10000;
-    request.ontimeout =
+    const request = new window.XMLHttpRequest();
+    request.onload =
       () => {
-        uploadError(dispatch, 'Timeout')
-      }
-    request.onerror =
-      () => {
-        uploadError(dispatch, 'Error occured')
-      }
-    request.onabort =
-      () => {
-        uploadError(dispatch, 'Aborted')
+        if (request.status === 200) {
+          console.log("uploaded the bitmap :) ")
+          dispatch(imageUploadSuccess())
+          dispatch(filesystemFakeAddFile(fileName))
+        }
+        else {
+          uploadError('Request Failed: ' + request.status)
+        }
       }
 
-    try {
+      request.timeout = 10000;
+      request.ontimeout =
+        () => {
+          uploadError(dispatch, 'Timeout')
+        }
+      request.onerror =
+        () => {
+          uploadError(dispatch, 'Error occured')
+        }
+      request.onabort =
+        () => {
+          uploadError(dispatch, 'Aborted')
+        }
+
       //console.log("postin", url)
       request.open('POST', url);
       request.send(formData);
