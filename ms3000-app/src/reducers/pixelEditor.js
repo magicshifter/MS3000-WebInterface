@@ -155,6 +155,7 @@ const pixelEditor = (state = null, action) => {
     imagePalette: [],
     frameDelay: 500, // TODO: individual!!!
     imageName: "newImage",
+    resizeFrames: null,
   }
 
   const { srcIdx, targetIdx } = action
@@ -206,6 +207,7 @@ const pixelEditor = (state = null, action) => {
         frames: newFramesANF,
         framesDelays: newDelaysANF,
         frameIdx: newFramesANF.length - 1,
+        resizeFrames: null,
       }
 
     case PIXEL_EDITOR_DELETE_FRAME:
@@ -223,6 +225,7 @@ const pixelEditor = (state = null, action) => {
         frames: newFramesDF,
         framesDelays: newDelaysDF,
         frameIdx: newIdxDF,
+        resizeFrames: null,
       }
 
     case PIXEL_EDITOR_MOVE_FRAME:
@@ -250,6 +253,7 @@ const pixelEditor = (state = null, action) => {
         frames: newFramesMF,
         framesDelays: newDelaysMF,
         frameIdx: newIdxMF,
+        resizeFrames: null,
       }
 
     case PIXEL_EDITOR_DUPLICATE_FRAME:
@@ -264,20 +268,18 @@ const pixelEditor = (state = null, action) => {
         frames: newFramesDUPF,
         framesDelays: newDelaysDUPF,
         frameIdx: targetIdx + 1,
+        resizeFrames: null,
       }
 
     case PIXEL_EDITOR_SET_FRAME_DELAY:
       const newDelaysSFD = framesDelays.slice(0)
-      newDelaysSFD.splice(frameIdx, 0, framesDelays[frameIdx])
-
+      newDelaysSFD.splice(action.targetIdx, 1, action.delayMs)
       return {
         ...state,
         framesDelays: newDelaysSFD,
       }
 
-
     case PIXEL_EDITOR_CHANGE_IMAGE:
-      //console.log("PIXEL_EDITOR_CHANGE_IMAGE", action)
       return {
         ...state,
         frameIdx: action.activeFrame,
@@ -286,8 +288,8 @@ const pixelEditor = (state = null, action) => {
         width: action.image.width,
         height: action.image.height,
         imagePalette: paletteFromImage(action.image.frames),
-        resizeFrames: null,
         imageName: action.name || state.imageName,
+        resizeFrames: null,
       }
 
     case PIXEL_EDITOR_RESET_IMAGE:
@@ -301,6 +303,7 @@ const pixelEditor = (state = null, action) => {
         palette: DEFAULT_PALETTE,
         imagePalette: [],
         imageName: "newImage",
+        resizeFrames: null,
       }
 
     case PIXEL_EDITOR_CHANGE_PIXEL:

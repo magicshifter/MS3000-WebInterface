@@ -27,6 +27,7 @@ export default class PixelPreview extends Component {
   }
 
   drawPixel = () => {
+    //console.log("drawing preview")
     var index = 0
 
     const { pixel, width, height, scale } = this.props

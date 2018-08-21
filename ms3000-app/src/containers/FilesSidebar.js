@@ -16,9 +16,36 @@ import { filesystemRefresh } from "../actions/filesystem";
 import { imageDownload } from '../actions/ms3000'
 
 
+function bitmapFilter(file) {
+  const n = file.name.toLowerCase()
+  return n.endsWith('.magicbitmap') || (n.endsWith('.magicfont'))
+}
+
 class FilesSidebar extends Component {
   static propTypes = {
     filesVisible: PropTypes.bool.isRequired,
+    selectedFile: PropTypes.string,
+
+    isFetching: PropTypes.bool.isRequired,
+    files: PropTypes.array,
+    filesError: PropTypes.any,
+
+    isDownloading: PropTypes.bool.isRequired,
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      this.props.filesVisible !== nextProps.filesVisible ||
+      this.props.selectedFile !== nextProps.selectedFile ||
+      this.props.isFetching !== nextProps.isFetching ||
+      this.props.files !== nextProps.files ||
+      this.props.filesError !== nextProps.filesError ||
+      this.props.isDownloading !== nextProps.isDownloading
+      ) {
+      return true;
+    }
+    console.log("no redraw sidebar")
+    return false;
   }
 
   onChangeFilesSidebar = (newState) => {
@@ -64,7 +91,8 @@ class FilesSidebar extends Component {
           <p>Please press refresh to update the filelist</p> :
           <SelectableList listItems={files} fieldId='name' fieldText='name' lines={30}
                           selectedId={selectedFile}
-                          select={this.selectFile} doubleClick={this.doubleClickFile}/>
+                          select={this.selectFile} doubleClick={this.doubleClickFile}
+                          filter={bitmapFilter}/>
         }
       </Sidebar>
     )
