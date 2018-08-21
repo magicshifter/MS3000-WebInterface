@@ -273,16 +273,13 @@ const pixelEditor = (state = null, action) => {
 
     case PIXEL_EDITOR_SET_FRAME_DELAY:
       const newDelaysSFD = framesDelays.slice(0)
-      newDelaysSFD.splice(frameIdx, 0, framesDelays[frameIdx])
-
+      newDelaysSFD.splice(action.targetIdx, 1, action.delayMs)
       return {
         ...state,
         framesDelays: newDelaysSFD,
       }
 
-
     case PIXEL_EDITOR_CHANGE_IMAGE:
-      //console.log("PIXEL_EDITOR_CHANGE_IMAGE", action)
       return {
         ...state,
         frameIdx: action.activeFrame,
