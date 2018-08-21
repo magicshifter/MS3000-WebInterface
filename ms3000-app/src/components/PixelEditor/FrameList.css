@@ -1,14 +1,14 @@
 .FrameListSpacer {
     border: dashed 0.2em yellow;
     border-radius: 3px;
-    padding: 0.7em;
+    padding: 0.8em;
     margin: 0.1em;
 }
 
 .FrameListFrame {
     border: solid 0.2em gray;
     border-radius: 3px;
-    padding: 0.9em;
+    padding: 0.8em;
     margin: 0.1em;
 
     background-color: darkgray;

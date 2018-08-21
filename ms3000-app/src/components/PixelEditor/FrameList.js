@@ -183,6 +183,7 @@ export default class FrameList extends Component {
       }
       return
     }
+
     this.lastTargetSpeedHack = evt.target
     this.lastTargetSpeedHackPrevent = false
 
@@ -193,7 +194,7 @@ export default class FrameList extends Component {
 
     const { idx, isSpace } = findDataInParents(evt.target)
 
-    //console.log("drag over", idx, evt.target);
+    //console.log("drag over passt fast defense", idx, evt.target);
 
     if (!isNaN(idx)) {
       var targetIdx = idx
@@ -214,6 +215,8 @@ export default class FrameList extends Component {
         this.dndLastSpacer.style.display = ''
         this.dndLastIdx = targetIdx
         this.dndOneShot = false
+
+        //console.log("changed styles")
       }
       // do this because spacer and frame have same targetIdx
       evt.preventDefault();
