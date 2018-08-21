@@ -1,11 +1,8 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {dumpU8,
-  fetchShifterState,
-  postShifterState,
-  receiveShifterState,
-  configDownload, configUpload
+import {
+  configDownload, configUpload, configUpdate
 } from '../actions/ms3000'
 
 import protobufs from '../utils/protoBufLoader'
@@ -30,16 +27,13 @@ class Config extends Component {
     const ctx = this
     this.dispatchDebouncedPostShifterState = throttle(() => {
       const { dispatch } = ctx.props
-
-
-      //dispatch(postShifterState())
       dispatch(configUpload())
     }, 500)
   }
 
   onChangeAutoInterface = (newState, theType) => {
     const { dispatch } = this.props
-    dispatch(receiveShifterState(newState))
+    dispatch(configUpdate(newState))
 
     if (this.refs.fastSync.checked)
       this.dispatchDebouncedPostShifterState()
@@ -47,14 +41,12 @@ class Config extends Component {
 
   handleRefreshClick = e => {
     e.preventDefault()
-
     const { dispatch } = this.props
-    dispatch(configDownload()) //fetchShifterState())
+    dispatch(configDownload())
   }
 
   handlePostClick = e => {
     e.preventDefault()
-    const { dispatch } = this.props
     this.dispatchDebouncedPostShifterState()
   }
 
@@ -69,7 +61,7 @@ class Config extends Component {
 
     var bufferU8 = pb.MS3KG.encode(testObj).finish()
 
-    dumpU8(bufferU8)
+    //dumpU8(bufferU8)
     const decodedObj = pb.MS3KG.decode(bufferU8);
 
     console.log("after decoding:", decodedObj, bufferU8)
@@ -81,7 +73,7 @@ class Config extends Component {
     var r = Math.floor(Math.random()*256)
     var g = Math.floor(Math.random()*256)
     var b = Math.floor(Math.random()*256)
-    dispatch(receiveShifterState({
+    dispatch(configUpdate({
       networkName:"Testdate MS",
       modes: {
         current: "what current??",

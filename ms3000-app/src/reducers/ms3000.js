@@ -1,7 +1,4 @@
 import {
-  RECEIVE_SHIFTER_STATE,
-  REQUEST_SHIFTER_STATE,
-
   IMAGE_UPLOAD_REQUEST_START,
   IMAGE_UPLOAD_REQUEST_SUCCESS,
   IMAGE_UPLOAD_REQUEST_FAIL,
@@ -9,6 +6,8 @@ import {
   IMAGE_DOWNLOAD_REQUEST_START,
   IMAGE_DOWNLOAD_REQUEST_SUCCESS,
   IMAGE_DOWNLOAD_REQUEST_FAIL,
+
+  CONFIG_UPDATE,
 
   CONFIG_DOWNLOAD_REQUEST_START,
   CONFIG_DOWNLOAD_REQUEST_SUCCESS,
@@ -46,17 +45,56 @@ const DEFAULT_STATE = {
 
 const ms3000 = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
-    case REQUEST_SHIFTER_STATE:
-      return {
-        ...state,
-        isFetching: true
-      }
-    case RECEIVE_SHIFTER_STATE:
+    case CONFIG_UPDATE:
       return {
         ...state,
         shifterState: action.shifterState,
-        isFetching: false
       };
+
+
+    case CONFIG_UPLOAD_REQUEST_START:
+      return {
+        ...state,
+        isConfigUploading: true,
+        configUploadError: null,
+      }
+
+    case CONFIG_UPLOAD_REQUEST_SUCCESS:
+      return {
+        ...state,
+        isConfigUploading: false,
+        configUploadError: null
+      }
+
+    case CONFIG_UPLOAD_REQUEST_FAIL:
+      return {
+        ...state,
+        files: null,
+        isConfigUploading: false,
+        configUploadError: action.error
+      }
+
+
+    case CONFIG_DOWNLOAD_REQUEST_START:
+      return {
+        ...state,
+        isConfigDownloading: true,
+        configDownloadError: null,
+      }
+
+    case CONFIG_DOWNLOAD_REQUEST_SUCCESS:
+      return {
+        ...state,
+        isConfigDownloading: false,
+        configDownloadError: null
+      }
+
+    case CONFIG_DOWNLOAD_REQUEST_FAIL:
+      return {
+        ...state,
+        isConfigDownloading: false,
+        configDownloadError: action.error
+      }
 
 
 
@@ -84,7 +122,6 @@ const ms3000 = (state = DEFAULT_STATE, action) => {
       }
 
 
-
     case IMAGE_DOWNLOAD_REQUEST_START:
       return {
         ...state,
@@ -104,55 +141,6 @@ const ms3000 = (state = DEFAULT_STATE, action) => {
         ...state,
         isDownloading: false,
         downloadError: action.error
-      }
-
-
-
-
-
-    case CONFIG_UPLOAD_REQUEST_START:
-      return {
-        ...state,
-        isConfigUploading: true,
-        configUploadError: null,
-      }
-
-    case CONFIG_UPLOAD_REQUEST_SUCCESS:
-      return {
-        ...state,
-        isConfigUploading: false,
-        configUploadError: null
-      }
-
-    case CONFIG_UPLOAD_REQUEST_FAIL:
-      return {
-        ...state,
-        files: null,
-        isConfigUploading: false,
-        configUploadError: action.error
-      }
-
-
-
-    case CONFIG_DOWNLOAD_REQUEST_START:
-      return {
-        ...state,
-        isConfigDownloading: true,
-        configDownloadError: null,
-      }
-
-    case CONFIG_DOWNLOAD_REQUEST_SUCCESS:
-      return {
-        ...state,
-        isConfigDownloading: false,
-        configDownloadError: null
-      }
-
-    case CONFIG_DOWNLOAD_REQUEST_FAIL:
-      return {
-        ...state,
-        isConfigDownloading: false,
-        configDownloadError: action.error
       }
 
     default:
