@@ -46,6 +46,15 @@ export default class FrameList extends Component {
     onChange: PropTypes.func.isRequired, // returns action
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+
+    if (this.props.activeFrame !== nextProps.activeFrame ||
+        this.props.frames !== nextProps.frames) {
+      return true;
+    }
+    return false;
+  }
+
   onClickFrame = (evt) => {
     const {onChange} = this.props
     const frameNr = parseInt(evt.currentTarget.dataset["frame"] || "0", 10)
@@ -85,7 +94,7 @@ export default class FrameList extends Component {
     for (let i = 0; i < fN; i++) {
       const elem = frames[i]
 
-      const className = activeFrame === i ? "FrameListActiveFrame" : "FrameListFrame"
+      const className = activeFrame === i ? "FrameListFrame active" : "FrameListFrame"
 
       controls.push(
         <li key={'s'+i} className={"pure-menu-item FrameListSpacer"}
@@ -106,9 +115,10 @@ export default class FrameList extends Component {
             onDragEnd={this.handleDragEndFrame}
             onDragOver={this.handleDragOverFrame}
         >
-          <span className="FrameListDrag" data-frame={i} data-idx={i}>
+          {/* <span className="FrameListDrag" data-frame={i} data-idx={i}>
             <FontAwesomeIcon color="white" icon={faArrowsAlt}/>
           </span>
+          */}
 
           <span className="FrameListDelete" data-frame={i} onClick={this.onClickRemoveFrame}>
             <FontAwesomeIcon color="white" icon={faTrash}/>
@@ -166,6 +176,8 @@ export default class FrameList extends Component {
   }
 
   handleDragOverFrame = (evt) => {
+
+    console.log("dragginover")
     evt.dataTransfer.dropEffect = 'move';
 
     if (this.dndOneShot) {

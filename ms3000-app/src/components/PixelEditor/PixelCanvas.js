@@ -341,6 +341,7 @@ export default class PixelCanvas extends Component {
   }
 
   onMouseMoveCanvas = (evt) => {
+    //console.log("movin...")
     evt.preventDefault()
     var p = this.getPos(evt)
     if (evt.buttons) {

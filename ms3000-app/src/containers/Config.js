@@ -21,8 +21,6 @@ class Config extends Component {
   constructor(props) {
     super(props)
 
-    var cnt = 0
-
     const ctx = this
     this.dispatchDebouncedPostShifterState = throttle(() => {
       const { dispatch } = ctx.props

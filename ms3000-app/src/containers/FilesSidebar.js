@@ -19,6 +19,28 @@ import { imageDownload } from '../actions/ms3000'
 class FilesSidebar extends Component {
   static propTypes = {
     filesVisible: PropTypes.bool.isRequired,
+    selectedFile: PropTypes.string,
+
+    isFetching: PropTypes.bool.isRequired,
+    files: PropTypes.array,
+    filesError: PropTypes.any,
+
+    isDownloading: PropTypes.bool.isRequired,
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      this.props.filesVisible !== nextProps.filesVisible ||
+      this.props.selectedFile !== nextProps.selectedFile ||
+      this.props.isFetching !== nextProps.isFetching ||
+      this.props.files !== nextProps.files ||
+      this.props.filesError !== nextProps.filesError ||
+      this.props.isDownloading !== nextProps.isDownloading
+      ) {
+      return true;
+    }
+    console.log("no redraw sidebar")
+    return false;
   }
 
   onChangeFilesSidebar = (newState) => {
