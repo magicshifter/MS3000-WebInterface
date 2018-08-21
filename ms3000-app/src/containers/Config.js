@@ -1,7 +1,12 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {dumpU8, fetchShifterState, postShifterState, receiveShifterState} from '../actions/ms3000'
+import {dumpU8,
+  fetchShifterState,
+  postShifterState,
+  receiveShifterState,
+  configDownload, configUpload
+} from '../actions/ms3000'
 
 import protobufs from '../utils/protoBufLoader'
 import pb from '../utils/protoBufLoader'
@@ -13,6 +18,7 @@ import IconButton from  '../components/inputs/IconButton'
 import './App.css';
 import logo from '../logo.svg';
 import {faCloudUploadAlt, faCloudDownloadAlt, faSyncAlt} from "@fortawesome/free-solid-svg-icons/index";
+import ErrorBox from "../components/outputs/ErrorBox";
 
 
 class Config extends Component {
@@ -25,9 +31,9 @@ class Config extends Component {
     this.dispatchDebouncedPostShifterState = throttle(() => {
       const { dispatch } = ctx.props
 
-      console.log("postin....", cnt)
-      cnt++
-      dispatch(postShifterState())
+
+      //dispatch(postShifterState())
+      dispatch(configUpload())
     }, 500)
   }
 
@@ -43,7 +49,7 @@ class Config extends Component {
     e.preventDefault()
 
     const { dispatch } = this.props
-    dispatch(fetchShifterState())
+    dispatch(configDownload()) //fetchShifterState())
   }
 
   handlePostClick = e => {
@@ -96,15 +102,20 @@ class Config extends Component {
   }
 
   render() {
-    const { isFetching, shifterState, location } = this.props
+    const { isFetching, shifterState,
+      isConfigUploading,
+      configUploadError,
+      isConfigDownloading,
+      configDownloadError} = this.props
 
       return (
           <div style={{border: '2px solid yellow'}}>
             <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
               <ul className="pure-menu-list">
-                <IconButton icon={faSyncAlt} tooltip='download config' onClick={this.handleRefreshClick} rotate={isFetching}/>
-                <IconButton icon={faCloudUploadAlt} tooltip='upload config' onClick={this.handlePostClick} rotate={false}/>
-
+                <IconButton icon={faSyncAlt} tooltip='download config' onClick={this.handleRefreshClick} rotate={isConfigDownloading}/>
+                <IconButton icon={faCloudUploadAlt} tooltip='upload config' onClick={this.handlePostClick} rotate={isConfigUploading}/>
+                <ErrorBox error={configUploadError}/>
+                <ErrorBox error={configDownloadError} />
               </ul>
             </div>
 
@@ -145,11 +156,24 @@ class Config extends Component {
 }
 
 const mapStateToProps = state => {
-  const { isFetching, shifterState } = state.ms3000
+  const {
+    isFetching,
+
+    shifterState,
+
+    isConfigUploading,
+    configUploadError,
+    isConfigDownloading,
+    configDownloadError,
+  } = state.ms3000
 
   return {
     isFetching,
     shifterState,
+    isConfigUploading,
+    configUploadError,
+    isConfigDownloading,
+    configDownloadError,
   }
 }
 

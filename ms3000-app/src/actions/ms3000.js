@@ -4,7 +4,7 @@ import pb from '../utils/protoBufLoader'
 import MagicBitmap from "../ms3000/MagicBitmap";
 
 import { pixelEditorChangeImage } from './pixelEditor'
-import {filesystemFakeAddFile, filesystemRefresh} from './filesystem'
+import { filesystemFakeAddFile } from './filesystem'
 
 
 export const IMAGE_UPLOAD_REQUEST_START = "IMAGE_UPLOAD_REQUEST_START"
@@ -116,12 +116,6 @@ const imageDownloadFail = (error) => ({
 })
 
 
-function downloadError(dispatch, error) {
-  error = "Image Upload Failed! " + error
-  console.log(error)
-  dispatch(imageDownloadFail(error))
-}
-
 export const imageDownload = (name) => (dispatch, getState) => {
   dispatch(imageDownloadStart())
 
@@ -148,6 +142,135 @@ export const imageDownload = (name) => (dispatch, getState) => {
       dispatch(imageDownloadFail(error))
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const CONFIG_UPLOAD_REQUEST_START = "CONFIG_UPLOAD_REQUEST_START"
+export const CONFIG_UPLOAD_REQUEST_SUCCESS = "CONFIG_UPLOAD_REQUEST_SUCCESS"
+export const CONFIG_UPLOAD_REQUEST_FAIL = "CONFIG_UPLOAD_REQUEST_FAIL"
+
+const configUploadStart = (shifterState) => ({
+  type: CONFIG_UPLOAD_REQUEST_START,
+  shifterState
+})
+
+const configUploadSuccess = () => ({
+  type: CONFIG_UPLOAD_REQUEST_SUCCESS,
+})
+
+const configUploadFail = (error) => ({
+  type: CONFIG_UPLOAD_REQUEST_FAIL,
+  error
+})
+
+export const configUpload = () => (dispatch, getState) => {
+  dispatch(configUploadStart())
+
+  const state = getState()
+  const { host } = state.ms3000
+
+  console.log("configUpload", state)
+
+  const testObj = state.ms3000.shifterState
+  var check = pb.MS3KG.verify(testObj);
+
+  if (check) {
+    alert("buffer verify error, corrupt? " + check)
+  }
+
+  const bufferU8 = pb.MS3KG.encode(testObj).finish()
+  const funkyStr = String.fromCharCode.apply(null, bufferU8)
+  const b64encoded = btoa(funkyStr);
+
+  fetch(host + '/protobuf?myArg=' + b64encoded, { method: 'POST'})
+    .then(() => {
+      dispatch(configUploadSuccess())
+    })
+    .catch(error => {
+      dispatch(configUploadFail(error))
+    });
+
+  console.log(check, bufferU8)
+}
+
+
+export const CONFIG_DOWNLOAD_REQUEST_START = "CONFIG_DOWNLOAD_REQUEST_START"
+export const CONFIG_DOWNLOAD_REQUEST_SUCCESS = "CONFIG_DOWNLOAD_REQUEST_SUCCESS"
+export const CONFIG_DOWNLOAD_REQUEST_FAIL = "CONFIG_DOWNLOAD_REQUEST_FAIL"
+
+
+const configDownloadStart = () => ({
+  type: CONFIG_DOWNLOAD_REQUEST_START,
+})
+
+const configDownloadSuccess = () => ({
+  type: CONFIG_DOWNLOAD_REQUEST_SUCCESS,
+})
+
+const configDownloadFail = (error) => ({
+  type: CONFIG_DOWNLOAD_REQUEST_FAIL,
+  error
+})
+
+export const configDownload = () => (dispatch, getState) => {
+  dispatch(configDownloadStart())
+
+  const state = getState()
+  const { host } = state.ms3000
+
+  fetch(host + '/protobuf')
+    .then(data => data.text())
+    .then(text => {
+      var decoded = atob(text)
+      console.log("b64 decoded", decoded)
+      var u8a = stringToArray(decoded);
+      //dumpU8(u8a)
+      console.log("u8", u8a)
+
+      try {
+        const shifterState = pb.MS3KG.decode(u8a);
+
+        var object = pb.MS3KG.toObject(shifterState, {
+          longs: undefined,
+          enums: undefined,
+          bytes: undefined,
+        });
+
+        dispatch(configDownloadSuccess())
+        dispatch(receiveShifterState(object))
+      }
+      catch (ex) {
+        console.error("shifterstate fetch decode error", ex)
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error)
+      dispatch(configDownloadFail(error))
+    });
+}
+
+
+
+
+
+
 
 
 

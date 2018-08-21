@@ -3,12 +3,20 @@ import {
   REQUEST_SHIFTER_STATE,
 
   IMAGE_UPLOAD_REQUEST_START,
-  IMAGE_UPLOAD_REQUEST_FAIL,
   IMAGE_UPLOAD_REQUEST_SUCCESS,
+  IMAGE_UPLOAD_REQUEST_FAIL,
 
   IMAGE_DOWNLOAD_REQUEST_START,
-  IMAGE_DOWNLOAD_REQUEST_FAIL,
   IMAGE_DOWNLOAD_REQUEST_SUCCESS,
+  IMAGE_DOWNLOAD_REQUEST_FAIL,
+
+  CONFIG_DOWNLOAD_REQUEST_START,
+  CONFIG_DOWNLOAD_REQUEST_SUCCESS,
+  CONFIG_DOWNLOAD_REQUEST_FAIL,
+
+  CONFIG_UPLOAD_REQUEST_START,
+  CONFIG_UPLOAD_REQUEST_SUCCESS,
+  CONFIG_UPLOAD_REQUEST_FAIL
 } from '../actions/ms3000'
 
 import {FILESYSTEM_REQUEST_START, FILESYSTEM_REQUEST_SUCCESS} from "../actions/filesystem";
@@ -26,6 +34,12 @@ const DEFAULT_STATE = {
 
   isDownloading: false,
   downloadError: null,
+
+  isConfigUploading: false,
+  configUploadError: null,
+
+  isConfigDownloading: false,
+  configDownloadError: null,
 }
 
 
@@ -90,6 +104,55 @@ const ms3000 = (state = DEFAULT_STATE, action) => {
         ...state,
         isDownloading: false,
         downloadError: action.error
+      }
+
+
+
+
+
+    case CONFIG_UPLOAD_REQUEST_START:
+      return {
+        ...state,
+        isConfigUploading: true,
+        configUploadError: null,
+      }
+
+    case CONFIG_UPLOAD_REQUEST_SUCCESS:
+      return {
+        ...state,
+        isConfigUploading: false,
+        configUploadError: null
+      }
+
+    case CONFIG_UPLOAD_REQUEST_FAIL:
+      return {
+        ...state,
+        files: null,
+        isConfigUploading: false,
+        configUploadError: action.error
+      }
+
+
+
+    case CONFIG_DOWNLOAD_REQUEST_START:
+      return {
+        ...state,
+        isConfigDownloading: true,
+        configDownloadError: null,
+      }
+
+    case CONFIG_DOWNLOAD_REQUEST_SUCCESS:
+      return {
+        ...state,
+        isConfigDownloading: false,
+        configDownloadError: null
+      }
+
+    case CONFIG_DOWNLOAD_REQUEST_FAIL:
+      return {
+        ...state,
+        isConfigDownloading: false,
+        configDownloadError: action.error
       }
 
     default:
