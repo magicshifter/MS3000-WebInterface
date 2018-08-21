@@ -60,7 +60,7 @@ export default class AutoControl extends Component {
 
       default:
         if (isEnum) {
-          controls.push(<EnumControl id={ field.name } key="enu" field={field} value={value} onChange={onChange} /> )
+          controls.push(<EnumControl id={ field.name } key="enu" field={field} value={value} onChange={onChange} radioButtons={true}/> )
         }
         else if (isType) {
           noLabel = true

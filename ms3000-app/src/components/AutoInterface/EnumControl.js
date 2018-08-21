@@ -7,12 +7,20 @@ export default class EnumControl extends Component {
     field: PropTypes.object.isRequired,
     value: PropTypes.any,
     onChange: PropTypes.func.isRequired,
+    radioButtons: PropTypes.bool
   }
 
   onChangeSelect = (evt) => {
     const { field, onChange } = this.props
+    const { target } = evt
 
-    const x = evt.target.value
+    if (target.type === "radio") {
+      if (!target.checked) {
+        console.log("ignoring false changeSelect!", evt)
+      }
+    }
+
+    const x = target.value
     var n = parseInt(x, 10)
     n = isNaN(n) ? 0 : n
 
@@ -26,7 +34,7 @@ export default class EnumControl extends Component {
   }
 
   render() {
-    const { field, id } = this.props
+    const { field, id, radioButtons } = this.props
     const value = this.getValue()
 
     const root = field.root
@@ -35,18 +43,47 @@ export default class EnumControl extends Component {
 
     const controls = []
 
+
     const keys = Object.keys(t.values)
-    for (var kk in keys) {
-      const k = keys[kk]
-      const f = t.values[k]
-      //console.log(k)
-      controls.push(<option key={f} value={f} label={k} />)
+    if (radioButtons) {
+      for (var kk in keys) {
+        const k = keys[kk]
+        const f = t.values[k]
+
+        const genid = field.name + k
+        console.log("rad", k, f, id)
+        controls.push(
+          <label key={f} htmlFor={genid} className="pure-radio">
+            <input
+              type="radio"
+              value={f}
+              id={genid}
+              checked={value === f }
+              onChange={this.onChangeSelect} /> {k}
+          </label>
+        )
+      }
+      return (
+        <span>
+          {controls}
+        </span>
+      )
+    }
+    else {
+
+      for (var kk in keys) {
+        const k = keys[kk]
+        const f = t.values[k]
+        //console.log(k)
+        controls.push(<option key={f} value={f} label={k} />)
+      }
+      return (
+        <select id={ id } value={value} onChange={this.onChangeSelect}>
+          {controls}
+        </select>
+      )
     }
 
-    return (
-      <select id={ id } value={value} onChange={this.onChangeSelect}>
-        {controls}
-      </select>
-    )
+
   }
 }

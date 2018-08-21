@@ -5,7 +5,7 @@ import {dumpU8, fetchShifterState, postShifterState, receiveShifterState} from '
 
 import protobufs from '../utils/protoBufLoader'
 import pb from '../utils/protoBufLoader'
-import debounce from '../utils/debounce'
+import {debounce, throttle} from "../utils/debounce";
 
 import AutoInterface from '../components/AutoInterface/index'
 import PixelEditor from './PixelEditor'
@@ -33,19 +33,19 @@ class App extends Component {
     var cnt = 0
 
     const ctx = this
-    this.dispatchDebouncedPostShifterState = debounce(() => {
+    this.dispatchDebouncedPostShifterState = throttle(() => {
       const { dispatch } = ctx.props
 
       console.log("postin....", cnt)
       cnt++
       dispatch(postShifterState())
-    }, 1000, true)
+    }, 500)
 
 
-    this.dispatchDebouncedPostShifterState = () => {
-      const { dispatch } = ctx.props
-      dispatch(postShifterState())
-    }
+    // this.dispatchDebouncedPostShifterState = () => {
+    //   const { dispatch } = ctx.props
+    //   dispatch(postShifterState())
+    // }
   }
 
   // // TODO: this must go to shadow state!
