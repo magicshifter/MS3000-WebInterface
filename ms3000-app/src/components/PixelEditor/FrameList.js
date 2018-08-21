@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 import PropTypes from "prop-types";
 import PixelPreview from './PixelPreview'
-
 import IconButton from '../inputs/IconButton'
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faArrowsAlt, faClone, faPlusSquare, faTrash} from '@fortawesome/free-solid-svg-icons'
+import {faClone, faPlusSquare, faTrash} from '@fortawesome/free-solid-svg-icons'
+
 // TODO: is it ok to have actions here??
 import {
   pixelEditorAddNewFrame,
@@ -176,9 +176,15 @@ export default class FrameList extends Component {
   }
 
   handleDragOverFrame = (evt) => {
-
-    console.log("dragginover")
-    evt.dataTransfer.dropEffect = 'move';
+    // get out of here as fast as possible this is called hundreds of times with each pixel movement of the mouse!
+    if (this.lastTargetSpeedHack === evt.target) {
+      if (this.lastTargetSpeedHackPrevent) {
+        evt.preventDefault();
+      }
+      return
+    }
+    this.lastTargetSpeedHack = evt.target
+    this.lastTargetSpeedHackPrevent = false
 
     if (this.dndOneShot) {
       this.dndLastSource.style.display = 'none'
@@ -190,10 +196,6 @@ export default class FrameList extends Component {
     //console.log("drag over", idx, evt.target);
 
     if (!isNaN(idx)) {
-      if (this.dndLastSpacer) {
-        this.dndLastSpacer.style.display = 'none'
-      }
-
       var targetIdx = idx
       if (!isSpace && !this.dndOneShot) {
         if (this.dndLastIdx === idx) {
@@ -201,12 +203,21 @@ export default class FrameList extends Component {
         }
       }
 
-      this.dndLastSpacer = this.refs["s" + targetIdx]
-      this.dndLastSpacer.style.display = ''
-      this.dndLastIdx = targetIdx
-      this.dndOneShot = false
+      if (this.dndOneShot || targetIdx !== this.dndLastIdx) {
+        evt.dataTransfer.dropEffect = 'move';
 
+        if (this.dndLastSpacer) {
+          this.dndLastSpacer.style.display = 'none'
+        }
+
+        this.dndLastSpacer = this.refs["s" + targetIdx]
+        this.dndLastSpacer.style.display = ''
+        this.dndLastIdx = targetIdx
+        this.dndOneShot = false
+      }
+      // do this because spacer and frame have same targetIdx
       evt.preventDefault();
+      this.lastTargetSpeedHackPrevent = true
     }
   }
 
@@ -228,6 +239,8 @@ export default class FrameList extends Component {
       this.dndLastSource = null
     }
     this.dndSourceIdx = null
+    this.dndLastIdx = null
+    this.dndOneShot = null
   }
 
   handleDropFrame = (evt) => {
