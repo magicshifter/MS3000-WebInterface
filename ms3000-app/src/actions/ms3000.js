@@ -180,6 +180,15 @@ const configUploadFail = (error) => ({
   error
 })
 
+function stringToArray(bufferString) {
+  var array = new Uint8Array(new ArrayBuffer(bufferString.length));
+
+  for (var i = 0; i < bufferString.length; i++) {
+    array[i] = bufferString.charCodeAt(i);
+  }
+  return array
+}
+
 export const configUpload = () => (dispatch, getState) => {
   dispatch(configUploadStart())
 
@@ -200,7 +209,7 @@ export const configUpload = () => (dispatch, getState) => {
   const b64encoded = btoa(funkyStr);
 
   fetch(host + '/protobuf?myArg=' + b64encoded, { method: 'POST'})
-    .then(() => {
+    .then((result) => {
       dispatch(configUploadSuccess())
     })
     .catch(error => {
@@ -266,17 +275,8 @@ export const configDownload = () => (dispatch, getState) => {
     });
 }
 
+
 export const CONFIG_UPDATE = 'CONFIG_UPDATE'
-
-
-export function stringToArray(bufferString) {
-  var array = new Uint8Array(new ArrayBuffer(bufferString.length));
-
-  for (var i = 0; i < bufferString.length; i++) {
-    array[i] = bufferString.charCodeAt(i);
-  }
-  return array
-}
 
 export const configUpdate = (shifterState) => ({
   type: CONFIG_UPDATE,

@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import AppDebug from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {getProtocolBuffersPromise} from './utils/protoBufLoader'
 import {applyMiddleware, createStore} from 'redux'
@@ -16,6 +15,7 @@ import rootSaga from './sagas'
 import createSagaMiddleware from 'redux-saga'
 
 import thunk from 'redux-thunk'
+
 
 
 const middleware = []
@@ -38,22 +38,14 @@ sagaMiddleware.run(rootSaga)
 
 
 
-
-
 var p = getProtocolBuffersPromise();
 p.then( () => {
-
-  if (true) {
-    ReactDOM.render(
-      <Provider store={store}>
-        <App/>
-      </Provider>,
-      document.getElementById('root')
-    )
-  }
-  else {
-    ReactDOM.render(<AppDebug/>, document.getElementById('root'));
-  }
+  ReactDOM.render(
+    <Provider store={store}>
+      <App/>
+    </Provider>,
+    document.getElementById('root')
+  )
 });
 
 
