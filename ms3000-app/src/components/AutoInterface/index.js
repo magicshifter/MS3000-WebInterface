@@ -63,7 +63,7 @@ export default class AutoInterface extends Component {
 
     if (skipInputTag) {
       return (
-        <fieldset style={{border: "3px solid red"}}>
+        <fieldset style={{border: "2px solid black"}}>
           <h2>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
