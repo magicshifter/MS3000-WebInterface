@@ -13,7 +13,6 @@ import AutoInterface from '../components/AutoInterface/index'
 import IconButton from  '../components/inputs/IconButton'
 
 import './App.css';
-import logo from '../logo.svg';
 import {faCloudUploadAlt, faCloudDownloadAlt, faSyncAlt} from "@fortawesome/free-solid-svg-icons/index";
 import ErrorBox from "../components/outputs/ErrorBox";
 
@@ -54,7 +53,6 @@ class Config extends Component {
     console.log("create", pb.MS3KG.create())
     const {shifterState } = this.props
 
-
     const testObj = shifterState
     var check = pb.MS3KG.verify(testObj);
     console.log("verified:", check, testObj)
@@ -76,8 +74,6 @@ class Config extends Component {
     dispatch(configUpdate({
       networkName:"Testdate MS",
       modes: {
-        current: "what current??",
-
         beat: {
           beatMode: 1,
           sensitivity: 2,
@@ -94,11 +90,13 @@ class Config extends Component {
   }
 
   render() {
-    const { isFetching, shifterState,
+    const {
+      shifterState,
       isConfigUploading,
       configUploadError,
       isConfigDownloading,
-      configDownloadError} = this.props
+      configDownloadError
+    } = this.props
 
       return (
           <div style={{border: '2px solid yellow'}}>
@@ -111,14 +109,7 @@ class Config extends Component {
               </ul>
             </div>
 
-
-                <div>
-              { !isFetching ?
-                <button onClick={this.handleRefreshClick}>
-                  Refresh
-                </button>
-                : <p><img src={logo} className="App-logo" alt="logo" /></p>
-              }
+            <div>
               <button onClick={this.handleTestDataClick}>
                 Get TestData
               </button>
@@ -127,9 +118,6 @@ class Config extends Component {
                 Test Buffer
               </button>
 
-              <button onClick={this.handlePostClick}>
-                Post
-              </button>
               fast sync: <input ref="fastSync" type="checkbox" defaultChecked={true} />
             </div>
 
@@ -149,10 +137,7 @@ class Config extends Component {
 
 const mapStateToProps = state => {
   const {
-    isFetching,
-
     shifterState,
-
     isConfigUploading,
     configUploadError,
     isConfigDownloading,
@@ -160,7 +145,6 @@ const mapStateToProps = state => {
   } = state.ms3000
 
   return {
-    isFetching,
     shifterState,
     isConfigUploading,
     configUploadError,

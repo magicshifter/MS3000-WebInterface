@@ -78,16 +78,8 @@ export default class AutoInterface extends Component {
         <fieldset>
           <legend>{legend}</legend>
             { controls }
-
-          Coding Ground Pure.CSS Forms (HTML-5)  Login Setting Edit Project Fork
-
         </fieldset>
       </form>
-
-
-
-
-
     )
   }
 }

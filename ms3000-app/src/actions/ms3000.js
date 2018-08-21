@@ -7,6 +7,7 @@ import { pixelEditorChangeImage } from './pixelEditor'
 import { filesystemFakeAddFile } from './filesystem'
 
 
+
 export const IMAGE_UPLOAD_REQUEST_START = "IMAGE_UPLOAD_REQUEST_START"
 export const IMAGE_UPLOAD_REQUEST_SUCCESS = "IMAGE_UPLOAD_REQUEST_SUCCESS"
 export const IMAGE_UPLOAD_REQUEST_FAIL = "IMAGE_UPLOAD_REQUEST_FAIL"
@@ -17,16 +18,13 @@ const imageUploadStart = (name, magicBitmap) => ({
   name,
   magicBitmap
 })
-
 const imageUploadSuccess = () => ({
   type: IMAGE_UPLOAD_REQUEST_SUCCESS,
 })
-
 const imageUploadFail = (error) => ({
   type: IMAGE_UPLOAD_REQUEST_FAIL,
   error
 })
-
 
 function uploadError(dispatch, error) {
   error = "Image Upload Failed! " + error
@@ -67,26 +65,17 @@ export const imageUpload = () => (dispatch, getState) => {
       () => {
         uploadError(dispatch, 'Timeout')
       }
-
     request.onerror =
       () => {
         uploadError(dispatch, 'Error occured')
       }
-
-  request.onabort =
-    () => {
-      uploadError(dispatch, 'Aborted')
-    }
-
-
-    request.onloadend = ()  => {
-      //if (request.status !== 200) {
-      //  uploadError(dispatch, 'LOADEND')
-      //}
-    }
+    request.onabort =
+      () => {
+        uploadError(dispatch, 'Aborted')
+      }
 
     try {
-      console.log("postin", url)
+      //console.log("postin", url)
       request.open('POST', url);
       request.send(formData);
     }
@@ -105,16 +94,13 @@ const imageDownloadStart = (name) => ({
   type: IMAGE_DOWNLOAD_REQUEST_START,
   name,
 })
-
 const imageDownloadSuccess = () => ({
   type: IMAGE_DOWNLOAD_REQUEST_SUCCESS,
 })
-
 const imageDownloadFail = (error) => ({
   type: IMAGE_DOWNLOAD_REQUEST_FAIL,
   error
 })
-
 
 export const imageDownload = (name) => (dispatch, getState) => {
   dispatch(imageDownloadStart())
@@ -142,24 +128,6 @@ export const imageDownload = (name) => (dispatch, getState) => {
       dispatch(imageDownloadFail(error))
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 export const CONFIG_UPLOAD_REQUEST_START = "CONFIG_UPLOAD_REQUEST_START"
@@ -209,7 +177,7 @@ export const configUpload = () => (dispatch, getState) => {
   const b64encoded = btoa(funkyStr);
 
   fetch(host + '/protobuf?myArg=' + b64encoded, { method: 'POST'})
-    .then((result) => {
+    .then(() => {
       dispatch(configUploadSuccess())
     })
     .catch(error => {

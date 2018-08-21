@@ -16,7 +16,6 @@ import './App.css';
 
 class App extends Component {
   static propTypes = {
-    isFetching: PropTypes.bool.isRequired,
     shifterState :PropTypes.object,
     location: PropTypes.string.isRequired,
   }
@@ -24,10 +23,7 @@ class App extends Component {
   render() {
     const { location } = this.props
 
-    //console.log("render", isFetching, shifterState )
-
     const controls = []
-
     switch (location) {
       case "wifi":
         controls.push(<SocketCmdCenter key='soc'/>)
@@ -60,11 +56,10 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const { isFetching, shifterState } = state.ms3000
+  const { shifterState } = state.ms3000
   const { location } = state.navigation
 
   return {
-    isFetching,
     shifterState,
     location
   }
