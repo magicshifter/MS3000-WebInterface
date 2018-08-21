@@ -47,7 +47,6 @@ export default class FrameList extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-
     if (this.props.activeFrame !== nextProps.activeFrame ||
         this.props.frames !== nextProps.frames) {
       return true;

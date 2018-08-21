@@ -273,7 +273,7 @@ class PixelEditor extends Component {
                 <li className="pure-menu-item ToolsMenuTooltip">
                   <span className="ToolsMenuTooltipText" style={{width: "120px"}}>new Image</span>
                   <button className="pure-button" onClick={this.onClickNew}>
-                    <FontAwesomeIcon icon={faFile} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                    <FontAwesomeIcon icon={faFile} size="1x" style={{textShadow: "2px 2px #ff0000"}}/>
                   </button>
                 </li>
                 <li className="pure-menu-item">
@@ -287,14 +287,14 @@ class PixelEditor extends Component {
                 <li className="pure-menu-item ToolsMenuTooltip">
                   <span className="ToolsMenuTooltipText" style={{width: "120px"}}>save as PNG</span>
                     <button className="pure-button" onClick={this.onExportImage}>
-                      <FontAwesomeIcon icon={faSave} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                      <FontAwesomeIcon icon={faSave} size="1x" style={{textShadow: "2px 2px #ff0000"}}/>
                     </button>
                 </li>
                 <li className="pure-menu-item ToolsMenuTooltip">
                   <span className="ToolsMenuTooltipText" style={{width: "240px"}}>open PNG or MagicBitmap</span>
                   <button className="pure-button" onClick={this.uploadClickHAck}>
                     <label htmlFor="ImportImage">
-                      <FontAwesomeIcon icon={faFolderOpen} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                      <FontAwesomeIcon icon={faFolderOpen} size="1x" style={{textShadow: "2px 2px #ff0000"}}/>
                       <input
                         ref="fileUpload"
                         id="ImportImage"
@@ -314,7 +314,7 @@ class PixelEditor extends Component {
                   <li className="pure-menu-item ToolsMenuTooltip">
                     <span className="ToolsMenuTooltipText">undo</span>
                     <button className="pure-button" onClick={this.onClickUndo}>
-                      <FontAwesomeIcon icon={faUndo} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                      <FontAwesomeIcon icon={faUndo} size="1x" style={{textShadow: "2px 2px #ff0000"}}/>
                     </button>
                   </li>
                   : null}
@@ -323,7 +323,7 @@ class PixelEditor extends Component {
                   <li className="pure-menu-item ToolsMenuTooltip">
                     <span className="ToolsMenuTooltipText">redo</span>
                     <button className="pure-button" onClick={this.onClickRedo}>
-                      <FontAwesomeIcon icon={faRedo} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+                      <FontAwesomeIcon icon={faRedo} size="1x" style={{textShadow: "2px 2px #ff0000"}}/>
                     </button>
                   </li>
                   : null}

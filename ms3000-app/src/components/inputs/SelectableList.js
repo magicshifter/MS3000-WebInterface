@@ -10,6 +10,7 @@ export class SelectableList extends Component {
     listItems: PropTypes.array,
     select: PropTypes.func,
     doubleClick: PropTypes.func,
+    filter: PropTypes.func,
   }
 
   static defaultProps = {
@@ -44,6 +45,7 @@ export class SelectableList extends Component {
     const {
       fieldId, fieldText,
       listItems, selectedId,
+      filter,
       lines: size,
     } = this.props
 
@@ -62,14 +64,19 @@ export class SelectableList extends Component {
         >
           {
             listItems.map(
-              (result, idx) =>
-                <option
-                  key={result[fieldId]}
-                  value={result[fieldId]}
-                >
-                  {result[fieldText]}
-                </option>
-            )
+              (result, idx) => {
+                if (!filter || filter(result)) {
+                  return (
+                    <option
+                      key={result[fieldId]}
+                      value={result[fieldId]}>
+                      {result[fieldText]}
+                    </option>)
+                }
+                else {
+                  return null
+                }
+              })
           }
         </select>
       </div>

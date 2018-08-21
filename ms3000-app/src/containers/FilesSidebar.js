@@ -16,6 +16,11 @@ import { filesystemRefresh } from "../actions/filesystem";
 import { imageDownload } from '../actions/ms3000'
 
 
+function bitmapFilter(file) {
+  const n = file.name.toLowerCase()
+  return n.endsWith('.magicbitmap') || (n.endsWith('.magicfont'))
+}
+
 class FilesSidebar extends Component {
   static propTypes = {
     filesVisible: PropTypes.bool.isRequired,
@@ -86,7 +91,8 @@ class FilesSidebar extends Component {
           <p>Please press refresh to update the filelist</p> :
           <SelectableList listItems={files} fieldId='name' fieldText='name' lines={30}
                           selectedId={selectedFile}
-                          select={this.selectFile} doubleClick={this.doubleClickFile}/>
+                          select={this.selectFile} doubleClick={this.doubleClickFile}
+                          filter={bitmapFilter}/>
         }
       </Sidebar>
     )
