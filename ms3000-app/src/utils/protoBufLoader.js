@@ -15,7 +15,7 @@ export function getProtocolBuffersPromise() {
       }
       else {
         // Obtain a message type
-        xxx.MS3KG = root.lookupType("MS3KG");
+        xxx.MS3KG = root.lookupType("MS3000GlobalPBuffer");
         xxx.root = root
 
         console.log("stage2", xxx)
