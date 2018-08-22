@@ -26,7 +26,7 @@ export default class IconButton extends Component {
         <span className="ToolsMenuTooltipText" style={style}>{tooltip}</span>
         <button className="pure-button" onClick={onClick}>
           <span id={rotate ?'loading' : null} style={{display: 'inline-block'}}>
-            <FontAwesomeIcon icon={icon} size="1x"/>
+            <FontAwesomeIcon icon={icon} />
           </span>
         </button>
       </li>

@@ -33,7 +33,7 @@ export default class ToolsMenu extends Component {
       controls.push(
         <li key={i} className={"pure-menu-item ToolsMenuTooltip " + className} data-tool={elem.name} onClick={this.onClickTool} >
           <span className="ToolsMenuTooltipText">{elem.label || elem.name}</span>
-          <FontAwesomeIcon icon={elem.icon} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
+          <FontAwesomeIcon icon={elem.icon} style={{textShadow: "2px 2px #ff0000"}}/>
         </li>
       )
     }
