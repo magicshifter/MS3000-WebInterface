@@ -22,14 +22,14 @@ export default class IconButton extends Component {
     }
 
     return (
-      <li className="pure-menu-item ToolsMenuTooltip">
+      <div className="icon-button ToolsMenuTooltip">
         <span className="ToolsMenuTooltipText" style={style}>{tooltip}</span>
         <button className="pure-button" onClick={onClick}>
           <span id={rotate ?'loading' : null} style={{display: 'inline-block'}}>
             <FontAwesomeIcon icon={icon} />
           </span>
         </button>
-      </li>
+      </div>
     )
   }
 }

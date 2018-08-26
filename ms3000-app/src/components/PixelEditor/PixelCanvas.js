@@ -41,6 +41,8 @@ export default class PixelCanvas extends Component {
 
   constructor(props) {
     super(props)
+
+    this.size = 15
   }
 
 
@@ -123,6 +125,10 @@ export default class PixelCanvas extends Component {
     const sH = Math.floor(dH/height)
     const scale = Math.min(sW, sH)
     this.scale = scale
+
+
+    // this.canvas.width = 500
+    // this.canvas.height = 500
 
     this.drawPixel()
   }
@@ -362,9 +368,11 @@ export default class PixelCanvas extends Component {
   render() {
     let { width, height } = this.props
 
+    //style={{minWidth: '0', flex: "1 1 auto", backgroundColor:'gray', border: '2px solid blue'}}
+
     return (
       <div ref='div' style={{minWidth: '0', flex: "1 1 auto", backgroundColor:'gray', border: '2px solid blue'}}
-           className="pure-menu pure-menu-horizontal pure-menu-scrollable">
+           >
         <canvas ref="canvas"
                 onMouseDown={this.onMouseDownCanvas}
                 onMouseMove={this.onMouseMoveCanvas}

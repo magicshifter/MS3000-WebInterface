@@ -7,7 +7,7 @@ import {FILESYSTEM_FAKE_ADD_FILE, FILESYSTEM_FAKE_REMOVE_FILE} from "../actions/
 
 
 const DEFAULT_STATE = {
-  filesVisible: true,
+  filesVisible: false,
   toolsVisible: true,
 
   selectedFile: 'mario.magicBitmap'

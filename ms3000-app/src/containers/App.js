@@ -46,8 +46,10 @@ class App extends Component {
         controls.push(<div key="uknw">MS3000 Error 404 Unknown location: {location}</div>)
     }
 
+    //
+    // style={{width: '100%', height:'100%', display: 'flex', flexFlow: 'column'}}
     return (
-      <div style={{width: '100%', height:'100%', display: 'flex', flexFlow: 'column'}}>
+      <div >
         <Navigation/>
         {controls}
       </div>

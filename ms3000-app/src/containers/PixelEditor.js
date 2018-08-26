@@ -262,37 +262,30 @@ class PixelEditor extends Component {
           the new bar is here
         </div>
         */
+
+    //  style={{display: 'flex', flexFlow: 'column', flex: '1 1 auto'}}
+    // style={{display: 'flex', flexFlow: 'column', flex: '1 1 auto'}}
+
+    // <Collapsable enlarged={toolsVisible} onChange={this.onChangeToolsSidebar} icon={faPalette} tooltip='Draw Tools'
+    //           float="right" top={"3em"} left='1em' width='95%'>
     return (
-      <div style={{display: 'flex', flexFlow: 'column', flex: '1 1 auto'}}>
-        <div style={{display: 'flex', flexFlow: 'column', flex: '1 1 auto'}}>
-        <Collapsable enlarged={toolsVisible} onChange={this.onChangeToolsSidebar} icon={faPalette} tooltip='Draw Tools'
-          float="right" top={"3em"} left='1em' width='95%'>
-          <form className="pure-form pure-form-aligned">
-            <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
-              <ul className="pure-menu-list">
-                <li className="pure-menu-item ToolsMenuTooltip">
-                  <span className="ToolsMenuTooltipText" style={{width: "120px"}}>new Image</span>
-                  <button className="pure-button" onClick={this.onClickNew}>
-                    <FontAwesomeIcon icon={faFile} size="1x" style={{textShadow: "2px 2px #ff0000"}}/>
-                  </button>
-                </li>
-                <li className="pure-menu-item">
-                  &nbsp;
+        <div>
+          <form className="">
+            <div className="pure-g" style={{paddingBottom: "0px"}}>
+
+                <div className="pure-u-1-1 pure-u-md-1-2">
+                  <IconButton icon={faFile} tooltip='new Image' onClick={this.onClickNew} />
                   <StringInput value={imageName} max={32} onChange={this.onChangeName} placeholder="image name"/>
-                </li>
-                <li className="pure-menu-item">
-                  &nbsp;
                   <NumberInput value={width} min={1} max={64} onChange={this.onChangeWidth} />&nbsp;px&nbsp;
-                </li>
-                <li className="pure-menu-item ToolsMenuTooltip">
-                  <span className="ToolsMenuTooltipText" style={{width: "120px"}}>save as PNG</span>
-                    <button className="pure-button" onClick={this.onExportImage}>
-                      <FontAwesomeIcon icon={faSave} size="1x" style={{textShadow: "2px 2px #ff0000"}}/>
-                    </button>
-                </li>
-                <li className="pure-menu-item ToolsMenuTooltip">
-                  <span className="ToolsMenuTooltipText" style={{width: "240px"}}>open PNG or MagicBitmap</span>
-                  <button className="pure-button" onClick={this.uploadClickHAck}>
+                </div>
+                <div className="pure-u-1-1 pure-u-md-1-2">
+                  <IconButton icon={faSave} tooltip='save image on hd' onClick={this.onExportImage} />
+
+                  <div className="icon-button ToolsMenuTooltip">
+                    <span className="ToolsMenuTooltipText" style={{width: "240px"}}>
+                      open PNG or MagicBitmap
+                    </span>
+                    <button className="pure-button" onClick={this.uploadClickHAck}>
                     <label htmlFor="ImportImage">
                       <FontAwesomeIcon icon={faFolderOpen} size="1x" style={{textShadow: "2px 2px #ff0000"}}/>
                       <input
@@ -306,33 +299,23 @@ class PixelEditor extends Component {
                         onChange={this.onImportImage}
                       />
                     </label>
-                  </button>
-                </li>
-                <IconButton icon={faUpload} tooltip='upload to MagicShifter' onClick={this.onUploadToShifter} rotate={isUploading}/>
-
-                {enableUndo ?
-                  <li className="pure-menu-item ToolsMenuTooltip">
-                    <span className="ToolsMenuTooltipText">undo</span>
-                    <button className="pure-button" onClick={this.onClickUndo}>
-                      <FontAwesomeIcon icon={faUndo} size="1x" style={{textShadow: "2px 2px #ff0000"}}/>
                     </button>
-                  </li>
-                  : null}
+                  </div>
 
-                {enableRedo ?
-                  <li className="pure-menu-item ToolsMenuTooltip">
-                    <span className="ToolsMenuTooltipText">redo</span>
-                    <button className="pure-button" onClick={this.onClickRedo}>
-                      <FontAwesomeIcon icon={faRedo} size="1x" style={{textShadow: "2px 2px #ff0000"}}/>
-                    </button>
-                  </li>
-                  : null}
+                  <IconButton icon={faUpload} tooltip='upload to MagicShifter' onClick={this.onUploadToShifter} rotate={isUploading}/>
+
+                {enableUndo ? <IconButton icon={faUndo} tooltip='undo' onClick={this.onClickUndo} /> : null}
+
+                {enableRedo ? <IconButton icon={faRedo} tooltip='redo' onClick={this.onClickRedo} /> : null}
 
                   <ErrorBox error={uploadError}/>
+                </div>
 
-              </ul>
+
+
             </div>
-            <div className="pure-menu pure-menu-horizontal" style={{paddingBottom: "0px"}}>
+
+            <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{paddingBottom: "0px"}}>
               <ul className="pure-menu-list">
                 <li className="pure-menu-item">
                   <ColorChooser color={color} onChange={this.onChangePalette}/>
@@ -365,18 +348,23 @@ class PixelEditor extends Component {
                 <ColorPalette palette={imagePalette} onChange={this.onChangePalette} activeColor={color}/>
               </ul>
             </div>
+
           </form>
-        </Collapsable>
+
         {pixel ?
           <PixelCanvas width={width} height={height} tool={tool} toolSize={toolSize} color={color} pixel={pixel} scale={25}
                        onChange={this.onChangePixel} onPick={this.onChangePick} onScroll={this.onChangeScroll} />
           : <span>No Frames :( Are you happy now?!?</span>
         }
         </div>
-      </div>
+
 
     )
   }
+  /*
+
+
+   */
 
   onClickTool = (newTool) => {
     //console.log("PixelEditor tool menu changed", newTool)
