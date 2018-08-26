@@ -111,8 +111,8 @@ export default class PixelCanvas extends Component {
 
   onResize = () => {
     const {div} = this.refs
-    let dW = div.clientWidth;
-    let dH = div.clientHeight;
+    let dW = 600 // iv.clientWidth;
+    let dH = 500 // div.clientHeight;
 
     //console.log("resize", dW, dH)
 

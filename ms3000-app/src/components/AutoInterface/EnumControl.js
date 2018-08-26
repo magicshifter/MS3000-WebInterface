@@ -38,7 +38,10 @@ export default class EnumControl extends Component {
     const value = this.getValue()
 
     const root = field.root
-    const t = root.lookupTypeOrEnum(field.type)
+
+    const typeName = field.parent ? field.parent.name + '.' + field.type : field.type
+
+    const t = root.lookupTypeOrEnum(typeName)
     //console.log("render enum", t)
 
     const controls = []
