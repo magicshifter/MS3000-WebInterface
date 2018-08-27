@@ -96,7 +96,7 @@ export default class FrameList extends Component {
       const className = activeFrame === i ? "FrameListFrame active" : "FrameListFrame"
 
       controls.push(
-        <li key={'s'+i} className={"pure-menu-item FrameListSpacer"}
+        <div key={'s'+i} className={"FrameListSpacer"}
             onDrop={this.handleDropFrame}
             onDragOver={this.handleDragOverFrame}
             ref={"s" + i}
@@ -104,10 +104,10 @@ export default class FrameList extends Component {
             style={{display:"none"}}
         >
           <DummyPreview width={width} height={height} scale={PREVIEW_SCALE} />
-        </li>)
+        </div>)
 
       controls.push(
-        <li key={'f'+i} className={"pure-menu-item " + className} data-frame={i} data-idx={i} ref={"i" + i}
+        <div key={'f'+i} className={className} data-frame={i} data-idx={i} ref={"i" + i}
             onClick={this.onClickFrame}
             draggable
             onDragStart={this.handleDragStartFrame}
@@ -119,24 +119,24 @@ export default class FrameList extends Component {
           </span>
           */}
 
-          <span className="FrameListDelete" data-frame={i} onClick={this.onClickRemoveFrame}>
+          <div className="FrameListDelete" data-frame={i} onClick={this.onClickRemoveFrame}>
             <FontAwesomeIcon color="white" icon={faTrash}/>
-          </span>
+          </div>
 
-          <span className="FrameListDuplicate" data-frame={i} onClick={this.onClickDuplicateFrame}>
+          <div className="FrameListDuplicate" data-frame={i} onClick={this.onClickDuplicateFrame}>
             <FontAwesomeIcon color="white" icon={faClone}/>
-          </span>
+          </div>
 
           <PixelPreview data-frameNr={i} scale={PREVIEW_SCALE} width={width} height={height}
                         pixel={elem}
           />
-        </li>
+        </div>
       )
     }
 
     controls.push(
-      <li key={'s'+ fN}
-          className={"pure-menu-item FrameListSpacer"}
+      <div key={'s'+ fN}
+          className={"FrameListSpacer"}
           ref={"s" + fN}
           data-idx={fN} data-spacer={1}
           style={{display:"none"}}
@@ -144,10 +144,10 @@ export default class FrameList extends Component {
           onDragOver={this.handleDragOverFrame}
       >
         <DummyPreview width={width} height={height} scale={PREVIEW_SCALE} />
-      </li>)
+      </div>)
 
     controls.push(
-      <IconButton key="add" icon={faPlusSquare} tooltip={"Add Frame"} onClick={this.onClickAddFrame}/>
+      <IconButton className="button-v-center" key="add" icon={faPlusSquare} tooltip={"Add Frame"} onClick={this.onClickAddFrame}/>
     )
 
     return controls

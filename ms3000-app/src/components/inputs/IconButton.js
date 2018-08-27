@@ -8,10 +8,11 @@ export default class IconButton extends Component {
     tooltip: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
     rotate: PropTypes.bool,
+    className: PropTypes.string,
   }
 
   render() {
-    const { icon, onClick, tooltip, rotate } = this.props
+    const { icon, onClick, tooltip, rotate, className } = this.props
 
     const style = {}
     if (tooltip) {
@@ -22,7 +23,7 @@ export default class IconButton extends Component {
     }
 
     return (
-      <div className="icon-button ToolsMenuTooltip">
+      <div className={"icon-button ToolsMenuTooltip " + className}>
         <div className="ToolsMenuTooltipText" style={style}>{tooltip}</div>
         <button className="pure-button" onClick={onClick}>
           <span id={rotate ?'loading' : null} style={{display: 'inline-block'}}>

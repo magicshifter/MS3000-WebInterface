@@ -1,15 +1,36 @@
+.button-v-center {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    height: 100%;
+
+}
+
+.button-v-center > button {
+    align-self: center;
+
+}
+
+
 .FrameListSpacer {
+    display: inline-block;
+    float: left;
     border: dashed 0.2em yellow;
     border-radius: 3px;
     padding: 0.8em;
     margin: 0.1em;
+    position: relative;
 }
 
 .FrameListFrame {
+    display: inline-block;
+    float: left;
     border: solid 0.2em gray;
     border-radius: 3px;
     padding: 0.8em;
     margin: 0.1em;
+
+    position: relative;
 
     background-color: darkgray;
     background-image:
