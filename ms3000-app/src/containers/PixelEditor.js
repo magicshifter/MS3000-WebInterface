@@ -315,28 +315,29 @@ class PixelEditor extends Component {
 
             </div>
 
-            <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{paddingBottom: "0px"}}>
-              <ul className="pure-menu-list">
-                <li className="pure-menu-item">
-                  <ColorChooser color={color} onChange={this.onChangePalette}/>
-                </li>
+            <div className="pure-g">
+              <div className="pure-u-1-1 pure-u-md-none">
+
+                <ColorChooser color={color} onChange={this.onChangePalette}/>
+              </div>
+              <div className="pure-u-1-1 pure-u-md-none">
                 <ToolsMenu structure={toolbarStructure} tool={tool} onChange={this.onClickTool}/>
-              </ul>
-              <ul className="pure-menu-list">
+              </div>
+              <div className="pure-u-1-1 pure-u-md-none">
                 <ToolSizes sizes={toolSizes} value={toolSize} onChange={this.onClickToolSize}/>
-              </ul>
+              </div>
             </div>
-            <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
-              <ul className="pure-menu-list">
+            <div className="pure-g">
+              <div className="pure-u-1-1 pure-u-md-none">
 
 
-                <li className="pure-menu-item">
+                <div>
                   Frame delay: <br /><NumberInput value={framesDelays[frameIdx]} min={100} max={60000} onChange={this.onChangeFrameDelay} />ms&nbsp;
-                </li>
+                </div>
 
                 <FrameList frames={frames} width={width} height={height} activeFrame={frameIdx}
                            onChange={this.onChangeFrames} />
-              </ul>
+              </div>
             </div>
             <div className="pure-menu pure-menu-horizontal pure-menu-scrollable" style={{padding: "0px"}}>
               <ul className="pure-menu-list">

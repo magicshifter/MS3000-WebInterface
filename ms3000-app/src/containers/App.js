@@ -30,7 +30,8 @@ class App extends Component {
         break;
 
       case "mode-Image":
-        controls.push(<FilesSidebar key='fS'/>)
+        // Sidebar macht seite zu gross
+        //controls.push(<FilesSidebar key='fS'/>)
         controls.push(<PixelEditor key="mImage" />)
         break;
 
