@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import Icon from '../outputs/Icon'
 
 export default class IconButton extends Component {
   static propTypes = {
@@ -23,10 +23,10 @@ export default class IconButton extends Component {
 
     return (
       <div className="icon-button ToolsMenuTooltip">
-        <span className="ToolsMenuTooltipText" style={style}>{tooltip}</span>
+        <div className="ToolsMenuTooltipText" style={style}>{tooltip}</div>
         <button className="pure-button" onClick={onClick}>
           <span id={rotate ?'loading' : null} style={{display: 'inline-block'}}>
-            <FontAwesomeIcon icon={icon} />
+            <Icon icon={icon} />
           </span>
         </button>
       </div>

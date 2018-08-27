@@ -31,7 +31,7 @@ export default class ToolsMenu extends Component {
       const className = elem.name === tool ? "ToolsMenuSelectedTool" : "ToolsMenuTool"
 
       controls.push(
-        <li key={i} className={"pure-menu-item ToolsMenuTooltip " + className} data-tool={elem.name} onClick={this.onClickTool} >
+        <li key={i} className={"pure-menu-item button-sized ToolsMenuTooltip " + className} data-tool={elem.name} onClick={this.onClickTool} >
           <span className="ToolsMenuTooltipText">{elem.label || elem.name}</span>
           <FontAwesomeIcon icon={elem.icon} style={{textShadow: "2px 2px #ff0000"}}/>
         </li>
