@@ -2,27 +2,29 @@ TODO:
 
 
 JAY!!!!!!!!!
+============
 Insurance
 
-Setup
 
-1-2 Synths + MSShifter
- 1 with serial interface
-
- 1 with neutron
-
-
-
-
-
-FOR evocell: no syntetic events!!! onMouse und so muss native reingehackt sein :)
-
-* shutdown in error mode after 3 sec
-* AP list config
-* todo: super low brightness
+Philipp vor ars
+===============
+* shutdown in error mode after 3 sec 10min
+* AP list config 2h
+* todo: super low brightness 20min in updateLEDS beim shiften / 16 div
 * errorbox schoen mit icon
-* multiframe in new fileformat
+* multiframe in new fileformat (protobuf for serialisation)
 * loading swipe (All are rapidly sweeping through hue, but each is timed 100ms off)
+* einbauen: http://magicshifter.github.io/ShiftGenJS/MagicShifterWebGLDemo.html
+
+
+Setup auf Ars
+=============
+1-2 Synths + MSShifter
+1 with serial interface
+1 with neutron arpi
+
+ 1x PC + monitor zum Pixel zeichnen
+
 
 
 DONE:
@@ -32,3 +34,4 @@ DONE:
 * double click filelist to load bmp from shifter
 * throttling
 * cleanup send/post protobuffer wie fileSystem
+* fixed enums namespacing
