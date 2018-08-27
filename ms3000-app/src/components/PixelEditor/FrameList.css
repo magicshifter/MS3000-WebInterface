@@ -1,16 +1,24 @@
+/*.button-v-center {*/
+    /*display: flex;*/
+    /*justify-content: space-between;*/
+    /*flex-direction: row;*/
+    /*height: 100%;*/
+/*}*/
+
+/*.button-v-center > button {*/
+    /*align-self: center;*/
+/*}*/
+
 .button-v-center {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    height: 100%;
-
+    display: inline-block;
+    float: left;
+    height: 100%
 }
-
 .button-v-center > button {
-    align-self: center;
-
+    margin-top: 50%;
+    margin-top: 50%;
+    margin-left: 2px;
 }
-
 
 .FrameListSpacer {
     display: inline-block;
