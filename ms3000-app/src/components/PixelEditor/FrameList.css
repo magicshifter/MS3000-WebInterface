@@ -1,29 +1,28 @@
-/*.button-v-center {*/
-    /*display: flex;*/
-    /*justify-content: space-between;*/
-    /*flex-direction: row;*/
-    /*height: 100%;*/
-/*}*/
-
-/*.button-v-center > button {*/
-    /*align-self: center;*/
-/*}*/
-
 .button-v-center {
+    height: 100%;
+}
+
+.button-v-center > button {
+    height: 100%;
+}
+
+.FrameListPlusButton {
     display: inline-block;
     float: left;
-    height: 100%
-}
-.button-v-center > button {
-    margin-top: 50%;
-    margin-top: 50%;
-    margin-left: 2px;
+    border: dashed 0.2em gray;
+    border-radius: 3px;
+    /*padding-top: 0.9em;*/
+    /*padding-bottom: 0.9em;*/
+    /*margin-left: 0.1em;*/
+    padding: 0.8em;
+    margin: 0.1em;
+    position: relative;
 }
 
 .FrameListSpacer {
     display: inline-block;
     float: left;
-    border: dashed 0.2em yellow;
+    border: dashed 0.2em white;
     border-radius: 3px;
     padding: 0.8em;
     margin: 0.1em;

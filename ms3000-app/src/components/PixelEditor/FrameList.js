@@ -20,9 +20,11 @@ import './FrameList.css'
 const PREVIEW_SCALE = 3
 
 
-function DummyPreview({scale, width, height}) {
+function DummyPreview({scale, width, height, children}) {
   return (
-    <div style={{height: " " + (scale * height) + "px", width: " " + (PREVIEW_SCALE * width) + "px"}} />
+    <div style={{height: " " + (scale * height) + "px", width: width ? "" + (PREVIEW_SCALE * width) + "px" : undefined}}>
+      {children}
+    </div>
   )
 }
 
@@ -147,7 +149,13 @@ export default class FrameList extends Component {
       </div>)
 
     controls.push(
-      <IconButton className="button-v-center" key="add" icon={faPlusSquare} tooltip={"Add Frame"} onClick={this.onClickAddFrame}/>
+
+      <div key='add' className={"FrameListPlusButton"}>
+        <DummyPreview height={height} scale={PREVIEW_SCALE}>
+          <IconButton className="button-v-center"  icon={faPlusSquare} tooltip={"Add Frame"} onClick={this.onClickAddFrame}/>
+        </DummyPreview>
+      </div>
+
     )
 
     return controls
