@@ -397,6 +397,10 @@ class PixelEditor extends Component {
 
   onUploadToShifter = () => {
     const { dispatch } = this.props
+
+    console.log("upload pressed")
+
+
     dispatch(imageUpload())
     };
 }

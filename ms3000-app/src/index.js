@@ -11,8 +11,8 @@ import reducer from './reducers'
 import App from './containers/App'
 
 
-import rootSaga from './sagas'
-import createSagaMiddleware from 'redux-saga'
+//import rootSaga from './sagas'
+//import createSagaMiddleware from 'redux-saga'
 
 import thunk from 'redux-thunk'
 
@@ -20,8 +20,8 @@ import thunk from 'redux-thunk'
 
 const middleware = []
 
-const sagaMiddleware = createSagaMiddleware()
-middleware.push(sagaMiddleware)
+//const sagaMiddleware = createSagaMiddleware()
+//middleware.push(sagaMiddleware)
 
 middleware.push(thunk)
 if (process.env.NODE_ENV !== 'production') {
@@ -34,7 +34,7 @@ const store = createStore(
 )
 
 // after createStore
-sagaMiddleware.run(rootSaga)
+//sagaMiddleware.run(rootSaga)
 
 
 

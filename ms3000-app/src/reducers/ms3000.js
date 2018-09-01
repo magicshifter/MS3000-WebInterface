@@ -100,6 +100,7 @@ const ms3000 = (state = DEFAULT_STATE, action) => {
 
 
     case IMAGE_UPLOAD_REQUEST_START:
+      console.log("IMAGE_UPLOAD_REQUEST_START", IMAGE_UPLOAD_REQUEST_START)
       return {
         ...state,
         isUploading: true,
@@ -107,17 +108,17 @@ const ms3000 = (state = DEFAULT_STATE, action) => {
       }
 
     case IMAGE_UPLOAD_REQUEST_SUCCESS:
+      console.log("IMAGE_UPLOAD_REQUEST_SUCCESS", IMAGE_UPLOAD_REQUEST_SUCCESS)
       return {
         ...state,
-        files: action.files,
         isUploading: false,
         uploadError: null
       }
 
     case IMAGE_UPLOAD_REQUEST_FAIL:
+      console.log("IMAGE_UPLOAD_REQUEST_FAIL", IMAGE_UPLOAD_REQUEST_FAIL)
       return {
         ...state,
-        files: null,
         isUploading: false,
         uploadError: action.error
       }
