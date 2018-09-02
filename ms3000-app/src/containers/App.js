@@ -6,6 +6,7 @@ import Config from './Config'
 import PixelEditor from './PixelEditor'
 import Navigation from './Navigation'
 import SocketCmdCenter from './SocketCmdCenter'
+import WiFiConfig from './WiFiConfig'
 
 import IconTest from '../components/IconTest'
 
@@ -26,6 +27,10 @@ class App extends Component {
     const controls = []
     switch (location) {
       case "wifi":
+        controls.push(<WiFiConfig key='soc'/>)
+        break;
+
+      case 'socket-test':
         controls.push(<SocketCmdCenter key='soc'/>)
         break;
 

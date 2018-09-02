@@ -268,6 +268,8 @@ class PixelEditor extends Component {
 
     // <Collapsable enlarged={toolsVisible} onChange={this.onChangeToolsSidebar} icon={faPalette} tooltip='Draw Tools'
     //           float="right" top={"3em"} left='1em' width='95%'>
+
+    // accept=".png,.msb,.magicBitmap,.magicFont,.magicBitmap2,*"
     return (
         <div>
           <form className="">
@@ -295,7 +297,7 @@ class PixelEditor extends Component {
                         multiple
                         type="file"
                         name="file"
-                        accept=".png,.magicBitmap,.magicFont,.magicBitmap2"
+
                         onChange={this.onImportImage}
                       />
                     </label>

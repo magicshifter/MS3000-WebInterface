@@ -12,6 +12,7 @@ const navStructure = [
   { name: "mode-Image" },
   { name: "mode-Light" },
   { name: "mode-MIDI" },
+  { name: "socket-test" },
   { name: "help" },
 ]
 
