@@ -27,8 +27,9 @@ const imageUploadFail = (error) => ({
 })
 
 function uploadError(dispatch, error) {
-  error = "Image Upload Failed! " + error
-  console.log(error)
+  const err = "Image Upload Failed! " + error
+  console.log(err)
+  alert(err)
   dispatch(imageUploadFail(error))
 }
 
@@ -50,7 +51,8 @@ export const imageUpload = () => (dispatch, getState) => {
 
     const request = new window.XMLHttpRequest();
     request.onload =
-      () => {
+      (e) => {
+        e.preventDefault()
         if (request.status === 200) {
           console.log("uploaded the bitmap :) ")
           dispatch(imageUploadSuccess())
@@ -61,27 +63,37 @@ export const imageUpload = () => (dispatch, getState) => {
         }
       }
 
-      request.timeout = 10000;
-      request.ontimeout =
-        () => {
-          uploadError(dispatch, 'Timeout')
-        }
-      request.onerror =
-        () => {
-          uploadError(dispatch, 'Error occured')
-        }
-      request.onabort =
-        () => {
-          uploadError(dispatch, 'Aborted')
-        }
+    request.timeout = 10000;
+    request.ontimeout =
+      (e) => {
+        e.preventDefault()
+        console.log('ontimeout', e)
+        uploadError(dispatch, 'Timeout')
+        return false
+      }
+    request.onerror =
+      (e) => {
+        e.preventDefault()
+        console.log('onerror', e)
+        uploadError(dispatch, e)
+        return false
+      }
+    request.onabort =
+      (e) => {
+        e.preventDefault()
+        console.log('onabort', e)
+        //alert(e)
+        uploadError(dispatch, 'Aborted')
+        return false
+      }
 
-      //console.log("postin", url)
-      request.open('POST', url);
-      request.send(formData);
-    }
-    catch (e) {
-      uploadError(dispatch, 'Exception: ' + e.toString())
-    }
+    //console.log("postin", url)
+    request.open('POST', url);
+    request.send(formData);
+  }
+  catch (e) {
+    uploadError(dispatch, 'Exception: ' + e.toString())
+  }
 }
 
 

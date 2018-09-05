@@ -26,8 +26,8 @@ const DEFAULT_STATE = {
   isFetching: false,
   shifterState: {},
 
-  //host: 'http://magicshifter.local',
-  host: 'http://192.168.4.1',
+  host: 'http://magicshifter.local',
+  //host: 'http://192.168.4.1',
 
   isUploading: false,
   uploadError: null,
@@ -68,6 +68,7 @@ const ms3000 = (state = DEFAULT_STATE, action) => {
       }
 
     case CONFIG_UPLOAD_REQUEST_FAIL:
+
       return {
         ...state,
         files: null,
@@ -116,7 +117,8 @@ const ms3000 = (state = DEFAULT_STATE, action) => {
       }
 
     case IMAGE_UPLOAD_REQUEST_FAIL:
-      console.log("IMAGE_UPLOAD_REQUEST_FAIL", IMAGE_UPLOAD_REQUEST_FAIL)
+      console.log("IMAGE_UPLOAD_REQUEST_FAIL", IMAGE_UPLOAD_REQUEST_FAIL, action)
+      alert(action)
       return {
         ...state,
         isUploading: false,
