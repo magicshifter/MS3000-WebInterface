@@ -69,6 +69,11 @@ export default class PixelCanvas extends Component {
   }
 
   handleTouchStart = (evt) => {
+
+    evt.preventDefault()
+    this.useTool(evt, 'down')
+    return
+
     evt.preventDefault();
     const touches = evt.changedTouches;
 
@@ -80,6 +85,11 @@ export default class PixelCanvas extends Component {
   }
 
   handleTouchMove = (evt) => {
+
+    evt.preventDefault();
+    this.useTool(evt, 'move')
+    return
+
     evt.preventDefault();
     const touches = evt.changedTouches;
 
@@ -232,9 +242,38 @@ export default class PixelCanvas extends Component {
 
   getPos = (evt) => {
     let { width, height } = this.props
-    const { scale } = this
+    const { scale, canvas } = this
 
-    var p = getMousePos(this.refs.canvas, evt)
+    let p
+    if (evt.changedTouches && evt.changedTouches.length > 0) {
+      console.log("touch detect", evt)
+
+
+      var rect = canvas.getBoundingClientRect();
+      const touch = evt.changedTouches[0]
+      p = {
+        x: touch.pageX - rect.left,
+        y: touch.pageY - rect.top
+      }
+      /*
+
+function getMousePos(canvas, evt) {
+  var rect = canvas.getBoundingClientRect();
+  return {
+    x: evt.clientX - rect.left,
+    y: evt.clientY - rect.top
+  };
+}
+
+
+function copyTouch(touch) {
+  return { identifier: touch.identifier, pageX: touch.pageX, pageY: touch.pageY, force: touch.force, radiusX: touch.radiusX };
+}
+       */
+    }
+    else {
+      p = getMousePos(this.refs.canvas, evt)
+    }
 
     var px = Math.floor(p.x / scale)
     var py = Math.floor(p.y / scale)
