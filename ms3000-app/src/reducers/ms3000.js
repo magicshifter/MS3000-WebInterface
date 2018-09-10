@@ -118,7 +118,7 @@ const ms3000 = (state = DEFAULT_STATE, action) => {
 
     case IMAGE_UPLOAD_REQUEST_FAIL:
       console.log("IMAGE_UPLOAD_REQUEST_FAIL", IMAGE_UPLOAD_REQUEST_FAIL, action)
-      alert(action)
+      //alert(action)
       return {
         ...state,
         isUploading: false,

@@ -12,7 +12,7 @@ export default class Icon extends Component {
   render() {
     const { icon } = this.props
     return (
-      <FontAwesomeIcon icon={icon} size="1x" style={{textShadow: "2px 2px #ff0000"}}/>
+      <FontAwesomeIcon icon={icon} size="2x" style={{textShadow: "2px 2px #ff0000"}}/>
     )
   }
 }

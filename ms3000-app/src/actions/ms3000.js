@@ -29,7 +29,7 @@ const imageUploadFail = (error) => ({
 function uploadError(dispatch, error) {
   const err = "Image Upload Failed! " + error
   console.log(err)
-  alert(err)
+  //alert(err)
   dispatch(imageUploadFail(error))
 }
 

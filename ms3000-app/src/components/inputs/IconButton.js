@@ -23,7 +23,7 @@ export default class IconButton extends Component {
     }
 
     return (
-      <div className={"icon-button ToolsMenuTooltip " + className}>
+      <div className={"icon-button ToolsMenuTooltip" + (className ? " " + className : "")}>
         <div className="ToolsMenuTooltipText" style={style}>{tooltip}</div>
         <button className="pure-button" onClick={onClick}>
           <span id={rotate ?'loading' : null} style={{display: 'inline-block'}}>

@@ -284,12 +284,12 @@ class PixelEditor extends Component {
                   <IconButton icon={faSave} tooltip='save image on hd' onClick={this.onExportImage} />
 
                   <div className="icon-button ToolsMenuTooltip">
-                    <span className="ToolsMenuTooltipText" style={{width: "240px"}}>
+                    <div className="ToolsMenuTooltipText" style={{width: "240px"}}>
                       open PNG or MagicBitmap
-                    </span>
+                    </div>
                     <button className="pure-button" onClick={this.uploadClickHAck}>
                     <label htmlFor="ImportImage">
-                      <FontAwesomeIcon icon={faFolderOpen} size="1x" style={{textShadow: "2px 2px #ff0000"}}/>
+                      <FontAwesomeIcon icon={faFolderOpen} size="2x"/>
                       <input
                         ref="fileUpload"
                         id="ImportImage"
@@ -397,7 +397,8 @@ class PixelEditor extends Component {
       saveAs(blob, fileName);
     };
 
-  onUploadToShifter = () => {
+  onUploadToShifter = (evt) => {
+    evt.preventDefault()
     const { dispatch } = this.props
 
     console.log("upload pressed")

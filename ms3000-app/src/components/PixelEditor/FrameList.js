@@ -63,6 +63,7 @@ export default class FrameList extends Component {
   }
 
   onClickAddFrame = (evt) => {
+    evt.preventDefault()
     const {onChange } = this.props
     onChange(pixelEditorAddNewFrame())
   }
