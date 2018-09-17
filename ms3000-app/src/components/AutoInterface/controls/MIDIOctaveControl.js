@@ -4,6 +4,10 @@ import Color from "color"
 
 
 
+const nrOfOctaves = 10
+const firstOctave = -1
+
+
 function getRelativeNDC(element, event) {
   let totalOffsetX = 0
   let totalOffsetY = 0
@@ -42,21 +46,37 @@ export default class MIDIOctaveControl extends Component {
     var ctx = c.getContext("2d");
     this.canvasContext = ctx
 
-    var ctx = c.getContext("2d");
-    ctx.beginPath();
-    ctx.arc(95, 50, 40, 0, 2 * Math.PI);
-    ctx.stroke();
+    this.redraw()
   }
 
   render() {
     const value = this.getValue()
 
+    this.redraw()
+
     return (
       <span>
         I'm an octave
-        <canvas ref={this.setupRefCanvas} onClick={this.onClickCanvas} />
+        <canvas width={400} height={40} ref={this.setupRefCanvas} onClick={this.onClickCanvas} />
       </span>
     )
+  }
+
+  redraw = () => {
+    const ctx = this.canvasContext
+    if (!ctx) return
+
+    const boxSize = 32
+    const boxSpace = boxSize + 0
+    const offsetX = 1
+    const offsetY = 1
+
+
+    for (let i = 0; i < nrOfOctaves; i++) {
+      ctx.beginPath();
+      ctx.rect(offsetX + i * boxSpace, offsetY, boxSize, boxSize);
+      ctx.stroke();
+    }
   }
 
   getValue = () => {
