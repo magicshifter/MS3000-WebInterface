@@ -1,8 +1,8 @@
 import { NAVIGATION_SET_LOCATION } from '../actions/navigation'
 
 const DEFAULT_MODE = {
-  //location: 'config'
-  location: "mode-Image"
+  location: 'config'
+  //location: "mode-Image"
 }
 
 const navigation = (state = DEFAULT_MODE, action) => {
