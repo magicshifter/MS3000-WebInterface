@@ -92,12 +92,19 @@ export default class MIDIOctaveControl extends Component {
 
 
 
-    for (let i = firstOctave; i < nrOfOctaves + firstOctave; i++) {
+    for (let i = 0; i < nrOfOctaves; i++) {
+
+      const oV = i + firstOctave
+
       ctx.beginPath();
       ctx.rect(offsetX + i * boxSpace, offsetY, boxSize, boxSize);
       ctx.stroke();
-      if (v === i) {
-        ctx.fillStyle = "green";
+      if (v === oV) {
+        ctx.fillStyle = "white";
+        ctx.fill();
+      }
+      else {
+        ctx.fillStyle = "black";
         ctx.fill();
       }
     }
@@ -105,7 +112,7 @@ export default class MIDIOctaveControl extends Component {
 
   getValue = () => {
     let { value} = this.props
-    value = value || 0
+    value = value ? value.v : 0
     return value
   }
 
@@ -130,6 +137,8 @@ export default class MIDIOctaveControl extends Component {
 
     const p = this.getPos(evt)
     console.log("using tool", p)
+
+    this.props.onChange({ v: p}, this.props.field)
   }
 
   drawMouseOver = (evt) => {
