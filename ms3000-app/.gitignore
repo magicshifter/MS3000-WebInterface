@@ -25,3 +25,4 @@ package-lock.json
 
 public/MS3000.proto
 
+src/proto-generated/*
