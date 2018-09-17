@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import AutoInterface from './index'
 import RGBControl from './RGBControl'
 import EnumControl from './EnumControl'
+import MIDIOctaveControl from './controls/MIDIOctaveControl'
 
 import {defaultParseInt} from '../../utils/types'
 
@@ -57,6 +58,10 @@ export default class AutoControl extends Component {
       case 'RGB':
         controls.push(<RGBControl id={ field.name } key="rgb" field={field} value={value} onChange={onChange}/>)
         break;
+
+      case 'MIDI_OCTAVE':
+        controls.push(<MIDIOctaveControl id={ field.name } key="octave" field={field} value={value} onChange={onChange}/>)
+        break
 
       default:
         if (isEnum) {
