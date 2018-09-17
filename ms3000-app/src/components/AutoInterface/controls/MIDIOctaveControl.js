@@ -7,6 +7,11 @@ import Color from "color"
 const nrOfOctaves = 10
 const firstOctave = -1
 
+const boxSize = 32
+const boxSpace = boxSize + 5
+const offsetX = 1
+const offsetY = 1
+
 
 function getRelativeNDC(element, event) {
   let totalOffsetX = 0
@@ -56,8 +61,7 @@ export default class MIDIOctaveControl extends Component {
 
     return (
       <span>
-        I'm an octave
-        <canvas width={400} height={40} ref={this.setupRefCanvas} onClick={this.onClickCanvas} />
+        <canvas style={{border: "2px solid green"}} width={boxSpace * nrOfOctaves + offsetX - 4} height={boxSpace + offsetY -4} ref={this.setupRefCanvas} onClick={this.onClickCanvas} />
       </span>
     )
   }
@@ -66,16 +70,14 @@ export default class MIDIOctaveControl extends Component {
     const ctx = this.canvasContext
     if (!ctx) return
 
-    const boxSize = 32
-    const boxSpace = boxSize + 0
-    const offsetX = 1
-    const offsetY = 1
+
 
 
     for (let i = 0; i < nrOfOctaves; i++) {
       ctx.beginPath();
       ctx.rect(offsetX + i * boxSpace, offsetY, boxSize, boxSize);
       ctx.stroke();
+      //ctx.fill();
     }
   }
 
