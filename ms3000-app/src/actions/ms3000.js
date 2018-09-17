@@ -181,7 +181,8 @@ export const configUpload = () => (dispatch, getState) => {
   var check = pb.MS3KG.verify(testObj);
 
   if (check) {
-    alert("buffer verify error, corrupt? " + check)
+    console.warn("buffer verify error, corrupt?",  check)
+    //alert("buffer verify error, corrupt? " + check)
   }
 
   const bufferU8 = pb.MS3KG.encode(testObj).finish()

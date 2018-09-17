@@ -1,8 +1,10 @@
 import protobuf from 'protobufjs'
+//import ms3kg from '../proto-generated/ms3kg'
 
 
 var xxx = {};
 
+//console.warn("SDFsdfsdf", ms3kg)
 
 
 //console.log("test hack", protobufs, protobufs.test)
