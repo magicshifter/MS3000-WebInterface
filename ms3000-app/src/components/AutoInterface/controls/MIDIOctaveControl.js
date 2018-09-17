@@ -7,6 +7,11 @@ import Color from "color"
 const nrOfOctaves = 10
 const firstOctave = -1
 
+const boxSize = 32
+const boxSpace = boxSize + 5
+const offsetX = 1
+const offsetY = 1
+
 
 function getRelativeNDC(element, event) {
   let totalOffsetX = 0
@@ -28,6 +33,14 @@ function getRelativeNDC(element, event) {
   const ndcY = 1 - (1.0 * canvasY) / elementHeight
 
   return [ndcX, ndcY]
+}
+
+function getMousePos(canvas, evt) {
+  var rect = canvas.getBoundingClientRect();
+  return {
+    x: evt.clientX - rect.left,
+    y: evt.clientY - rect.top
+  };
 }
 
 
@@ -54,10 +67,17 @@ export default class MIDIOctaveControl extends Component {
 
     this.redraw()
 
+
+    // TODO: why -4 ??? margin??
     return (
       <span>
-        I'm an octave
-        <canvas width={400} height={40} ref={this.setupRefCanvas} onClick={this.onClickCanvas} />
+        <canvas style={{border: "2px solid green"}}
+                width={boxSpace * nrOfOctaves + offsetX - 4}
+                height={boxSpace + offsetY -4} ref={this.setupRefCanvas}
+                onMouseDown={this.onMouseDownCanvas}
+                onMouseMove={this.onMouseMoveCanvas}
+                onMouseLeave={this.onMouseLeaveCanvas}
+        />
       </span>
     )
   }
@@ -66,16 +86,14 @@ export default class MIDIOctaveControl extends Component {
     const ctx = this.canvasContext
     if (!ctx) return
 
-    const boxSize = 32
-    const boxSpace = boxSize + 0
-    const offsetX = 1
-    const offsetY = 1
+
 
 
     for (let i = 0; i < nrOfOctaves; i++) {
       ctx.beginPath();
       ctx.rect(offsetX + i * boxSpace, offsetY, boxSize, boxSize);
       ctx.stroke();
+      //ctx.fill();
     }
   }
 
@@ -89,8 +107,53 @@ export default class MIDIOctaveControl extends Component {
     this.canvasRef = theCanvas
   }
 
-  onClickCanvas = (evt) => {
-    const pos  = getRelativeNDC(this.canvasRef, evt)
-    console.log("clicked", pos)
+  // onClickCanvas = (evt) => {
+  //   const pos  = getRelativeNDC(this.canvasRef, evt)
+  //   console.log("clicked", pos)
+  // }
+
+  getPos = (evt) => {
+    const p = getMousePos(this.canvasRef, evt)
+    return p
+    //return  getRelativeNDC(this.canvasRef, evt)
   }
+
+
+  useTool = (evt) => {
+    evt.preventDefault()
+
+    const p = this.getPos(evt)
+    console.log("using tool", p)
+  }
+
+  drawMouseOver = (evt) => {
+    evt.preventDefault()
+
+    const p = this.getPos(evt)
+    console.log("drawin mouseover", p)
+  }
+
+
+  onMouseDownCanvas = (evt) => {
+    this.useTool(evt)
+  }
+
+  onMouseMoveCanvas = (evt) => {
+    //console.log("movin...")
+    evt.preventDefault()
+
+    if (evt.buttons) {
+      this.useTool(evt, 'move')
+    }
+    else {
+      this.drawMouseOver(evt)
+    }
+  }
+
+  // clearing tool preview
+  onMouseLeaveCanvas = (evt) => {
+    evt.preventDefault()
+    this.redraw()
+  }
+
 }
