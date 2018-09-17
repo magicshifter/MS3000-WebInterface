@@ -71,7 +71,7 @@ export default class MIDIOctaveControl extends Component {
     // TODO: why -4 ??? margin??
     return (
       <span>
-        <canvas style={{border: "2px solid green"}}
+        <canvas style={{border: "0px solid green"}}
                 width={boxSpace * nrOfOctaves + offsetX - 4}
                 height={boxSpace + offsetY -4} ref={this.setupRefCanvas}
                 onMouseDown={this.onMouseDownCanvas}
@@ -86,20 +86,26 @@ export default class MIDIOctaveControl extends Component {
     const ctx = this.canvasContext
     if (!ctx) return
 
+    const v = this.getValue()
+
+    console.log("gettin", v)
 
 
 
-    for (let i = 0; i < nrOfOctaves; i++) {
+    for (let i = firstOctave; i < nrOfOctaves + firstOctave; i++) {
       ctx.beginPath();
       ctx.rect(offsetX + i * boxSpace, offsetY, boxSize, boxSize);
       ctx.stroke();
-      //ctx.fill();
+      if (v === i) {
+        ctx.fillStyle = "green";
+        ctx.fill();
+      }
     }
   }
 
   getValue = () => {
-    let { value,} = this.props
-    value = value || {R: 0, G: 0, B: 0}
+    let { value} = this.props
+    value = value || 0
     return value
   }
 
@@ -114,7 +120,7 @@ export default class MIDIOctaveControl extends Component {
 
   getPos = (evt) => {
     const p = getMousePos(this.canvasRef, evt)
-    return p
+    return Math.floor(p.x / boxSpace) + firstOctave
     //return  getRelativeNDC(this.canvasRef, evt)
   }
 
