@@ -35,6 +35,14 @@ function getRelativeNDC(element, event) {
   return [ndcX, ndcY]
 }
 
+function getMousePos(canvas, evt) {
+  var rect = canvas.getBoundingClientRect();
+  return {
+    x: evt.clientX - rect.left,
+    y: evt.clientY - rect.top
+  };
+}
+
 
 
 export default class MIDIOctaveControl extends Component {
@@ -59,9 +67,17 @@ export default class MIDIOctaveControl extends Component {
 
     this.redraw()
 
+
+    // TODO: why -4 ??? margin??
     return (
       <span>
-        <canvas style={{border: "2px solid green"}} width={boxSpace * nrOfOctaves + offsetX - 4} height={boxSpace + offsetY -4} ref={this.setupRefCanvas} onClick={this.onClickCanvas} />
+        <canvas style={{border: "2px solid green"}}
+                width={boxSpace * nrOfOctaves + offsetX - 4}
+                height={boxSpace + offsetY -4} ref={this.setupRefCanvas}
+                onMouseDown={this.onMouseDownCanvas}
+                onMouseMove={this.onMouseMoveCanvas}
+                onMouseLeave={this.onMouseLeaveCanvas}
+        />
       </span>
     )
   }
@@ -91,8 +107,53 @@ export default class MIDIOctaveControl extends Component {
     this.canvasRef = theCanvas
   }
 
-  onClickCanvas = (evt) => {
-    const pos  = getRelativeNDC(this.canvasRef, evt)
-    console.log("clicked", pos)
+  // onClickCanvas = (evt) => {
+  //   const pos  = getRelativeNDC(this.canvasRef, evt)
+  //   console.log("clicked", pos)
+  // }
+
+  getPos = (evt) => {
+    const p = getMousePos(this.canvasRef, evt)
+    return p
+    //return  getRelativeNDC(this.canvasRef, evt)
   }
+
+
+  useTool = (evt) => {
+    evt.preventDefault()
+
+    const p = this.getPos(evt)
+    console.log("using tool", p)
+  }
+
+  drawMouseOver = (evt) => {
+    evt.preventDefault()
+
+    const p = this.getPos(evt)
+    console.log("drawin mouseover", p)
+  }
+
+
+  onMouseDownCanvas = (evt) => {
+    this.useTool(evt)
+  }
+
+  onMouseMoveCanvas = (evt) => {
+    //console.log("movin...")
+    evt.preventDefault()
+
+    if (evt.buttons) {
+      this.useTool(evt, 'move')
+    }
+    else {
+      this.drawMouseOver(evt)
+    }
+  }
+
+  // clearing tool preview
+  onMouseLeaveCanvas = (evt) => {
+    evt.preventDefault()
+    this.redraw()
+  }
+
 }
