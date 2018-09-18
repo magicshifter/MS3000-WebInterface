@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Color from "color"
 import {arrayForEach} from "../../../utils/functional";
 import MIDIOctaveControl from "./MIDIOctaveControl";
+import MIDIIntervalControl from "./MIDIIntervalControl";
 
 
 
@@ -58,11 +59,20 @@ export default class MIDISequenceControl extends Component {
     super(props)
   }
 
-  onChangeControl = (newValue, field) => {
+  onChangeOctaveControl = (newValue, field) => {
 
     console.log("onChanged", newValue, field)
     const v = this.getValue()
-    v.steps[field] = { octave: newValue }
+    v.steps[field].octave = newValue
+
+    this.props.onChange(v, this.props.field)
+  }
+
+  onChangeIntervalControl = (newValue, field) => {
+
+    console.log("onChanged", newValue, field)
+    const v = this.getValue()
+    v.steps[field].interval = newValue
 
     this.props.onChange(v, this.props.field)
   }
@@ -74,14 +84,17 @@ export default class MIDISequenceControl extends Component {
     console.log("RENDER MIDISequ", field)
 
     const controls = []
+    const controlsI = []
     arrayForEach(value.steps, (step, i) => {
-      controls.push(<MIDIOctaveControl field={i} onChange={this.onChangeControl} value={step.octave}/>)
+      controls.push(<MIDIOctaveControl field={i} onChange={this.onChangeOctaveControl} value={step.octave}/>)
+      controlsI.push(<MIDIIntervalControl field={i} onChange={this.onChangeIntervalControl} value={step.interval}/>)
     })
 
 
     // TODO: why -4 ??? margin??
     return (
         <div>
+          {controlsI}<br /><br />
           {controls}
         </div>
     )
