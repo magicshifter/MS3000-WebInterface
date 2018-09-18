@@ -9,6 +9,7 @@ import MIDIOctaveControl from './controls/MIDIOctaveControl'
 import {defaultParseInt} from '../../utils/types'
 
 import protobuf from 'protobufjs'
+import MIDISequenceControl from "./controls/MIDISequenceControl";
 
 
 export default class AutoControl extends Component {
@@ -61,6 +62,10 @@ export default class AutoControl extends Component {
 
       case 'MIDI_OCTAVE':
         controls.push(<MIDIOctaveControl id={ field.name } key="octave" field={field} value={value} onChange={onChange}/>)
+        break
+
+      case 'MIDI_SEQUENCE':
+        controls.push(<MIDISequenceControl id={ field.name } key="sequ" field={field} value={value} onChange={onChange}/>)
         break
 
       default:

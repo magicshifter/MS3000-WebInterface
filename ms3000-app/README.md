@@ -8,6 +8,7 @@ Insurance
 
 Philipp vor ars
 ===============
+* find typedef to gt rid ov v and o fro octave and interval
 * shutdown in error mode after 3 sec 10min
 * AP list config 2h
 * todo: super low brightness 20min in updateLEDS beim shiften / 16 div
