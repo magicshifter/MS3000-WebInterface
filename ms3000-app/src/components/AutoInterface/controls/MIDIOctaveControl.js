@@ -72,8 +72,8 @@ export default class MIDIOctaveControl extends Component {
     return (
       <span>
         <canvas style={{border: "0px solid green"}}
-                width={boxSpace * nrOfOctaves + offsetX - 4}
-                height={boxSpace + offsetY -4} ref={this.setupRefCanvas}
+                height={boxSpace * nrOfOctaves + offsetX - 4}
+                width={boxSpace + offsetY -4} ref={this.setupRefCanvas}
                 onMouseDown={this.onMouseDownCanvas}
                 onMouseMove={this.onMouseMoveCanvas}
                 onMouseLeave={this.onMouseLeaveCanvas}
