@@ -59,19 +59,13 @@ export default class MIDISequenceControl extends Component {
   }
 
   onChangeControl = (newValue, field) => {
-    console.log("onChanged", newValue, field)
-    //const v = this.getValue
-  }
 
-  // componentDidMount() {
-  //   var c = this.canvasRef
-  //   this.canvas = c
-  //
-  //   var ctx = c.getContext("2d");
-  //   this.canvasContext = ctx
-  //
-  //   this.redraw()
-  // }
+    console.log("onChanged", newValue, field)
+    const v = this.getValue()
+    v.steps[field] = { octave: newValue }
+
+    this.props.onChange(v, this.props.field)
+  }
 
   render() {
     const { field } = this.props
@@ -80,8 +74,8 @@ export default class MIDISequenceControl extends Component {
     console.log("RENDER MIDISequ", field)
 
     const controls = []
-    arrayForEach(value.steps, (step) => {
-      controls.push(<MIDIOctaveControl field="TODO" onChange={this.onChangeControl} value={step.octave}/>)
+    arrayForEach(value.steps, (step, i) => {
+      controls.push(<MIDIOctaveControl field={i} onChange={this.onChangeControl} value={step.octave}/>)
     })
 
 
@@ -95,7 +89,7 @@ export default class MIDISequenceControl extends Component {
 
   getValue = () => {
     let { value} = this.props
-    value = value ? value.v : {
+    value = value ? value : {
       steps: [
         { interval: { v: 0}, octave: { o: 5 }, mode: 0 },
         { interval: { v: 0}, octave: { o: 5 }, mode: 0 },

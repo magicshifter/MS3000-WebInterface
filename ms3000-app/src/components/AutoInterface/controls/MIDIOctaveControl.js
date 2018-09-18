@@ -7,7 +7,7 @@ import Color from "color"
 const nrOfOctaves = 10
 const firstOctave = -1
 
-const boxSize = 32
+const boxSize = 16
 const boxSpace = boxSize + 5
 const offsetX = 1
 const offsetY = 1
@@ -97,7 +97,7 @@ export default class MIDIOctaveControl extends Component {
       const oV = i + firstOctave
 
       ctx.beginPath();
-      ctx.rect(offsetX + i * boxSpace, offsetY, boxSize, boxSize);
+      ctx.rect(offsetX, offsetY + i * boxSpace, boxSize, boxSize);
       ctx.stroke();
       if (v === oV) {
         ctx.fillStyle = "white";
@@ -112,7 +112,7 @@ export default class MIDIOctaveControl extends Component {
 
   getValue = () => {
     let { value} = this.props
-    value = value ? value.v : 0
+    value = value ? value.o : 0
     return value
   }
 
@@ -127,7 +127,7 @@ export default class MIDIOctaveControl extends Component {
 
   getPos = (evt) => {
     const p = getMousePos(this.canvasRef, evt)
-    return Math.floor(p.x / boxSpace) + firstOctave
+    return Math.floor(p.y / boxSpace) + firstOctave
     //return  getRelativeNDC(this.canvasRef, evt)
   }
 
@@ -138,7 +138,7 @@ export default class MIDIOctaveControl extends Component {
     const p = this.getPos(evt)
     console.log("using tool", p)
 
-    this.props.onChange({ v: p}, this.props.field)
+    this.props.onChange({ o: p}, this.props.field)
   }
 
   drawMouseOver = (evt) => {
