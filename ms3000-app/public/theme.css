@@ -32,7 +32,26 @@ button {
 #loading {
     -webkit-animation: rotation 2s infinite linear;
 }
+/* Cutsom CSS for THEME*/
+.ms3000-main-container{
+  max-width: 800px;
+  margin: 0 auto;
+}
 
+.ms3000-input-radio{
+  text-align: center;
+}
+
+.ms3000-input-radio>label{
+  display: block;
+
+}
+.ms3000-input-radio>label>input{
+
+  display: block;
+  float: left;
+
+}
 @-webkit-keyframes rotation {
     from {
         -webkit-transform: rotate(0deg);

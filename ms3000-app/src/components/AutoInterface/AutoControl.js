@@ -76,7 +76,7 @@ export default class AutoControl extends Component {
           noLabel = true
           //controls.push(<legend key="leg">{field.name}</legend>)
           controls.push(
-            <div style={{paddingLeft:"20px"}}>
+            <div className="ms3000-interface-container">
               <AutoInterface key="rec" legend={field.name} skipInputTag={true} type={lookup} value={value} onChange={this.onChangeRecursive} />
             </div>)
         }
