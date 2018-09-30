@@ -40,19 +40,19 @@ export default class AutoControl extends Component {
     var noLabel = false
     switch (field.type) {
       case 'string':
-        controls.push(<input id={ field.name } key="str" type='text' value={value || ""} onChange={(evt) => {
+        controls.push(<div className="pure-u-1-1 pure-u-1-2"><input id={ field.name } key="str" type='text' value={value || ""} onChange={(evt) => {
           //console.log("text chnage", evt)
           onChange(evt.target.value, field)
-        }}/>)
+        }}/></div>)
         break;
 
       case 'int32':
-        controls.push(<input id={ field.name } key="str" type='text' value={value || "0"} onChange={(evt) => {
+        controls.push(<div className="pure-u-1-1 pure-u-1-2"><input id={ field.name } key="str" type='text' value={value || "0"} onChange={(evt) => {
           const v = defaultParseInt(evt.target.value)
           //console.log("text chnage", evt)
 
           onChange(v, field)
-        }}/>)
+        }}/></div>)
         break;
 
 
@@ -86,7 +86,7 @@ export default class AutoControl extends Component {
         break;
     }
     if (!noLabel) {
-      controls.unshift(<label id="lbl" className="ms3000-interface-headline" htmlFor={field.name}>{field.name}:&nbsp;</label>)
+      controls.unshift(<div className="pure-u-1-1 pure-u-1-2"><label id="lbl" className="ms3000-interface-headline" htmlFor={field.name}>{field.name}:&nbsp;</label></div>)
     }
 
     return (

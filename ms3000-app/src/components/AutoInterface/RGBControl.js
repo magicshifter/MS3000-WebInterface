@@ -66,12 +66,20 @@ export default class RGBControl extends Component {
     const color = Color.rgb(value.R, value.G, value.B)
 
     return (
-      <span>
-        <input ref="RGBA" id={id} type="color" value={color.hex()} onChange={this.onChangeRGBA} />
+      <div className="pure-g">
+        <div className="pure-u-1-1 pure-u-md-1-2">
+          <input ref="RGBA" id={id} type="color" value={color.hex()} onChange={this.onChangeRGBA} />
+        </div>
+        <div className="pure-u-1-1 pure-u-md-1-8">
         R <input ref="R" type="number" min="0" max="255" value={value.R} onChange={this.onChangeR}/>
+        </div>
+        <div className="pure-u-1-1 pure-u-md-1-8">
         G <input ref="G" type="number" min="0" max="255" value={value.G} onChange={this.onChangeG}/>
+        </div>
+        <div className="pure-u-1-1 pure-u-md-1-8">
         B <input ref="B" type="number" min="0" max="255" value={value.B} onChange={this.onChangeB}/>
-      </span>
+        </div>
+      </div>
     )
   }
 }

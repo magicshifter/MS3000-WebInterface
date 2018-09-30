@@ -68,6 +68,18 @@ button {
   width: 2em;
   display: block;
 }
+.ms3000-menu-burger{
+  float: right;
+  font-size: 2em;
+}
+.m3000-menu-list>li>a{
+        padding: 0.1em 0.5em;
+        color:#aaa;
+        text-decoration: none; 
+  }
+.m3000-menu-container{
+      display: block;
+    }
 h2{
   color:#F77E11;
 }
@@ -84,12 +96,76 @@ h2{
     width: 1em;
     height: 1em;
 }
+
+@media screen and (min-width:320px){
+    body{ 
+      font-size: 20px 
+    }
+    .ms3000-menu-burger{
+      display: block;
+      position: relative;
+      z-index: 200;
+      padding: 0.4em;
+    }
+    .m3000-menu-list{
+      margin-top: 2.9em;
+      display: none;
+      position: absolute;
+      top:0;
+      background-color: #333;
+      z-index: 2000;
+      text-align: center;
+      padding:0;
+      width: 100%;
+    }
+    .m3000-menu-container{
+      width:100vw;
+      background-color: #333;
+      text-align: center;
+      clear: both;
+    }
+    .m3000-menu-list>li{
+      float: none;
+      display: block;
+      clear: both;
+      position: relative;
+      font-size: 2em;
+      padding: 0.5em 0;
+    }
+    .ms3000-menu-visible{
+      display: block !important;
+    }
+    .ms3000-menu-item-active{
+      background-color: #888;
+
+    }
+    .ms3000-menu-item-active>a{
+      color: #000;
+      
+    }
+}
 @media screen and (min-width:768px){
+   body{ 
+      font-size: 12px 
+    }
     .pure-u-md-none{
         width: auto;
     }
+    .ms3000-menu-burger{
+      display: none;
+    }
+    .m3000-menu-list{
+      display: block;
+      position: relative;
+    }
+    .m3000-menu-list>li{
+       
+        font-size: 1.3em;
+        
+        display: inline-block;
+      }
+    
 }
-
 
 /**/
 
@@ -131,7 +207,7 @@ h2{
   margin-right: 0;
   outline: none;
   position: relative;
-  z-index: 1000;
+  z-index: 100;
   float: left;
 }
 .option-input:hover {

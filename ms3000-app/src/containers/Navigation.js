@@ -1,9 +1,15 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {navigationSetLocation} from '../actions/navigation'
 
+
 import './App.css';
+
+import {
+  faBars
+} from '@fortawesome/free-solid-svg-icons'
 
 const navStructure = [
   { name: "wifi" },
@@ -40,23 +46,34 @@ class Navigation extends Component {
       const nav = structure[i]
 
       controls.push(
-        <li key={i} className="pure-menu-item">
-          <a href="#" onClick={this.onClickNav} data-name={nav.name} className="pure-menu-link"
-             style={{backgroundColor: nav.name === location ? "blue" : null }}>
+        <li key={i} className="ms3000-menu-item" className={ nav.name === location ? "ms3000-menu-item-active" : null }>
+          <a href="#" onClick={this.onClickNav} data-name={nav.name}>
             {nav.name}
           </a>
         </li>)
     }
 
     return (
-      <div className="pure-menu pure-menu-horizontal" style={{padding: "0px", flex: '0 1 auto'}}>
-        <ul className="pure-menu-list">
+      <div className="m3000-menu-container">
+        <ul ref={this.setupBurgerRef} className="m3000-menu-list">
           {controls}
         </ul>
+         <FontAwesomeIcon icon={faBars} size="2x" onClick={ this.onClickBurger} className="ms3000-menu-burger"/>
       </div>
     )
   }
+
+  setupBurgerRef = (el) => {
+    this.burgerRef = el
+    console.log("REF")
+  }  
+
+  onClickBurger = () => {
+    this.burgerRef.classList.toggle("ms3000-menu-visible")
+    console.log("Click")
+  }
 }
+
 
 const mapStateToProps = state => {
   const { location } = state.navigation
