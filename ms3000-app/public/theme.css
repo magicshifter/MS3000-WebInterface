@@ -32,7 +32,45 @@ button {
 #loading {
     -webkit-animation: rotation 2s infinite linear;
 }
+/* Cutsom CSS for THEME*/
+.ms3000-main-container{
+  max-width: 800px;
+  margin: 0 auto;
+}
+.ms3000-control-container{
+  text-align: center;
+}
+.ms3000-input-radio{
+  text-align: center;
+  display: block;
+  clear: both;
+  margin-bottom: 1.5em;
+}
 
+.ms3000-input-radio>label{
+
+  display: block;
+  
+}
+.ms3000-input-radio>label>input{
+
+  display: block;
+  clear:both;
+
+}
+.ms3000-interface-headline{
+  font-size: 1.3em;
+  margin-bottom: 0.5em;
+  color: #ccc;
+}
+.ms3000-input-flow{
+  margin: 0 auto;
+  width: 2em;
+  display: block;
+}
+h2{
+  color:#F77E11;
+}
 @-webkit-keyframes rotation {
     from {
         -webkit-transform: rotate(0deg);
@@ -57,16 +95,16 @@ button {
 
 @keyframes click-wave {
   0% {
-    height: 40px;
-    width: 40px;
+    height: 2.2em;
+    width: 2.2em;
     opacity: 0.35;
     position: relative;
   }
   100% {
-    height: 200px;
-    width: 200px;
-    margin-left: -80px;
-    margin-top: -80px;
+    height: 5em;
+    width: 5em;
+    margin-left: 2.2em;
+    margin-top: 2.2em;
     opacity: 0;
   }
 }
@@ -78,19 +116,19 @@ button {
   -o-appearance: none;
   appearance: none;
   position: relative;
-  top: 13.33333px;
+  top: 0.1em;
   right: 0;
   bottom: 0;
   left: 0;
-  height: 40px;
-  width: 40px;
+  height: 2.2em;
+  width: 2.2em;
   transition: all 0.15s ease-out 0s;
   background: #cbd1d8;
   border: none;
   color: #fff;
   cursor: pointer;
   display: inline-block;
-  margin-right: 0.5rem;
+  margin-right: 0;
   outline: none;
   position: relative;
   z-index: 1000;
@@ -103,15 +141,17 @@ button {
   background: #40e0d0;
 }
 .option-input:checked::before {
-  height: 40px;
-  width: 40px;
-  position: absolute;
+  height: 2.2em;
+  width: 2.2em;
   content: '✔';
   display: inline-block;
-  font-size: 26.66667px;
+  font-size: 2.8em;
   text-align: center;
-  line-height: 40px;
+  margin-left: -0.7em;
+  margin-top: -0.1em
+
 }
+/*
 .option-input:checked::after {
   -webkit-animation: click-wave 0.65s;
   -moz-animation: click-wave 0.65s;
@@ -121,7 +161,7 @@ button {
   display: block;
   position: relative;
   z-index: 100;
-}
+}*/
 .option-input.radio {
   border-radius: 50%;
 }
@@ -132,9 +172,6 @@ button {
 /*
 body div {
 }*/
-body label {
-  display: block;
-  line-height: 40px;
-}
+
 
 

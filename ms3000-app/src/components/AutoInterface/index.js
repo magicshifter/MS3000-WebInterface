@@ -55,7 +55,7 @@ export default class AutoInterface extends Component {
       const f = fs[k]
       //console.log(f, value)
       controls.push(
-        <div key={i} className="pure-control-group">
+        <div key={i} className={ skipInputTag ? "ms3000-control-container" : "ms3000-main-container" }>
           <AutoControl field={f} value={this.getFromValue(f)} onChange={this.onChangeControl}/>
         </div>
       )
@@ -63,10 +63,8 @@ export default class AutoInterface extends Component {
 
     if (skipInputTag) {
       return (
-        <fieldset style={{border: "2px solid black"}}>
+        <fieldset>
           <h2>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             {legend}</h2>
           {controls}
         </fieldset>
@@ -74,7 +72,7 @@ export default class AutoInterface extends Component {
     }
 
     return (
-      <form className="pure-form pure-form-aligned">
+      <form className="">
         <fieldset>
           <legend>{legend}</legend>
             { controls }

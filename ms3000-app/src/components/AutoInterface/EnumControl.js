@@ -56,15 +56,18 @@ export default class EnumControl extends Component {
         const genid = field.name + k
         console.log("rad", k, f, id)
         controls.push(
-            <div className="pure-u-1-3 pure-u-md-1-4">
+            <div className="pure-u-1-1 pure-u-sm-1-2 pure-u-md-1-4 ms3000-input-radio">
               <label key={f} htmlFor={genid} >
-                <input
-                  type="radio"
-                  className="option-input radio"
-                  value={f}
-                  id={genid}
-                  checked={value === f }
-                  onChange={this.onChangeSelect} /> {k}
+              {k} <br/>
+                <span className="ms3000-input-flow">
+                  <input
+                    type="radio"
+                    className="option-input radio"
+                    value={f}
+                    id={genid}
+                    checked={value === f }
+                    onChange={this.onChangeSelect} />
+                </span>
               </label>
             </div>
         )
