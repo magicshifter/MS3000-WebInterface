@@ -86,7 +86,7 @@ export default class AutoControl extends Component {
         break;
     }
     if (!noLabel) {
-      controls.unshift(<label id="lbl" htmlFor={field.name}>{field.name}:&nbsp;</label>)
+      controls.unshift(<label id="lbl" className="ms3000-interface-headline" htmlFor={field.name}>{field.name}:&nbsp;</label>)
     }
 
     return (

@@ -55,7 +55,7 @@ export default class AutoInterface extends Component {
       const f = fs[k]
       //console.log(f, value)
       controls.push(
-        <div key={i} className="ms3000-main-container">
+        <div key={i} className={ skipInputTag ? "ms3000-control-container" : "ms3000-main-container" }>
           <AutoControl field={f} value={this.getFromValue(f)} onChange={this.onChangeControl}/>
         </div>
       )
@@ -63,7 +63,7 @@ export default class AutoInterface extends Component {
 
     if (skipInputTag) {
       return (
-        <fieldset className="ms3000-control-container">
+        <fieldset>
           <h2>
             {legend}</h2>
           {controls}
