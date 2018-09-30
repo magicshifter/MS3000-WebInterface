@@ -123,6 +123,8 @@ h2{
       background-color: #333;
       text-align: center;
       clear: both;
+      display: block;
+      height: 3em;
     }
     .m3000-menu-list>li{
       float: none;
