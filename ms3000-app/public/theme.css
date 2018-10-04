@@ -168,7 +168,15 @@ h2{
       }
     
 }
+/*Big screens*/
+@media screen and (min-width:1200px){
+    .ms3000-u-none{
+        width:auto;
+        margin-left:1em;
+        margin-right:1em; 
+    }
 
+}
 /**/
 
 @keyframes click-wave {
