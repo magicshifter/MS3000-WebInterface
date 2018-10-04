@@ -56,7 +56,7 @@ export default class EnumControl extends Component {
         const genid = field.name + k
         console.log("rad", k, f, id)
         controls.push(
-            <div className="pure-u-1-1 pure-u-sm-1-2 pure-u-md-1-4 ms3000-u-none ms3000-input-radio">
+            <div className="pure-u-1-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-8 ms3000-input-radio">
               <label key={f} htmlFor={genid} >
               {k} <br/>
                 <span className="ms3000-input-flow">
