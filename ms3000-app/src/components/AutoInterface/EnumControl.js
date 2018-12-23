@@ -62,7 +62,7 @@ export default class EnumControl extends Component {
                 <span className="ms3000-input-flow">
                   <input
                     type="radio"
-                    className="option-input radio"
+                    className="fat-ms-button"
                     value={f}
                     id={genid}
                     checked={value === f }
