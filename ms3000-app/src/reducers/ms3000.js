@@ -25,8 +25,7 @@ import {FILESYSTEM_REQUEST_START, FILESYSTEM_REQUEST_SUCCESS} from "../actions/f
 const DEFAULT_STATE = {
   isFetching: false,
   shifterState: {},
-
-  // host: 'http://magicshifter.local',
+  //host: 'http://magicshifter.local',
   host: 'http://192.168.4.1',
 
   isUploading: false,
