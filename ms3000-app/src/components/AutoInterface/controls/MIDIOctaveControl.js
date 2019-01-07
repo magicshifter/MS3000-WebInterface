@@ -7,7 +7,7 @@ import Color from "color"
 const nrOfOctaves = 10
 const firstOctave = -1
 
-const boxSize = 16
+const boxSize = 64
 const boxSpace = boxSize + 5
 const offsetX = 1
 const offsetY = 1

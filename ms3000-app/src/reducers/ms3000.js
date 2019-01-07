@@ -26,8 +26,8 @@ const DEFAULT_STATE = {
   isFetching: false,
   shifterState: {},
 
-  host: 'http://magicshifter.local',
-  //host: 'http://192.168.4.1',
+  // host: 'http://magicshifter.local',
+  host: 'http://192.168.4.1',
 
   isUploading: false,
   uploadError: null,

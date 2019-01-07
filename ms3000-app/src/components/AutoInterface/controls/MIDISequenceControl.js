@@ -10,7 +10,7 @@ import MIDIIntervalControl from "./MIDIIntervalControl";
 const nrOfOctaves = 10
 const firstOctave = -1
 
-const boxSize = 32
+const boxSize = 128
 const boxSpace = boxSize + 5
 const offsetX = 1
 const offsetY = 1
