@@ -7,7 +7,7 @@ import config from '../config';
 
 const debug = _debug('app:server');
 const paths = config.utils_paths;
-const app = koa();
+const app = new koa();
 
 // This rewrites all routes requests to the root /index.html file
 // (ignoring file requests). If you want to implement isomorphic
