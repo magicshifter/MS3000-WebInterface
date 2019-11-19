@@ -13,7 +13,14 @@ Usage:
   git clone git@github.com:magicshifter/ms3000-webinterface
   cd ms3000-webinterface
   make install
-  make
+
+  # the development environment is currently broken.
+  # to get the app to run, 
+  make build # this builds to dist
+
+  cd dist && python -m SimpleHTTPServer
+
+  # client is now served at localhost:8000
 ```
 =======
 
