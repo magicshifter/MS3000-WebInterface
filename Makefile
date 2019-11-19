@@ -16,7 +16,6 @@ JS_DIST_DIR=./dist/
 	server \
 	dev \
 	dev-no-debug \
-	flow \
 	test \
 	test-dev \
 	inline \
@@ -60,9 +59,6 @@ dev:
 	@${CLI} $@
 
 dev-no-debug:
-	@${CLI} $@
-
-flow:
 	@${CLI} $@
 
 test:
